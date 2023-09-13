@@ -1,0 +1,17 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<h1>Home</h1>
+<div>
+    {% for incidence in incidences %}
+        <!-- user will type the number of incidence (element configurable)
+        if exists render the view relate to incidence trought its id -->
+        <a href="{% url 'viewIncidence' incidence.id %}"><p>{{ incidence.incidence }}</p></a>
+    {% endfor %}
+</div>
+
+user will type the number of incidence (element configurable)
+if exists render the view relate to incidence trought its id
+<link rel="stylesheet" href="/viewIncidence/{{incidence.id}}">
+{% endblock %}

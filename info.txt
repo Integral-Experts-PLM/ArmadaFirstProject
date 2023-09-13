@@ -1,0 +1,17 @@
+1-     Desde la aplicación de ATAVIA (hecha con Django), vamos a crear un desplegable que tendrá 3 opciones
+-        Creación de incidencia
+-        Actualización de incidencia y fallos
+-        Visualización incidencia
+
+2-     Cada uno de esas opciones va abrir una página (con los estilos de los formularios de Windchill Fracas) dentro de Atavia (crearemos el front de esos formularios en Django para añadirlo a la aplicación que ya existe).
+
+3-     Cada página web tendrá un input para elegir un “elemento configurable” (los elementos configurables están almacenados en Atavia) y desde ahí trabajaremos para “crear”, “actualizar” o “visualizar” los datos del elemento configurable.
+-        Si el elemento configurable no existe tendremos un error, lo manejamos con una pantalla con un mensaje de error, y que entente con otro elemento configurable.
+
+4-     Una vez que el usuario terminó de añadir la info, el salvara la incidencia clicando en “OK”. Desde ahí haremos una llamada a Windchill Fracas por webservice (API / REST) y salvaremos la data en Windchill Fracas. (Pregunta. ¿Se salvará la data en la aplicación de Atavia también o solo en Windchill?)
+
+5-     Para hacer esa “conexión” de Atavia a Windchill Fracas necesitaremos de credenciales de acceso. Donde encuentro los endpoint para llamadas REST
+
+6-     La pantalla más importante será la de “visualización” que nos va traer toda la información del “elemento configurable” y la pasamos a Windchill Fracas (sin más). Esa información viene cómo? (json)
+
+7-     Para hacer el CRUD en Windchill Fracas necesitamos de los endpoints.
