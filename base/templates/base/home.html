@@ -1,17 +1,23 @@
 {% extends 'index.html' %}
 
 {% block content %}
-
-<h1>Home</h1>
-<div>
-    {% for incidence in incidences %}
-        <!-- user will type the number of incidence (element configurable)
-        if exists render the view relate to incidence trought its id -->
-        <a href="{% url 'viewIncidence' incidence.id %}"><p>{{ incidence.incidence }}</p></a>
-    {% endfor %}
+<div class="main-input-container">
+    <h3 class="title-input-container">Initial Failure Information</h3>
+    <div class="input-container">
+        <label class="label-input">Incident Number:</label>
+        <input type="text" class="input-box" name="">
+    </div>
 </div>
 
-user will type the number of incidence (element configurable)
-if exists render the view relate to incidence trought its id
-<link rel="stylesheet" href="/viewIncidence/{{incidence.id}}">
+{% for incident in incidents %}
+<!-- user will type the number of incident (element configurable)
+if exists render the view relate to incident trought its id -->
+<a href="{% url 'viewIncident' incident.id %}"><p>{{ incident.incident_identifier }}</p></a>
+{% endfor %}
+
+<!-- user will type the number of incident (element configurable)
+if exists render the view relate to incident trought its id -->
+<link href="/viewIncident/{{incident.id}}">
 {% endblock %}
+
+

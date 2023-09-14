@@ -1,29 +1,52 @@
-from django.shortcuts import render
+import pprint
+from django.shortcuts import render, get_object_or_404
+from .models import Incident, IncidentInitialInfo, IncidentDetailInfo, IncidentReview, IncidentAnalysis
 
-incidences = [
-    { 'id': 1, 'incidence': 'incidentce one testing'},
-    { 'id': 2, 'incidence': 'incidentce two testing'},
-    { 'id': 3, 'incidence': 'incidentce tree testing'},
-
-]
 # Create your views here.
 def home(request):
-    context = {'incidences': incidences}
+    incidents = Incident.objects.all()
+    context = {'incidents': incidents}
     return render(request, 'base/home.html', context)
 
-def createIncidence(request):
-    # context = 'create incidence'
-    return render(request, 'base/createIncidence.html')
+def createIncident(request):
+    # context = 'create incident'
+    return render(request, 'base/createIncident.html')
 
-def updateIncidence(request):
-    # context = 'update incidence'
-    return render(request, 'base/updateIncidence.html')
+def updateIncident(request):
+    # context = 'update incident'
+    return render(request, 'base/updateIncident.html')
 
-def viewIncidence(request, pk):
-    incidence = None
-    for i in incidences:
-        if i['id'] == int(pk):
-            incidence = i
-    context = {'incidence': incidence}
-    # context = 'view incidence'
-    return render(request, 'base/viewIncidence.html', context)
+def viewIncident(request, pk):
+    incident = get_object_or_404(Incident.objects.select_related('initial_info', 'detail_info', 'review', 'analysis'), pk=str(pk))
+
+    context = {'incident': incident}
+
+    try:
+        # Create a pretty printer
+        pretty_printer = pprint.PrettyPrinter(indent=4)
+
+        # Print the incident data
+        print("Incident Data:")
+        pretty_printer.pprint(incident.__dict__)
+
+        # Print related data in a friendly format
+        if incident.initial_info:
+            print("Related IncidentInitialInfo Data:")
+            pretty_printer.pprint(incident.initial_info.__dict__)
+
+        if incident.detail_info:
+            print("Related IncidentDetailInfo Data:")
+            pretty_printer.pprint(incident.detail_info.__dict__)
+
+        if incident.review:
+            print("Related IncidentReview Data:")
+            pretty_printer.pprint(incident.review.__dict__)
+
+        if incident.analysis:
+            print("Related IncidentAnalysis Data:")
+            pretty_printer.pprint(incident.analysis.__dict__)
+
+    except AttributeError as e:
+        print(f"An error occurred: {e}")
+
+    return render(request, 'base/viewIncident.html', context)

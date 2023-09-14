@@ -3,8 +3,8 @@ from . import views
 
 urlpatterns = [
     path('', views.home, name='home'),
-    path('createIncidence/', views.createIncidence, name='createIncidence'),
-    path('updateIncidence/', views.updateIncidence, name='updateIncidence'),
+    path('createIncident/', views.createIncident, name='createIncident'),
+    path('updateIncident/', views.updateIncident, name='updateIncident'),
     # dynamic value - check if pk is interger or string from the source
-    path('viewIncidence/<int:pk>', views.viewIncidence, name='viewIncidence')
+    path('viewIncident/<str:pk>', views.viewIncident, name='viewIncident')
 ]
