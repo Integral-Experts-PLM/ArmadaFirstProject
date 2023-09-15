@@ -1,5 +1,23 @@
-{% extends 'index.html' %}
-
-{% block content %}
-<h1>Create an Incident</h1>
+{% extends 'index.html' %} {% block content %}
+<div style="width: 910px; margin-top: 20px;">
+<div style="display: flex; width: 100%; justify-content: flex-end;">
+    {% include 'currentState.html' %}
+</div>
+<div style="display: flex; justify-content: space-between;">
+    {% include 'initialFailureInfo.html' %}
+    {% include 'detailedFailureInfo.html' %}    
+</div>
+</div>
 {% endblock %}
+
+<!-- ========================================================= -->
+<div style="display: flex; justify-content: space-between;">
+    {% include 'initialFailureInfo.html' %}
+    {% include 'detailedFailureInfo.html' %}    
+</div>
+
+<!-- ========================================================= -->
+<div>
+    {% include 'failureInfoDone.html' %}
+</div>
+

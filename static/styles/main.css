@@ -2,9 +2,15 @@ body{
     background-color: white;
     font-family: Arial, Helvetica, sans-serif;
     font-size: small;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
 }
 
 .navbar {
+    width: 100%;
     background-color: #343a41;
     padding: 12px;
     font-size: medium;
@@ -21,9 +27,14 @@ body{
     background-color: #4b5057;
 }
 
+.state-container {
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+
 .main-input-container {
     width: 440px;
-    margin: 20px;
     border: 2px solid #3b689b;
     padding: 15px;
     padding-top: 25px;
@@ -42,8 +53,20 @@ body{
 .input-container {
     width: 400px;
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: flex-end;
+    align-items: flex-start;
+    padding-bottom: 10px;
+}
+
+.input-label {
+    margin-right: 10px;
+}
+
+.checkbox-container {
+    color: #989f9f;
+    display: flex;
+    justify-content: center;
+    padding-top: 20px;
 }
 
 .input-box {
