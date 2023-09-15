@@ -1,11 +1,13 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class IncidentInitialInfo(models.Model):
     incident_identifier = models.CharField(max_length=200)
     created_at = models.DateTimeField(auto_now_add=True)
     configuration = models.CharField(max_length=200, null=True, blank=True)
     related_part = models.CharField(max_length=200, null=True, blank=True)
-    user = models.CharField(max_length=200)
+    # user = models.ForeignKey(User, on_delete=models.CASCADE)ç
+    user = models.CharField(max_length=200, null=True, blank=True)
     incident_type = models.CharField(max_length=200)
     incident_date = models.DateTimeField()
     serial_number = models.CharField(max_length=200, null=True, blank=True)

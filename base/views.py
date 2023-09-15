@@ -1,6 +1,7 @@
 import pprint
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from .models import Incident, IncidentInitialInfo, IncidentDetailInfo, IncidentReview, IncidentAnalysis
+from .forms import IncidentForm
 
 # Create your views here.
 def home(request):
@@ -9,16 +10,46 @@ def home(request):
     return render(request, 'base/home.html', context)
 
 def createIncident(request):
-    # context = 'create incident'
+    # form = IncidentForm()
+    # if request.method == 'POST':
+    #     form = IncidentForm(request.POST)
+    #     if form.is_valid():
+    #         form.save()
+    #         return redirect('home')
+
+    # context = { 'form': form, 'view': 'createIncident' }
     return render(request, 'base/createIncident.html')
 
-def updateIncident(request):
-    # context = 'update incident'
+# in the future, this template will need a pk
+def incidentReviewAnalysis(request):
+    # incident = get_object_or_404(Incident.objects.select_related('initial_info', 'detail_info', 'review', 'analysis'), pk=str(pk))
+    # context = {'incident': incident}
+
+    return render(request, 'base/incidentReviewAnalysis.html')
+
+def updateIncident(request, pk):
+    incident = Incident.objects.get(id=pk)
+    form = IncidentForm(instance=incident)
+    if request.method == 'POST':
+        form = IncidentForm(request.POST, instance=incident)
+        if form.is_valid():
+            form.save()
+            return redirect('home')
+
+    context = { 'form': form, 'view': 'updateIncident' }
     return render(request, 'base/updateIncident.html')
+
+def deleteIncident(request, pk):
+    incident = Incident.objects.get(id=pk)
+    if request.method == 'POST':
+        incident.delete()
+        return redirect('home')
+
+    context = { 'incident': incident.incident_identifier }
+    return render(request, 'base/deleteIncident.html', context)
 
 def viewIncident(request, pk):
     incident = get_object_or_404(Incident.objects.select_related('initial_info', 'detail_info', 'review', 'analysis'), pk=str(pk))
-
     context = {'incident': incident}
 
     # try:

@@ -36,7 +36,9 @@
     <textarea class="input-box" name="initial_records" rows="4"
       cols="50">"{{ incident.initial_info.initial_records }}"</textarea>
   </div>
-  <div style="display: flex; justify-content: center;">
-    <button class="button">Initial Failure Information Complete?</button>
+  <div class="input-container" style="margin-top: 20px;">
+    <a href="{% url 'incidentReviewAnalysis' %}">
+      <button class="button" style="width: 100%;">Initial Failure Info Completed?</button>
+    </a>
   </div>
 </div>

@@ -1,6 +1,14 @@
 {% extends 'index.html' %}
 
 {% block content %}
+<div class="main-input-container" style="margin-top: 30px;">
+    <h3 class="title-input-container">Incert Incident</h3>
+    <div class="input-container">
+      <label class="input-label">Incident Number:</label>
+      <input type="text" value="{{ incident.initial_info.incident_identifier }}" class="input-box"
+        name="incident_identifier" />
+    </div>
+</div>  
 {% for incident in incidents %}
 <!-- user will type the number of incident (element configurable)
 if exists render the view relate to incident trought its id -->
