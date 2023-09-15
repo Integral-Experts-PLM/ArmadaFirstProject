@@ -1,10 +1,14 @@
 {% extends 'index.html' %}
 
 {% block content %}
-<h1>View an Incident</h1>
-<!-- user will type and incident number on home (elemenot configurabel)
-if exists we get the id of this incident and reder dynamicaly -->
-<div>
-    <h1>{{ incident.id }}</h1><span> - {{ incident.incident_identifier }}</span>
+<div style="display: flex; justify-content: space-between; margin: 30px;">
+    <div style="width: 910px;">
+        {% include 'currentState.html' %}
+        {% include 'failureInfoDone.html' %}
+    </div>
+    <div style="display: flex; flex-direction: column; justify-content: flex-start; width: 100%; margin-left: 20px;">
+        {% include 'reviewReport.html' %}
+        {% include 'analysisReport.html' %}
+    </div>
 </div>
 {% endblock %}

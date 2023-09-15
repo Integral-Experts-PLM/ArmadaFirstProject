@@ -59,13 +59,6 @@ body{
     padding-bottom: 10px;
 }
 
-.checkbox-container {
-    color: #989f9f;
-    display: flex;
-    justify-content: center;
-    padding-top: 20px;
-}
-
 .input-label {
     margin-right: 10px;
 }
@@ -76,4 +69,16 @@ body{
     padding: 5px;
     border: 1px solid #ccc;
     border-radius: 2px;
+}
+
+.button {
+    padding: 5px 40px;
+    font-size: small;
+    text-align: center;
+    border: 1px solid #989f9f;
+    border-radius: 2px;
+    background-color: #f6f6f6;
+    color: #000000;
+    cursor: pointer;
+    outline: none;
 }

@@ -52,7 +52,7 @@ class IncidentReview(models.Model):
 
 class IncidentAnalysis(models.Model):
     incident_identifier = models.CharField(max_length=200)
-    method = models.FileField(null=True, blank=True)
+    method = models.TextField(null=True, blank=True)
     investigation_done = models.TextField(null=True, blank=True)
     analysis_results = models.TextField(null=True, blank=True)
     failure_mode = models.CharField(max_length=200, null=True, blank=True)

@@ -3,7 +3,7 @@
   <div class="input-container">
     <label class="input-label" for="failure_mode">Failure Mode:</label>
     <select id="failure_mode" class="input-box" name="failure_mode">
-      <option value="">Option 1</option>
+      <option value="{{ incident.detail_info.failure_mode }}">{{ incident.detail_info.failure_mode }}</option>
       <option value="">Option 2</option>
       <option value="">Option 3</option>
     </select>
@@ -11,63 +11,37 @@
   <div class="input-container">
     <label class="input-label" for="failure_symptom">Failure Symptom:</label>
     <select id="failure_symptom" class="input-box" name="failure_symptom">
-      <option value="">Option 1</option>
+      <option value="{{ incident.detail_info.failure_symptom }}">{{ incident.detail_info.failure_symptom }}</option>
       <option value="">Option 2</option>
       <option value="">Option 3</option>
     </select>
   </div>
   <div class="input-container">
-    <label class="input-label">Incident Description:</label>
-    <textarea
-      class="input-box"
-      name="fracas_incident_description"
-      rows="4"
-      cols="50"
-    >
-Testing</textarea
-    >
+    <label class="input-label">Fracas Incident Description:</label>
+    <textarea class="input-box" name="fracas_incident_description" rows="4" cols="50">
+{{ incident.detail_info.fracas_incident_description }}</textarea>
   </div>
   <div class="input-container">
     <label class="input-label">Incident Date:</label>
-    <input
-      type="date"
-      value="2023-09-14"
-      class="input-box"
-      name="incident_date"
-    />
+    <input type="date" value="{{ incident.detail_info.incident_date|date:'Y-m-d' }}" class="input-box" name="incident_date" />
   </div>
   <div class="input-container">
     <label class="input-label">Notice Date:</label>
-    <input
-      type="date"
-      value="2023-09-14"
-      class="input-box"
-      name="notice_date"
-    />
+    <input type="date" value="{{ incident.detail_info.notice_date|date:'Y-m-d' }}" class="input-box" name="notice_date" />
   </div>
   <div class="input-container">
     <label class="input-label">Relevant Category:</label>
-    <input
-      type="text"
-      value="Testing"
-      class="input-box"
-      name="relevant_category"
-    />
+    <input type="text" value="{{ incident.detail_info.relevant_category }}" class="input-box"
+      name="relevant_category" />
   </div>
   <div class="input-container">
     <label class="input-label">Remark Incident Entry:</label>
     <textarea class="input-box" name="remark_incident_entry" rows="4" cols="50">
-Testing</textarea
-    >
+{{ incident.detail_info.remark_incident_entry }}</textarea>
   </div>
   <div class="input-container">
     <label class="input-label">Incident Attachment:</label>
-    <input
-      onclick=""
-      type="text"
-      value="Testing"
-      class="input-box"
-      name="incident_attachment"
-    />
+    <input onclick="" type="text" value="{{ incident.detail_info.incident_attachment }}" class="input-box"
+      name="incident_attachment" />
   </div>
 </div>

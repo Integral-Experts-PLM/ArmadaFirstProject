@@ -21,32 +21,32 @@ def viewIncident(request, pk):
 
     context = {'incident': incident}
 
-    try:
-        # Create a pretty printer
-        pretty_printer = pprint.PrettyPrinter(indent=4)
+    # try:
+    #     # Create a pretty printer
+    #     pretty_printer = pprint.PrettyPrinter(indent=4)
 
-        # Print the incident data
-        print("Incident Data:")
-        pretty_printer.pprint(incident.__dict__)
+    #     # Print the incident data
+    #     print("Incident Data:")
+    #     pretty_printer.pprint(incident.__dict__)
 
-        # Print related data in a friendly format
-        if incident.initial_info:
-            print("Related IncidentInitialInfo Data:")
-            pretty_printer.pprint(incident.initial_info.__dict__)
+    #     # Print related data in a friendly format
+    #     if incident.initial_info:
+    #         print("Related IncidentInitialInfo Data:")
+    #         pretty_printer.pprint(incident.initial_info.__dict__)
 
-        if incident.detail_info:
-            print("Related IncidentDetailInfo Data:")
-            pretty_printer.pprint(incident.detail_info.__dict__)
+    #     if incident.detail_info:
+    #         print("Related IncidentDetailInfo Data:")
+    #         pretty_printer.pprint(incident.detail_info.__dict__)
 
-        if incident.review:
-            print("Related IncidentReview Data:")
-            pretty_printer.pprint(incident.review.__dict__)
+    #     if incident.review:
+    #         print("Related IncidentReview Data:")
+    #         pretty_printer.pprint(incident.review.__dict__)
 
-        if incident.analysis:
-            print("Related IncidentAnalysis Data:")
-            pretty_printer.pprint(incident.analysis.__dict__)
+    #     if incident.analysis:
+    #         print("Related IncidentAnalysis Data:")
+    #         pretty_printer.pprint(incident.analysis.__dict__)
 
-    except AttributeError as e:
-        print(f"An error occurred: {e}")
+    # except AttributeError as e:
+    #     print(f"An error occurred: {e}")
 
     return render(request, 'base/viewIncident.html', context)

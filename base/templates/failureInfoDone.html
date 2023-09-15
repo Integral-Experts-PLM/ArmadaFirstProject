@@ -5,29 +5,29 @@
       <div>
         <div class="input-container">
           <label class="input-label">Incident Number:</label>
-          <input type="text" class="input-box" value="Testing" name="incident_identifier" />
+          <input type="text" class="input-box" value="{{ incident.review.incident_identifier }}" name="incident_identifier" />
         </div>
         <div class="input-container">
           <label class="input-label">Configuration:</label>
-          <input type="text" class="input-box" value="Testing" name="configuration" />
+          <input type="text" class="input-box" value="{{ incident.initial_info.configuration }}" name="configuration" />
         </div>
         <div class="input-container">
           <label class="input-label">Incident Date:</label>
-          <input type="date" class="input-box" value="2023-09-14" name="incident_date" />
+          <input type="date" class="input-box" value="{{ incident.initial_info.incident_date|date:'Y-m-d' }}" name="incident_date" />
         </div>
         <div class="input-container">
           <label class="input-label">Incident Type:</label>
-          <input type="text" class="input-box" value="Testing" name="incident_type" />
+          <input type="text" class="input-box" value="{{ incident.initial_info.incident_type }}" name="incident_type" />
         </div>
         <div class="input-container">
           <label class="input-label">FRACAS Incident Desc:</label>
-          <input type="text" value="Testing" class="input-box" name="fracas_incident_description" />
+          <input type="text" value="{{ incident.detail_info.fracas_incident_description }}" class="input-box" name="fracas_incident_description" />
         </div>
       </div>
       <div class="input-container" style="display: flex; flex-direction: column; justify-content: flex-start; margin-left: 20px;">
         <label style="padding-bottom: 10px;">Incident Desc:</label>
         <textarea class="input-box" name="incident_description" rows="6" cols="50" style="width: 100%;""
-      >Testing</textarea>
+      >"{{ incident.review.incident_description }}"</textarea>
     </div>
   </div>
 </div>
@@ -35,22 +35,18 @@
 <div class=" main-input-container" style="width: 100%; margin-bottom: 20px;">
   <h3 class="title-input-container">Material Information</h3>
   <div style="display: flex; justify-content: space-between;">
-
     <div class="input-container" style="width: auto; justify-content: flex-start;">
       <label class="input-label">Part Name:</label>
-      <input style="width: 200px;" type="text" class="input-box" value="Testing" name="part_name" />
+      <input style="width: 200px;" type="text" class="input-box" value="{{ incident.review.part_name }}" name="part_name" />
     </div>
-
     <div class="input-container" style="width: auto; justify-content: flex-start;">
       <label class="input-label">Part Number:</label>
-      <input style="width: 140px;" type="text" class="input-box" value="Testing" name="part_number" />
+      <input style="width: 140px;" type="text" class="input-box" value="{{ incident.review.part_number }}" name="part_number" />
     </div>
-
     <div class="input-container" style="width: auto; justify-content: flex-start;">
       <label class="input-label">Serial Number:</label>
-      <input style="width: 140px;" type="text" class="input-box" value="Testing" name="serial_number" />
+      <input style="width: 140px;" type="text" class="input-box" value="{{ incident.review.serial_number }}" name="serial_number" />
     </div>
-
   </div>
 </div>
 <!-- ====================================================================== -->
@@ -60,11 +56,11 @@
     <div>
       <div class="input-container">
         <label class="input-label">Project Number:</label>
-        <input type="text" class="input-box" value="Testing" name="project_number" />
+        <input type="text" class="input-box" value="{{ incident.review.project_number }}" name="project_number" />
       </div>
       <div class="input-container">
         <label class="input-label">Customer Number:</label>
-        <input type="text" class="input-box" value="Testing" name="customer_number" />
+        <input type="text" class="input-box" value="{{ incident.review.customer_number }}" name="customer_number" />
       </div>
       <div class="input-container">
         <label class="input-label">Address:</label>
@@ -73,21 +69,21 @@
           name="address"
           rows="4"
           cols="50"
-        >Testing</textarea>
+        >"{{ incident.review.address }}"</textarea>
       </div>
     </div>
     <div>
       <div class="input-container">
         <label class="input-label">Project Name:</label>
-        <input type="text" class="input-box" value="Testing" name="project_name" />
+        <input type="text" class="input-box" value="{{ incident.review.project_name }}" name="project_name" />
       </div>
       <div class="input-container">
         <label class="input-label">Customer Name:</label>
-        <input type="text" class="input-box" value="Testing" name="customer_name" />
+        <input type="text" class="input-box" value="{{ incident.review.customer_name }}" name="customer_name" />
       </div>
       <div class="input-container">
         <label class="input-label">Phone:</label>
-        <input type="text" class="input-box" value="Testing" name="phone" />
+        <input type="text" class="input-box" value="{{ incident.review.phone }}" name="phone" />
       </div>
     </div>
   </div>
@@ -98,7 +94,7 @@
 
   <div class="input-container">
     <label class="input-label">Operating Mode:</label>
-    <input type="text" class="input-box" value="Testing" name="operating_mode" />
+    <input type="text" class="input-box" value="{{ incident.review.operating_mode }}" name="operating_mode" />
   </div>
   <div class="input-container" style="width: 100%;">
     <label style="width: 185px;">Corrective Maintenance:</label>
@@ -156,7 +152,7 @@
   </div>
   <div class="input-container">
     <label class="input-label">Attachments:</label>
-    <input onclick="" type="text" value="Testing" class="input-box" name="incident_attachment" />
+    <input onclick="" type="text" value="{{ incident.detail_info.incident_attachment }}" class="input-box" name="incident_attachment" />
   </div>
 </div>
 </div>

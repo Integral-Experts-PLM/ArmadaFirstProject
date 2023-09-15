@@ -2,46 +2,41 @@
   <h3 class="title-input-container">Initial Failure Information</h3>
   <div class="input-container">
     <label class="input-label">Incident Number:</label>
-    <input type="text" value="Testing" class="input-box" name="incident_identifier" />
+    <input type="text" value="{{ incident.initial_info.incident_identifier }}" class="input-box"
+      name="incident_identifier" />
   </div>
   <div class="input-container">
     <label class="input-label">Entry Date:</label>
-    <input type="date" value="2023-09-14" class="input-box" name="created_at" />
+    <input type="date" value="{{ incident.initial_info.created_at|date:'Y-m-d' }}" class="input-box"
+      name="created_at" />
   </div>
   <div class="input-container">
     <label class="input-label">Configuration:</label>
-    <input type="text" value="Testing" class="input-box" name="configuration" />
+    <input type="text" value="{{ incident.initial_info.configuration }}" class="input-box" name="configuration" />
   </div>
   <div class="input-container">
     <label class="input-label">Related Part:</label>
-    <input type="text" value="Testing" class="input-box" name="related_part" />
+    <input type="text" value="{{ incident.initial_info.related_part }}" class="input-box" name="related_part" />
   </div>
   <div class="input-container">
     <label class="input-label">Person Incident Entry:</label>
-    <input type="text" value="Testing" class="input-box" name="user" />
+    <input type="text" value="{{ incident.initial_info.user }}" class="input-box" name="user" />
   </div>
   <div class="input-container">
-    <label for="incident_date">Date Incident:</label>
-    <select id="incident_date" class="input-box" name="incident_date">
-      <option value="">Option 1</option>
-      <option value="">Option 2</option>
-      <option value="">Option 3</option>
-    </select>
+    <label class="input-label">Date Incident:</label>
+    <input type="date" value="{{ incident.initial_info.incident_date|date:'Y-m-d' }}" class="input-box"
+      name="incident_date" />
   </div>
   <div class="input-container">
     <label class="input-label">Serial Number:</label>
-    <input type="text" value="Testing" class="input-box" name="serial_number" />
+    <input type="text" value="{{ incident.initial_info.serial_number }}" class="input-box" name="serial_number" />
   </div>
   <div class="input-container">
     <label class="input-label">Initial Records:</label>
-    <textarea
-      class="input-box"
-      name="initial_records"
-      rows="4"
-      cols="50"
-    >Testing</textarea>
+    <textarea class="input-box" name="initial_records" rows="4"
+      cols="50">"{{ incident.initial_info.initial_records }}"</textarea>
   </div>
-  <div class="checkbox-container">
-    <label class="input-label">Initial Failure Information Complete?</label>
+  <div style="display: flex; justify-content: center;">
+    <button class="button">Initial Failure Information Complete?</button>
   </div>
 </div>
