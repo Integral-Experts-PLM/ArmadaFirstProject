@@ -1,78 +1,73 @@
-<div class="main-input-container" style="width: 910px; margin-bottom: 20px;">
-  <h3 class="title-input-container">Incident Information</h3>
-  <div style="display: flex; justify-content: space-between;">
-    <div>
-      <div class="input-container" style="justify-content: flex-end;">
-        <label class="input-label">Incident Number:</label>
-        <input type="text" class="input-box" value="Testing" name="incident_identifier" />
+<div>
+  <div class="main-input-container" style="width: 100%; margin-bottom: 20px;">
+    <h3 class="title-input-container">Incident Information</h3>
+    <div style="display: flex; justify-content: space-between;">
+      <div>
+        <div class="input-container">
+          <label class="input-label">Incident Number:</label>
+          <input type="text" class="input-box" value="Testing" name="incident_identifier" />
+        </div>
+        <div class="input-container">
+          <label class="input-label">Configuration:</label>
+          <input type="text" class="input-box" value="Testing" name="configuration" />
+        </div>
+        <div class="input-container">
+          <label class="input-label">Incident Date:</label>
+          <input type="date" class="input-box" value="2023-09-14" name="incident_date" />
+        </div>
+        <div class="input-container">
+          <label class="input-label">Incident Type:</label>
+          <input type="text" class="input-box" value="Testing" name="incident_type" />
+        </div>
+        <div class="input-container">
+          <label class="input-label">FRACAS Incident Desc:</label>
+          <input type="text" value="Testing" class="input-box" name="fracas_incident_description" />
+        </div>
       </div>
-      <div class="input-container" style="justify-content: flex-end;">
-        <label class="input-label">Configuration:</label>
-        <input type="text" class="input-box" value="Testing" name="configuration" />
-      </div>
-      <div class="input-container">
-        <label style="margin-right: 10px;">Incident Date:</label>
-        <input type="date" class="input-box" value="2023-09-14" name="incident_date" />
-      </div>
-      <div class="input-container" style="justify-content: flex-end;">
-        <label style="margin-right: 10px;">Incident Type:</label>
-        <input type="text" class="input-box" value="Testing" name="incident_type" />
-      </div>
-      <div class="input-container" style="justify-content: flex-end;">
-        <label style="margin-right: 10px;">FRACAS Incident Desc:</label>
-        <input
-          type="text"
-          value="Testing"
-          class="input-box"
-          name="fracas_incident_description"
-        />
-      </div>
-    </div>
-    <div class="input-container" style="display: flex; flex-direction: column; justify-content: flex-start;">
-      <label style="padding-bottom: 10px;">Incident Desc:</label>
-      <textarea
-      class="input-box"
-      name="incident_description"
-      rows="6"
-      cols="50"
-      style="width: 100%;""
+      <div class="input-container" style="display: flex; flex-direction: column; justify-content: flex-start; margin-left: 20px;">
+        <label style="padding-bottom: 10px;">Incident Desc:</label>
+        <textarea class="input-box" name="incident_description" rows="6" cols="50" style="width: 100%;""
       >Testing</textarea>
     </div>
   </div>
 </div>
 <!-- ====================================================================== -->
-<div class="main-input-container" style="width: 910px; margin-bottom: 20px;">
+<div class=" main-input-container" style="width: 100%; margin-bottom: 20px;">
   <h3 class="title-input-container">Material Information</h3>
   <div style="display: flex; justify-content: space-between;">
+
     <div class="input-container" style="width: auto; justify-content: flex-start;">
-      <label style="margin-right: 10px;">Part Name:</label>
-      <input style="width: 240px;" type="text" class="input-box" value="Testing" name="part_name" />
+      <label class="input-label">Part Name:</label>
+      <input style="width: 200px;" type="text" class="input-box" value="Testing" name="part_name" />
     </div>
+
     <div class="input-container" style="width: auto; justify-content: flex-start;">
-      <label style="margin-right: 10px;">Part Number:</label>
-      <input style="width: 160px;" type="text" class="input-box" value="Testing" name="part_number" />
+      <label class="input-label">Part Number:</label>
+      <input style="width: 140px;" type="text" class="input-box" value="Testing" name="part_number" />
     </div>
+
     <div class="input-container" style="width: auto; justify-content: flex-start;">
-      <label style="margin-right: 10px;">Serial Number:</label>
-      <input style="width: 160px;" type="text" class="input-box" value="Testing" name="serial_number" />
+      <label class="input-label">Serial Number:</label>
+      <input style="width: 140px;" type="text" class="input-box" value="Testing" name="serial_number" />
     </div>
+
   </div>
 </div>
 <!-- ====================================================================== -->
-<div class="main-input-container" style="width: 910px; margin-bottom: 20px;">
+<div class="main-input-container" style="width: 100%; margin-bottom: 20px;">
   <h3 class="title-input-container">Customer Information</h3>
   <div style="display: flex; justify-content: space-between;">
     <div>
-      <div class="input-container"style="justify-content: flex-end;">
-        <label style="margin-right: 10px;">Project Number:</label>
+      <div class="input-container">
+        <label class="input-label">Project Number:</label>
         <input type="text" class="input-box" value="Testing" name="project_number" />
       </div>
-      <div class="input-container" style="justify-content: flex-end;">
-        <label style="margin-right: 10px;">Customer Number:</label>
+      <div class="input-container">
+        <label class="input-label">Customer Number:</label>
         <input type="text" class="input-box" value="Testing" name="customer_number" />
       </div>
-      <div class="input-container" style="justify-content: flex-end;">
-        <label style="margin-right: 10px;">Address:</label>
+      <div class="input-container">
+        <label class="input-label">Address:</label>
         <textarea
           class="input-box"
           name="address"
@@ -80,24 +75,88 @@
           cols="50"
         >Testing</textarea>
       </div>
+    </div>
+    <div>
+      <div class="input-container">
+        <label class="input-label">Project Name:</label>
+        <input type="text" class="input-box" value="Testing" name="project_name" />
       </div>
-      <div>
-        <div class="input-container" style="justify-content: flex-end;">
-          <label style="margin-right: 10px;">Project Name:</label>
-          <input type="text" class="input-box" value="Testing" name="project_name" />
-        </div>
-        <div class="input-container" style="justify-content: flex-end;">
-          <label style="margin-right: 10px;">Customer Name:</label>
-          <input type="text" class="input-box" value="Testing" name="customer_name" />
-        </div>
-        <div class="input-container" style="justify-content: flex-end;">
-          <label style="margin-right: 10px;">Phone:</label>
-          <input type="text" class="input-box" value="Testing" name="phone" />
-        </div>
-        </div>
+      <div class="input-container">
+        <label class="input-label">Customer Name:</label>
+        <input type="text" class="input-box" value="Testing" name="customer_name" />
       </div>
+      <div class="input-container">
+        <label class="input-label">Phone:</label>
+        <input type="text" class="input-box" value="Testing" name="phone" />
+      </div>
+    </div>
+  </div>
 </div>
 <!-- ====================================================================== -->
-<div class="main-input-container" style="width: 910px; margin-bottom: 20px;">
+<div class="main-input-container" style="width: 100%; margin-bottom: 20px;">
   <h3 class="title-input-container">Incident Details</h3>
+
+  <div class="input-container">
+    <label class="input-label">Operating Mode:</label>
+    <input type="text" class="input-box" value="Testing" name="operating_mode" />
+  </div>
+  <div class="input-container" style="width: 100%;">
+    <label style="width: 185px;">Corrective Maintenance:</label>
+    <table class="input-box" style="width: 100%;">
+      <thead>
+        <tr>
+          <th>Incident</th>
+          <th>Maintenance</th>
+          <th>Replaced?</th>
+          <th>Item Cost</th>
+          <th>Number of Men</th>
+          <th>Elapsed Maintenance</th>
+          <th>Actions Take</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Testing 1</td>
+          <td>Testing 1</td>
+          <td>Testing 1</td>
+          <td>Testing 1</td>
+          <td>Testing 1</td>
+          <td>Testing 1</td>
+          <td>Testing 1</td>
+        </tr>
+        <tr>
+          <td>Testing 2</td>
+          <td>Testing 2</td>
+          <td>Testing 2</td>
+          <td>Testing 2</td>
+          <td>Testing 2</td>
+          <td>Testing 2</td>
+          <td>Testing 2</td>
+        </tr>
+        <tr>
+          <td>Testing 3</td>
+          <td>Testing 3</td>
+          <td>Testing 3</td>
+          <td>Testing 3</td>
+          <td>Testing 3</td>
+          <td>Testing 3</td>
+          <td>Testing 3</td>
+        </tr>
+        <tr>
+          <td>Testing 4</td>
+          <td>Testing 4</td>
+          <td>Testing 4</td>
+          <td>Testing 4</td>
+          <td>Testing 4</td>
+          <td>Testing 4</td>
+          <td>Testing 4</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="input-container">
+    <label class="input-label">Attachments:</label>
+    <input onclick="" type="text" value="Testing" class="input-box" name="incident_attachment" />
+  </div>
+</div>
 </div>
