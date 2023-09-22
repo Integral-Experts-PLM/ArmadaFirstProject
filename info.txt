@@ -1,3 +1,7 @@
+super user id = admin
+super user email = admin@admin.com
+super user password = admin
+
 1-     Desde la aplicación de ATAVIA (hecha con Django), vamos a crear un desplegable que tendrá 3 opciones
 -        Creación de incidencia
 -        Actualización de incidencia y fallos

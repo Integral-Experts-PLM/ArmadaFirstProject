@@ -1,0 +1,31 @@
+<div class="main-input-container">
+  <h3 class="title-input-container">Incident Details</h3>
+  <div style="display: flex; flex-direction: row; justify-content: space-around;">
+    <div class="input-container">
+      <label class="input-label">Operating Mode:</label>
+      <input type="text" value="{{ incident_details.0.operating_mode }}" class="input-box" name="operating_mode" />
+    </div>
+    <div class="input-container">
+      <label class="input-label">Initial Severity:</label>
+      <input type="text" value="{{ incident_details.0.initial_severity }}" class="input-box" name="initial_severity" />
+    </div>
+  </div>
+  <div>
+    <div class="input-container" style="width: 100%;">
+      <label class="input-label" style="width: 140px; text-align: right;">Incident Description:</label>
+      <textarea name="incident_description" rows="3"
+        class="input-box" style="width: 100%; text-align: left;">
+        {{ incident_details.0.incident_description }}
+    </textarea>
+    </div>
+    <div class="input-container" style="width: 100%;">
+      <label class="input-label" style="width: 140px; text-align: right;">Maintenance:</label>
+      {% include 'maintenance.html' %}
+    </div>
+
+    <div class="input-container" style="width: 100%; display: flex; justify-content: flex-start;">
+      <label class="input-label" style="width: 122px; text-align: right;">Attachments:</label>
+      <input type="text" value="{{ incident_details.0.attachment }}" class="input-box" name="attachment" />
+    </div>
+  </div>
+</div>

@@ -1,0 +1,32 @@
+<div class="main-input-container">
+  <h3 class="title-input-container">Location Details</h3>
+  <div style="display: flex; flex-direction: row; justify-content: space-around;">
+    <div>
+      <div class="input-container">
+        <label class="input-label">Location:</label>
+        <input type="text" value="{{ location_details.0.location }}" class="input-box" name="location" />
+      </div>
+      <div class="input-container">
+        <label class="input-label">Address:</label>
+        <textarea name="incident_description" rows="3" class="input-box" style="text-align: left;"
+          style="height: 65px; display: flex; flex-wrap: wrap; align-items: flex-start;" name="address">
+        {{ location_details.0.address }}
+    </textarea>
+      </div>
+    </div>
+    <div>
+      <div class="input-container">
+        <label class="input-label">Contact:</label>
+        <input type="text" value="{{ location_details.0.contact }}" class="input-box" name="contact" />
+      </div>
+      <div class="input-container">
+        <label class="input-label">Phone:</label>
+        <input type="text" value="{{ location_details.0.phone }}" class="input-box" name="phone" />
+      </div>
+      <div class="input-container">
+        <label class="input-label">Email:</label>
+        <input type="text" value="{{ location_details.0.email }}" class="input-box" name="email" />
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,43 @@
+<div class="main-input-container">
+  <form method="POST">
+    {% csrf_token %}
+    <h3 class="title-input-container">Incident Information</h3>
+    <div class="input-container">
+      <label class="input-label">Incident Id:</label>
+      <input type="text"
+        value="{% if incident %}{{ incident.incident_id }}{% else %}{{ incident_info_form.incident_id.value|default:'' }}{% endif %}"
+        class="input-box" name="incident_id" />
+    </div>
+    <div class="input-container">
+      <label class="input-label">Reported By:</label>
+      <input type="text"
+        value="{% if incident %}{{ incident.reportedBy }}{% else %}{{ incident_info_form.reportedBy.value|default:'' }}{% endif %}"
+        class="input-box" name="reportedBy" />
+    </div>
+    <div class="input-container">
+      <label class="input-label">Incident Date:</label>
+      <input type="date"
+        value="{% if incident %}{{ incident.incident_date|date:'Y-m-d' }}{% else %}{{ incident_info_form.incident_date.value|default:''|date:'Y-m-d' }}{% endif %}"
+        class="input-box" name="incident_date" />
+    </div>
+    <div class="input-container">
+      <label class="input-label">Configuration:</label>
+      <input type="text"
+        value="{% if incident %}{{ incident.configuration }}{% else %}{{ incident_info_form.configuration.value|default:'' }}{% endif %}"
+        class="input-box" name="configuration" />
+    </div>
+    <div class="input-container">
+      <label class="input-label">Tail Number:</label>
+      <input type="text"
+        value="{% if incident %}{{ incident.tail_number }}{% else %}{{ incident_info_form.tail_number.value|default:'' }}{% endif %}"
+        class="input-box" name="tail_number" />
+    </div>
+    <div class="input-container">
+      <label class="input-label">Mission Effect:</label>
+      <input type="text"
+        value="{% if incident %}{{ incident.mission_effect }}{% else %}{{ incident_info_form.mission_effect.value|default:'' }}{% endif %}"
+        class="input-box" name="mission_effect" />
+    </div>
+    <input type="submit" value="Create Incident Info">
+  </form>
+</div>

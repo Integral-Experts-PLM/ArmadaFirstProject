@@ -1,84 +1,106 @@
-body{
-    background-color: white;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: small;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
+body {
+  background-color: white;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: small;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  margin: 0;
 }
 
 .navbar {
-    width: 100%;
-    background-color: #343a41;
-    padding: 12px;
-    font-size: medium;
+  width: 100%;
+  background-color: #343a41;
+  padding: 12px;
+  font-size: medium;
 }
 
 .custom-link {
-    text-decoration: none;
-    padding: 12px;
-    transition: background-color 0.3s;
-    color: #989f9f;
+  text-decoration: none;
+  padding: 12px;
+  transition: background-color 0.3s;
+  color: #989f9f;
 }
-  
+
 .custom-link:hover {
-    background-color: #4b5057;
+  background-color: #4b5057;
 }
 
 .state-container {
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .main-input-container {
-    width: 440px;
-    border: 2px solid #3b689b;
-    padding: 15px;
-    padding-top: 25px;
-    position: relative;
+  width: 100%;
+  border: 1px solid gray;
+  padding: 25px 15px 15px 15px;
+  position: relative;
 }
 
 .title-input-container {
-    font-size: 20px;
-    font-weight: bold;
-    color: #3b689b;    
-    position: absolute;
-    top: -16px;
-    padding: 4px;
-    background-color: white;
+  font-size: 15px;
+  color: black;
+  position: absolute;
+  top: -16px;
+  padding: 4px;
+  background-color: white;
 }
 
 .input-container {
-    width: 400px;
-    display: flex;
-    justify-content: flex-end;
-    align-items: flex-start;
-    padding-bottom: 10px;
+  width: 400px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  padding-bottom: 10px;
 }
 
 .input-label {
-    margin-right: 10px;
+  margin-right: 10px;
 }
 
 .input-box {
-    width: 250px;
-    background-color: #f6f6f6;
-    padding: 5px;
-    border: 1px solid #ccc;
-    border-radius: 2px;
+  width: 250px;
+  background-color: #f6f6f6;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 2px;
 }
 
 .button {
-    padding: 5px 40px;
-    font-size: small;
-    text-align: center;
-    border: 1px solid #989f9f;
-    border-radius: 2px;
-    background-color: #f6f6f6;
-    color: #000000;
-    cursor: pointer;
-    outline: none;
+  padding: 5px 40px;
+  font-size: small;
+  text-align: center;
+  border: 1px solid #989f9f;
+  border-radius: 2px;
+  background-color: #f6f6f6;
+  color: #000000;
+  cursor: pointer;
+  outline: none;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+th {
+  background-color: #e4eef3;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2; /* Light gray for even rows */
+}
+
+tr:nth-child(odd) {
+  background-color: white; /* White for odd rows */
 }

@@ -1,14 +1,16 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import IncidentInitialInfo
-from .models import IncidentDetailInfo
-from .models import IncidentReview
+from .models import IncidentInfo
+from .models import EquipmentDetails
+from .models import LocationDetails
+from .models import MaintananceInfo
+from .models import IncidentDetail
 from .models import IncidentAnalysis
-from .models import Incident
 
-admin.site.register(IncidentInitialInfo)
-admin.site.register(IncidentDetailInfo)
-admin.site.register(IncidentReview)
+admin.site.register(IncidentInfo)
+admin.site.register(EquipmentDetails)
+admin.site.register(LocationDetails)
+admin.site.register(MaintananceInfo)
+admin.site.register(IncidentDetail)
 admin.site.register(IncidentAnalysis)
-admin.site.register(Incident)
