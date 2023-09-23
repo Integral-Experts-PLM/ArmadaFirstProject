@@ -16,28 +16,24 @@ def home(request):
     return render(request, 'base/home.html', context)
 
 def createIncident(request):
-    incident_info_form = IncidentInfoForm(request.POST)
+    incident_info_form = IncidentInfoForm(request.POST or None)
+    equipment_details_form = EquipmentDetailsForm(request.POST or None)
 
     if request.method == 'POST':
-        print(incident_info_form.data)
-        if incident_info_form.is_valid():
-            incident_info = incident_info_form.save()
+        if all([incident_info_form.is_valid(), equipment_details_form.is_valid()]):
+            print('all valid')
+            incident_data = incident_info_form.save(commit=False)
+            incident_data.save()
+            equipment_data = equipment_details_form.save(commit=False)
+            equipment_data.incident_id = incident_data
+            equipment_data.save()
+            # print('incident_data', incident_data)
+            # print('equipment_data', equipment_data)
+            return redirect('home')
         else:
-            print('from incident data', incident_info_form.errors.as_data())
             incident_info_form = IncidentInfoForm()
+            equipment_details_form = EquipmentDetailsForm()
 
-        # equipment_details_form = EquipmentDetailsForm(request.POST)
-        # print(equipment_details_form.data)
-        # if equipment_details_form.is_valid():
-        #     equipment_details = equipment_details_form.save(commit=False)
-        #     equipment_details.incident_id = incident_info
-        #     equipment_details.save()
-        # else:
-        #     print('from equipment data', equipment_details_form.errors.as_data())
-        # equipment_details_form = EquipmentDetailsForm()
-
-        return redirect('home')    
-       
     context = {'incident_info_form': incident_info_form, 'view': 'create_incident'
 }
     return render(request, 'base/createIncident.html', context)

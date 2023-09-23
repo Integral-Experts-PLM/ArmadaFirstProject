@@ -1,6 +1,4 @@
 <div class="main-input-container">
-  <form method="POST">
-    {% csrf_token %}
     <h3 class="title-input-container">Incident Information</h3>
     <div class="input-container">
       <label class="input-label">Incident Id:</label>
@@ -38,6 +36,4 @@
         value="{% if incident %}{{ incident.mission_effect }}{% else %}{{ incident_info_form.mission_effect.value|default:'' }}{% endif %}"
         class="input-box" name="mission_effect" />
     </div>
-    <input type="submit" value="Create Incident Info">
-  </form>
 </div>

@@ -4,7 +4,6 @@ from .models import IncidentInfo, EquipmentDetails, LocationDetails, Maintanance
 class IncidentInfoForm(ModelForm):
     class Meta:
         model = IncidentInfo
-        fields = '__all__'
         exclude = ['current_state']
 
 class EquipmentDetailsForm(ModelForm):

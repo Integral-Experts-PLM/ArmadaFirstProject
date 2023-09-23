@@ -1,6 +1,4 @@
 <div class="main-input-container">
-  <form method="POST">
-    {% csrf_token %}
     <h3 class="title-input-container">Equipment Details</h3>
     <div class="input-container">
       <label class="input-label">Failed Component:</label>
@@ -38,6 +36,4 @@
         value="{% if equipment_details %}{{ equipment_details.0.analysis_team }}{% else %}{{ equipment_details_form.analysis_team.value|default:'' }}{% endif %}"
         class="input-box" name="analysis_team" />
     </div>
-    <input type="submit" value="Create Equipment Details" style="display: none;">
-  </form>
 </div>

@@ -4,24 +4,25 @@
 
 {% block content %}
 <div style="display: flex; flex-direction: column; align-items: center;">
-    <div style="display: flex; justify-content: space-between; margin-top: 30px;">
-        <form method="POST">
-            {% csrf_token %}
+    <form method="POST">
+        {% csrf_token %}
+        <div style="display: flex; justify-content: space-between; margin-top: 30px;">
             {% include 'incidentInfo.html' %}
-        </form>
-        <div style="height: 100%; display: flex; flex-direction: column; align-items: center;">
-            <div style="height: 220px;">
-                <img src="{% static 'images/escudoArmada.png' %}" alt="Escudo Armada" style="height: auto;">
+            <div style="height: 100%; display: flex; flex-direction: column; align-items: center;">
+                <div style="height: 220px;">
+                    <img src="{% static 'images/escudoArmada.png' %}" alt="Escudo Armada" style="height: auto;">
+                </div>
+                {% include 'currentState.html' %}
             </div>
-            {% include 'currentState.html' %}
+            {% include 'equipmentDetails.html' %}
         </div>
-        {% include 'equipmentDetails.html' %}
-    </div>
-    <div style=" margin-top: 20px; width: 100%;">
-        {% include 'locationDetails.html' %}
-    </div>
-    <div style="margin: 20px 0px 20px 0px; width: 100%;">
-        {% include 'incidentDetails.html' %}
-    </div>
+        <!-- <div style=" margin-top: 20px; width: 100%;">
+            {% include 'locationDetails.html' %}
+        </div>
+        <div style="margin: 20px 0px 20px 0px; width: 100%;">
+            {% include 'incidentDetails.html' %}
+        </div> -->
+        <input type="submit" value="Create Incident">
+    </form>
 </div>
 {% endblock %}
