@@ -4,28 +4,28 @@
     <div>
       <div class="input-container">
         <label class="input-label">Location:</label>
-        <input type="text" value="{{ location_details.0.location }}" class="input-box" name="location" />
+        <input type="text" value="{% if location_details %}{{ location_details.location }}{% else %}{{ incident_info_form.location.value|default:'' }}{% endif %}" class="input-box" name="location" />
       </div>
       <div class="input-container">
         <label class="input-label">Address:</label>
-        <textarea name="incident_description" rows="3" class="input-box" style="text-align: left;"
-          style="height: 65px; display: flex; flex-wrap: wrap; align-items: flex-start;" name="address">
-        {{ location_details.0.address }}
+        <textarea name="address" rows="3" class="input-box" style="text-align: left;"
+          style="height: 65px; display: flex; flex-wrap: wrap; align-items: flex-start;">
+          {% if location_details %}{{ location_details.address }}{% else %}{{ incident_info_form.address.value|default:'' }}{% endif %}
     </textarea>
       </div>
     </div>
     <div>
       <div class="input-container">
         <label class="input-label">Contact:</label>
-        <input type="text" value="{{ location_details.0.contact }}" class="input-box" name="contact" />
+        <input type="text" value="{% if location_details %}{{ location_details.contact }}{% else %}{{ incident_info_form.contact.value|default:'' }}{% endif %}" class="input-box" name="contact" />
       </div>
       <div class="input-container">
         <label class="input-label">Phone:</label>
-        <input type="text" value="{{ location_details.0.phone }}" class="input-box" name="phone" />
+        <input type="text" value="{% if location_details %}{{ location_details.phone }}{% else %}{{ incident_info_form.phone.value|default:'' }}{% endif %}" class="input-box" name="phone" />
       </div>
       <div class="input-container">
         <label class="input-label">Email:</label>
-        <input type="text" value="{{ location_details.0.email }}" class="input-box" name="email" />
+        <input type="text" value="{% if location_details %}{{ location_details.email }}{% else %}{{ incident_info_form.email.value|default:'' }}{% endif %}" class="input-box" name="email" />
       </div>
     </div>
   </div>

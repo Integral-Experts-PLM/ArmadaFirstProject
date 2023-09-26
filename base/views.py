@@ -1,44 +1,70 @@
 import pprint
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
 from .models import IncidentInfo, EquipmentDetails, LocationDetails, MaintananceInfo, IncidentDetail, IncidentAnalysis
-from .forms import IncidentInfoForm, EquipmentDetailsForm, LocationDetailsForm, MaintananceInfoForm, IncidentDetailForm, IncidentAnalysisForm
-
-# Create your views here.
+from .forms import IncidentInfoForm, EquipmentDetailsForm, LocationDetailsForm, MaintananceInfoForm, IncidentDetailForm, IncidentAnalysisForm, IncidentInfoIdForm
 
 
 def home(request):
-    incidents = IncidentInfo.objects.all()
-    context = {'incidents': incidents}
+    message = None  # Initialize the message variable
+    if request.method == 'POST':
+        # Create a form to input the incident number
+        incident_id_form = IncidentInfoIdForm(request.POST)
+        if incident_id_form.is_valid():
+            incident_id = incident_id_form.cleaned_data['incident_id']
+            # Try to retrieve the incident
+            try:
+                incident = IncidentInfo.objects.get(incident_id=incident_id)
+            except IncidentInfo.DoesNotExist:
+                message = 'Invalid Incident Id!'
+            else:
+                return redirect('view_incident', pk=incident.pk)
+    else:
+        incident_id_form = IncidentInfoIdForm()
 
-    # incident = get_object_or_404(IncidentInfo, incident_id=incident_id)
-    # context = {'incident': incident}
-
+    context = {'incident_id_form': incident_id_form, 'message': message}
     return render(request, 'base/home.html', context)
 
+
 def createIncident(request):
+    # Create forms for the incident creation
     incident_info_form = IncidentInfoForm(request.POST or None)
     equipment_details_form = EquipmentDetailsForm(request.POST or None)
+    location_details_form = LocationDetailsForm(request.POST or None)
+    incident_details_form = IncidentDetailForm(request.POST or None)
 
     if request.method == 'POST':
-        if all([incident_info_form.is_valid(), equipment_details_form.is_valid()]):
-            print('all valid')
+        if all([incident_info_form.is_valid(), equipment_details_form.is_valid(), location_details_form.is_valid(), incident_details_form.is_valid()]):
+
             incident_data = incident_info_form.save(commit=False)
             incident_data.save()
+
             equipment_data = equipment_details_form.save(commit=False)
             equipment_data.incident_id = incident_data
             equipment_data.save()
-            # print('incident_data', incident_data)
-            # print('equipment_data', equipment_data)
+
+            location_details = location_details_form.save(commit=False)
+            location_details.incident_id = incident_data
+            location_details.save()
+
+            incident_details = incident_details_form.save(commit=False)
+            incident_details.incident_id = incident_data
+            incident_details.save()
+
             return redirect('home')
         else:
             incident_info_form = IncidentInfoForm()
             equipment_details_form = EquipmentDetailsForm()
+            location_details_form = LocationDetailsForm()
+            incident_details_form = IncidentDetailForm()
 
-    context = {'incident_info_form': incident_info_form, 'view': 'create_incident'
-}
+    context = {'incident_info_form': incident_info_form, 'equipment_details_form': equipment_details_form, 'location_details_form': location_details_form, 'incident_details_form': incident_details_form, 'view': 'create_incident'
+               }
+
     return render(request, 'base/createIncident.html', context)
 
+
 def incidentReviewAnalysis(request):
+    # UNDER CONSTRUCTION
     # incident = get_object_or_404(IncidentInfo.objects.select_related('initial_info', 'detail_info', 'review', 'analysis'), pk=str(pk))
     # context = {'incident': incident}
 
@@ -46,70 +72,56 @@ def incidentReviewAnalysis(request):
 
 
 def updateIncident(request, pk):
-    try:
-        incident = get_object_or_404(IncidentInfo, pk=pk)
-        equipment = get_object_or_404(EquipmentDetails, pk=pk)
-        location = get_object_or_404(LocationDetails, pk=pk)
-        maintenance = get_object_or_404(MaintananceInfo, pk=pk)
-        incident_detail = get_object_or_404(IncidentDetail, pk=pk)
-        incident_analysis = get_object_or_404(IncidentAnalysis, pk=pk)
+    # Use get_object_or_404 to retrieve the IncidentInfo instance
+    incident = get_object_or_404(IncidentInfo, pk=pk)
 
-    except IncidentInfo.DoesNotExist:
-        return render(request, '404.html', status=404)
+    # Access related objects
+    equipment_details = EquipmentDetails.objects.filter(
+        incident_id=incident).first()
+    location_details = LocationDetails.objects.filter(
+        incident_id=incident).first()
+    incident_details = IncidentDetail.objects.filter(
+        incident_id=incident).first()
 
     if request.method == 'POST':
-        # Create forms for each model and populate them with POST data
-        incident_form = IncidentInfoForm(request.POST, instance=incident)
-        equipment_form = EquipmentDetailsForm(request.POST, instance=equipment)
-        location_form = LocationDetailsForm(request.POST, instance=location)
-        maintenance_form = MaintananceInfoForm(
-            request.POST, instance=maintenance)
-        incident_detail_form = IncidentDetailForm(
-            request.POST, instance=incident_detail)
-        incident_analysis_form = IncidentAnalysisForm(
-            request.POST, instance=incident_analysis)
+        # Create forms instances to be updated
+        incident_info_form = IncidentInfoForm(request.POST, instance=incident)
+        equipment_details_form = EquipmentDetailsForm(
+            request.POST, instance=equipment_details)
+        location_details_form = LocationDetailsForm(
+            request.POST, instance=location_details)
+        incident_details_form = IncidentDetailForm(
+            request.POST, instance=incident_details)
 
-        # Check if all forms are valid
-        if all([
-            incident_form.is_valid(),
-            equipment_form.is_valid(),
-            location_form.is_valid(),
-            maintenance_form.is_valid(),
-            incident_detail_form.is_valid(),
-            incident_analysis_form.is_valid(),
-        ]):
-            # Save each form individually to update the associated model instances
-            incident_form.save()
-            equipment_form.save()
-            location_form.save()
-            maintenance_form.save()
-            incident_detail_form.save()
-            incident_analysis_form.save()
-            return redirect('home')  # Redirect after successful update
+        if all([incident_info_form.is_valid(), equipment_details_form.is_valid(), location_details_form.is_valid(), incident_details_form.is_valid()]):
+            # Save the updated data
+            incident_info_form.save()
+            equipment_details_form.save()
+            location_details_form.save()
+            incident_details_form.save()
+
+            return redirect('home')
 
     else:
-        # Create forms for each model and populate them with instance data
-        incident_form = IncidentInfoForm(instance=incident)
-        equipment_form = EquipmentDetailsForm(instance=equipment)
-        location_form = LocationDetailsForm(instance=location)
-        maintenance_form = MaintananceInfoForm(instance=maintenance)
-        incident_detail_form = IncidentDetailForm(instance=incident_detail)
-        incident_analysis_form = IncidentAnalysisForm(
-            instance=incident_analysis)
+        # Initialize forms with existing data
+        incident_info_form = IncidentInfoForm(instance=incident)
+        equipment_details_form = EquipmentDetailsForm(
+            instance=equipment_details)
+        location_details_form = LocationDetailsForm(instance=location_details)
+        incident_details_form = IncidentDetailForm(instance=incident_details)
 
     context = {
-        'incident_form': incident_form,
-        'equipment_details': equipment_form,
-        'location_details': location_form,
-        'maintenance_info': maintenance_form,
-        'incident_details': incident_detail_form,
-        'incident_analysis': incident_analysis_form,
         'incident': incident,
+        'equipment_details': equipment_details,
+        'location_details': location_details,
+        'incident_details': incident_details,
+        'view': 'update_incident',
     }
     return render(request, 'base/updateIncident.html', context)
 
 
 def deleteIncident(request, pk):
+    # Use get_object_or_404 to retrieve the IncidentInfo instance
     incident = get_object_or_404(IncidentInfo, pk=pk)
 
     if request.method == 'POST':
@@ -125,11 +137,16 @@ def viewIncident(request, pk):
     incident = get_object_or_404(IncidentInfo, pk=pk)
 
     # Access related objects with correct lowercase names
-    equipment_details = incident.equipmentdetails_set.all()
-    location_details = incident.locationdetails_set.all()
-    maintenance_info = incident.maintananceinfo_set.all()
-    incident_details = incident.incidentdetail_set.all()
-    incident_analysis = incident.incidentanalysis_set.all()
+    equipment_details = EquipmentDetails.objects.filter(
+        incident_id=incident).first()
+    location_details = LocationDetails.objects.filter(
+        incident_id=incident).first()
+    maintenance_info = MaintananceInfo.objects.filter(
+        incident_id=incident).first()
+    incident_details = IncidentDetail.objects.filter(
+        incident_id=incident).first()
+    incident_analysis = IncidentAnalysis.objects.filter(
+        incident_id=incident).first()
 
     context = {
         'incident': incident,
@@ -144,42 +161,17 @@ def viewIncident(request, pk):
     # Render the template and pass the context
     return render(request, 'base/viewIncident.html', context)
 
-    # try:
+
+def insert_new_record(request):
+    # Add your logic here to insert a new record for the  MAINTENANCE
+    # UNDER CONSTRUCTION
+    # For example, you can save data to the database or perform any desired action.
+    # You can customize the response as needed.
+    return HttpResponse("New record inserted successfully")
+
     #     # Create a pretty printer
     #     pretty_printer = pprint.PrettyPrinter(indent=4)
 
     #     # Print the incident data
     #     print("IncidentInfo Data:")
     #     pretty_printer.pprint(incident.__dict__)
-
-    #     # Print related data in a friendly format
-    #     if incident.initial_info:
-    #         print("Related IncidentInitialInfo Data:")
-    #         pretty_printer.pprint(incident.initial_info.__dict__)
-
-    #     if incident.detail_info:
-    #         print("Related IncidentDetailInfo Data:")
-    #         pretty_printer.pprint(incident.detail_info.__dict__)
-
-    #     if incident.review:
-    #         print("Related IncidentReview Data:")
-    #         pretty_printer.pprint(incident.review.__dict__)
-
-    #     if incident.analysis:
-    #         print("Related IncidentAnalysis Data:")
-    #         pretty_printer.pprint(incident.analysis.__dict__)
-
-    # except AttributeError as e:
-    #     print(f"An error occurred: {e}")
-
-    return render(request, 'base/viewIncident.html', context)
-
-
-def insert_new_record(request):
-    # Add your logic here to insert a new record
-    # For example, you can save data to the database or perform any desired action.
-    # You can customize the response as needed.
-    return HttpResponse("New record inserted successfully")
-
-
-createIncident

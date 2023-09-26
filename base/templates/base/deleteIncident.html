@@ -1,13 +1,16 @@
 {% extends 'index.html' %}
 {% block content %}
-<input action="" method="POST">
-{% csrf_token %}
-<p>Are you sure you want to delete Incident number "{{incident.incident_id}}"?</p>
-<div style="display: flex; justify-content: center; margin: 20px;">
-    <a href="{{ request.META.HTTP_REFERER }}">
-        <button class="button" style="margin-left: 20px;">Go Back</button>
-    </a>
-    <input type="submit" value="Confirm" class="button" style="margin-left: 20px;">
-    </form>
+<form method="POST">
+    {% csrf_token %}
+    <div class="main-input-container" style="margin-top: 30px; width: 500px;">
+        <h3 class="title-input-container">Confirm Delete</h3>
+        <p>Are you sure you want to delete Incident number "{{incident.incident_id}}"?</p>
+        <div style="display: flex; justify-content: center; margin-top: 20px;">
+            <a href="{{ request.META.HTTP_REFERER }}">
+                <button class="button" style="margin-left: 20px;">Go Back</button>
+            </a>
+            <input type="submit" value="Delete" class="button" style="margin-left: 20px;">
+        </div>
+</form>
 </div>
 {% endblock %}

@@ -1,23 +1,22 @@
 {% extends 'index.html' %}
 
 {% block content %}
-<div class="main-input-container" style="margin-top: 30px;">
-    <h3 class="title-input-container">Incert Incident</h3>
+<form method="post">
+  {% csrf_token %}
+
+  <div class="main-input-container" style="margin-top: 30px; width: 440px;">
+    <h3 class="title-input-container">Insert Incident</h3>
     <div class="input-container">
       <label class="input-label">Incident Number:</label>
-      <input type="text" value="" class="input-box"
-        name="incident_id" />
+      <input type="text" class="input-box" name="incident_id" />
     </div>
-</div>  
-{% for incident in incidents %}
-<!-- user will type the number of incident (element configurable)
-if exists render the view relate to incident trought its id -->
-<a href="{% url 'view_incident' incident.id %}"><p>{{ incident.incident_id }}</p></a>
-{% endfor %}
-
-<!-- user will type the number of incident (element configurable)
-if exists render the view relate to incident trought its id -->
-<link href="/viewIncident/{{incident.id}}">
+    <div style="display: flex; flex-direction: column; align-items: center;">
+      {% if message %}
+      <p>{{ message }}</p>
+      {% endif %}
+      <p></p>
+      <input type="submit" value="Find Incident" class="button" style="margin-top: 20px;">
+    </div>
+  </div>
+</form>
 {% endblock %}
-
-

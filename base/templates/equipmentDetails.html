@@ -3,37 +3,37 @@
     <div class="input-container">
       <label class="input-label">Failed Component:</label>
       <input type="text"
-        value="{% if equipment_details %}{{ equipment_details.0.failed_component }}{% else %}{{ equipment_details_form.failed_component.value|default:'' }}{% endif %}"
+        value="{% if equipment_details %}{{ equipment_details.failed_component }}{% else %}{{ equipment_details_form.failed_component.value|default:'' }}{% endif %}"
         class="input-box" name="failed_component" />
     </div>
     <div class="input-container">
       <label class="input-label">Serial Number:</label>
       <input type="text"
-        value="{% if equipment_details %}{{ equipment_details.0.serial_number }}{% else %}{{ equipment_details_form.serial_number.value|default:'' }}{% endif %}"
+        value="{% if equipment_details %}{{ equipment_details.serial_number }}{% else %}{{ equipment_details_form.serial_number.value|default:'' }}{% endif %}"
         class="input-box" name="serial_number" />
     </div>
     <div class="input-container">
       <label class="input-label">TSN:</label>
       <input type="text"
-        value="{% if equipment_details %}{{ equipment_details.0.tsn }}{% else %}{{ equipment_details_form.tsn.value|default:'' }}{% endif %}"
+        value="{% if equipment_details %}{{ equipment_details.tsn }}{% else %}{{ equipment_details_form.tsn.value|default:'' }}{% endif %}"
         class="input-box" name="tsn" />
     </div>
     <div class="input-container">
       <label class="input-label">TSO:</label>
       <input type="text"
-        value="{% if equipment_details %}{{ equipment_details.0.tso }}{% else %}{{ equipment_details_form.tso.value|default:'' }}{% endif %}"
+        value="{% if equipment_details %}{{ equipment_details.tso }}{% else %}{{ equipment_details_form.tso.value|default:'' }}{% endif %}"
         class="input-box" name="tso" />
     </div>
     <div class="input-container">
       <label class="input-label">OEM:</label>
       <input type="text"
-        value="{% if equipment_details %}{{ equipment_details.0.oem }}{% else %}{{ equipment_details_form.oem.value|default:'' }}{% endif %}"
+        value="{% if equipment_details %}{{ equipment_details.oem }}{% else %}{{ equipment_details_form.oem.value|default:'' }}{% endif %}"
         class="input-box" name="oem" />
     </div>
     <div class="input-container">
       <label class="input-label">Analysis Team:</label>
       <input type="text"
-        value="{% if equipment_details %}{{ equipment_details.0.analysis_team }}{% else %}{{ equipment_details_form.analysis_team.value|default:'' }}{% endif %}"
+        value="{% if equipment_details %}{{ equipment_details.analysis_team }}{% else %}{{ equipment_details_form.analysis_team.value|default:'' }}{% endif %}"
         class="input-box" name="analysis_team" />
     </div>
 </div>
