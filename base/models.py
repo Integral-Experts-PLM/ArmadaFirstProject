@@ -3,6 +3,8 @@ from django.contrib.auth.models import User
 
 class IncidentInfo(models.Model):
     incident_id = models.CharField(max_length=200)
+    system_id = models.CharField(max_length=200)
+    project_id = models.CharField(max_length=200)
     current_state = models.CharField(max_length=200, default='NEW INCIDENT')
     reportedBy = models.CharField(max_length=200, null=True, blank=True)
     incident_date = models.DateTimeField()

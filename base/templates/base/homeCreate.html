@@ -5,7 +5,7 @@
   {% csrf_token %}
 
   <div class="main-input-container" style="margin-top: 30px; width: 440px;">
-    <h3 class="title-input-container">Search Incident</h3>
+    <h3 class="title-input-container">Create Incident</h3>
     <div class="input-container">
       <label class="input-label">Project Number:</label>
       <input type="text" class="input-box" name="project_id" />
@@ -16,17 +16,12 @@
       <input type="text" class="input-box" name="system_id" />
     </div>
 
-    <div class="input-container">
-      <label class="input-label">Incident Number:</label>
-      <input type="text" class="input-box" name="incident_id" />
-    </div>
-
     <div style="display: flex; flex-direction: column; align-items: center;">
       {% if message %}
       <p>{{ message }}</p>
       {% endif %}
       <p></p>
-      <input type="submit" value="Find Incident" class="button" style="margin-top: 20px;">
+      <input type="submit" value="Create Incident" class="button" style="margin-top: 20px;">
     </div>
   </div>
 </form>

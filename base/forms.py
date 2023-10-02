@@ -4,7 +4,12 @@ from .models import IncidentInfo, EquipmentDetails, LocationDetails, Maintanance
 class IncidentInfoIdForm(ModelForm):
     class Meta:
         model = IncidentInfo
-        fields = ['incident_id']
+        fields = ['incident_id', 'system_id', 'project_id']
+
+class IncidentCreationForm(ModelForm):
+    class Meta:
+        model = IncidentInfo
+        fields = ['system_id', 'project_id']
 
 # 'current_state' must be exclude because it has a default initial value
 class IncidentInfoForm(ModelForm):

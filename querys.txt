@@ -1,0 +1,30 @@
+=========================
+===== VIEW INCIDENT =====
+=========================
+
+GET PROJECTS
+https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/
+UAVDemo 1268
+
+GET SYSTEMS
+https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_1268/Systems
+ACME-CA 1344
+
+GET INCIDENT"S"
+https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_1268/Systems(1344)/Incidents
+
+GET INCIDENT
+https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_1268/Systems(1344)/Incidents/1235
+Incident number at the end
+
+EX:
+project:    1268
+system:     1344
+incident:   1235
+
+===========================
+===== CREATE INCIDENT =====
+===========================
+
+POST INCIDENT
+https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_1268/Systems(1344)/Incidents
