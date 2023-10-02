@@ -64,7 +64,7 @@ def homeCreateIncident(request):
     return render(request, 'base/homeCreate.html', context)
 
 
-def createIncident2(request, project_id, system_id):
+def createIncident(request, project_id, system_id):
     # Define authentication credentials
     auth = (settings.API_USERNAME, settings.API_PASSWORD)
 
@@ -76,7 +76,7 @@ def createIncident2(request, project_id, system_id):
     url_tree_items = f'{base_url}TreeItems'
 
     # Function to handle the API request and response
-    def make_api_request(url, payload=None):
+    def make_api_request(url):
         headers = {
             "Content-Type": "application/json",
             "Accept": "application/json",
@@ -103,11 +103,13 @@ def createIncident2(request, project_id, system_id):
 
         # Define the payload for creating an incident
         payload = {
-            "EntryDate": "2010-06-27T12:35:24+02:00",
-            "PersonIncidentEntry": "Joao",
+            "EntryDate": datetime.now().strftime("%Y-%m-%dT%H:%M:%S+02:00"),
+            "PersonIncidentEntry": "testing create 4",
             "DateSentToWorkflowState": None,
-            "RemarksIncidentEntry": 'testing create',
-            "FailurePhase": 'testing create',
+            "RemarksIncidentEntry": "testing create 4",
+            "FailurePhase": "testing create 4",
+            "UserText13": "testing create 4",
+            "OccurrenceDate": datetime.now().strftime("%Y-%m-%dT%H:%M:%S+02:00"),
             "Configuration@odata.bind": f"Systems({system_id})/Configurations({configuration})",
             "SystemTreeItem@odata.bind": f"Systems({system_id})/TreeItems({tree_items})"
         }
@@ -136,7 +138,8 @@ def createIncident2(request, project_id, system_id):
         print("Failed to retrieve configuration and tree item data.")
 
     return render(request, 'base/createIncident.html')
-def createIncident(request):
+
+def createIncident2(request):
     # Create forms for the incident creation
     incident_info_form = IncidentInfoForm(request.POST or None)
     equipment_details_form = EquipmentDetailsForm(request.POST or None)
