@@ -7,19 +7,20 @@
     <th>Item Cost</th>
     <th>Personel Count</th>
   </tr>
-  {% for info in maintenance_info %}
+  {% for log in maintenance_logs_data %}
   <tr>
     <td>{{ forloop.counter }}</td>
-    <td>{{ info.field_1 }}</td>
-    <td>{{ info.field_2 }}</td>
-    <td>{{ info.field_3 }}</td>
-    <td>{{ info.field_4 }}</td>
-    <td>{{ info.field_5 }}</td>
+    <td>{{ log.MaintenanceLogIdentifier }}</td>
+    <td>{{ log.ID }}</td>
+    <td>{{ log.Replaced }}</td>
+    <td>{{ log.CostItem }}</td>
+    <td>{{ log.field_5 }}</td>
   </tr>
   {% endfor %}
   <tr style="background-color: #ffce55; height: 10px;">
     <td colspan="6" style="text-align: center; cursor: pointer;">
-      <a href="{% url 'insert_new_record' %}">Click here to insert a new record</a>
+      <a href="{% url 'maintenance_log_create' %}">Click here to insert a new record</a>
     </td>
   </tr>
 </table>
+<a href="{% url 'maintenance_log_create' %}">Click here to insert a new record</a>

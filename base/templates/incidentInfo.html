@@ -15,7 +15,7 @@
     <div class="input-container">
       <label class="input-label">Incident Date:</label>
       <input type="date"
-        value="{% if incident_data %}{{ occurrence_date|date:'Y-m-d' }}{% else %}{{ incident_info_form.incident_date.value|default:''|date:'Y-m-d' }}{% endif %}"
+        value="{% if incident_data %}{{ OccurrenceDate }}{% else %}{{ incident_info_form.incident_date.value|default:''|date:'Y-m-d' }}{% endif %}"
         class="input-box" name="incident_date" />
     </div>
     <div class="input-container">

@@ -15,7 +15,7 @@ class IncidentCreationForm(ModelForm):
 class IncidentInfoForm(ModelForm):
     class Meta:
         model = IncidentInfo
-        exclude = ['current_state']
+        exclude = ['current_state', 'project_id', 'system_id', 'incident_id']
 
 # 'incident_id' must be exclude because it is asign automaticaly
 class EquipmentDetailsForm(ModelForm):
@@ -32,7 +32,7 @@ class LocationDetailsForm(ModelForm):
 class MaintananceInfoForm(ModelForm):
     class Meta:
         model = MaintananceInfo
-        fields = '__all__'
+        exclude = ['incident_id']
 
 # 'incident_id' must be exclude because it is asign automaticaly
 class IncidentDetailForm(ModelForm):

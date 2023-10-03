@@ -104,3 +104,4 @@ tr:nth-child(even) {
 tr:nth-child(odd) {
   background-color: white; /* White for odd rows */
 }
+

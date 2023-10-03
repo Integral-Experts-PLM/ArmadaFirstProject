@@ -65,6 +65,12 @@ def homeCreateIncident(request):
 
 
 def createIncident(request, project_id, system_id):
+    # Create forms for the incident creation
+    incident_info_form = IncidentInfoForm(request.POST or None)
+    equipment_details_form = EquipmentDetailsForm(request.POST or None)
+    location_details_form = LocationDetailsForm(request.POST or None)
+    incident_details_form = IncidentDetailForm(request.POST or None)
+
     # Define authentication credentials
     auth = (settings.API_USERNAME, settings.API_PASSWORD)
 
@@ -98,81 +104,72 @@ def createIncident(request, project_id, system_id):
         configuration = configuration_data.get('value', [])[0].get('ID')
         tree_items = tree_items_data.get('value', [])[0].get('ID')
 
-        # Define the URL for creating an incident
-        url_post = f'{base_url}Incidents'
-
-        # Define the payload for creating an incident
-        payload = {
-            "EntryDate": datetime.now().strftime("%Y-%m-%dT%H:%M:%S+02:00"),
-            "PersonIncidentEntry": "testing create 4",
-            "DateSentToWorkflowState": None,
-            "RemarksIncidentEntry": "testing create 4",
-            "FailurePhase": "testing create 4",
-            "UserText13": "testing create 4",
-            "OccurrenceDate": datetime.now().strftime("%Y-%m-%dT%H:%M:%S+02:00"),
-            "Configuration@odata.bind": f"Systems({system_id})/Configurations({configuration})",
-            "SystemTreeItem@odata.bind": f"Systems({system_id})/TreeItems({tree_items})"
-        }
-
-        # Set the headers for the request
-        headers = {
-            "Content-Type": "application/json",
-            "Accept": "application/json",
-        }
-
-        # Convert the payload dictionary to a JSON string
-        payload_json = json.dumps(payload)
-
-        # Make the POST request to create an incident
-        response = requests.post(url_post, data=payload_json, headers=headers, auth=auth)
-
-        # Check the response
-        if response.status_code == 201:
-            print(f"Incident created. Data: {payload_json}")
-            print(f"Incident ID: {response.json()}")
-        else:
-            print(f"Failed to create incident. Status code: {response.status_code}")
-            print(response.text)  # Print the response content for debugging
-
-    else:
-        print("Failed to retrieve configuration and tree item data.")
-
-    return render(request, 'base/createIncident.html')
-
-def createIncident2(request):
-    # Create forms for the incident creation
-    incident_info_form = IncidentInfoForm(request.POST or None)
-    equipment_details_form = EquipmentDetailsForm(request.POST or None)
-    location_details_form = LocationDetailsForm(request.POST or None)
-    incident_details_form = IncidentDetailForm(request.POST or None)
-
-    if request.method == 'POST':
-        if all([incident_info_form.is_valid(), equipment_details_form.is_valid(), location_details_form.is_valid(), incident_details_form.is_valid()]):
+        if request.method == 'POST' and incident_info_form.is_valid() and equipment_details_form.is_valid() and location_details_form.is_valid() and incident_details_form.is_valid():
 
             incident_data = incident_info_form.save(commit=False)
-            incident_data.save()
 
             equipment_data = equipment_details_form.save(commit=False)
-            equipment_data.incident_id = incident_data
-            equipment_data.save()
 
             location_details = location_details_form.save(commit=False)
-            location_details.incident_id = incident_data
-            location_details.save()
 
             incident_details = incident_details_form.save(commit=False)
-            incident_details.incident_id = incident_data
-            incident_details.save()
 
-            return redirect('home')
+            # Define the URL for creating an incident
+            url_post = f'{base_url}Incidents'
+
+            # Define the payload for creating an incident
+            payload = {
+                "PersonIncidentEntry": incident_data.reportedBy,
+                "UserText13": incident_data.tail_number,
+                "OccurrenceDate": incident_data.incident_date.strftime("%Y-%m-%dT%H:%M:%S+02:00"),
+                # "OccurrenceDate": datetime.now().strftime("%Y-%m-%dT%H:%M:%S+02:00"),
+
+                "SerialNumber": equipment_data.serial_number,
+
+                "UserText4": location_details.location,
+                "UserText23": location_details.address,
+                "UserText25": location_details.contact,
+                "UserText22": location_details.phone,
+                "UserText21": location_details.email,
+
+                "OperatingMode": incident_details.operating_mode,
+                "UserText2": incident_details.initial_severity,
+                "DescriptionIncident": incident_details.incident_description,
+
+                "Configuration@odata.bind": f"Systems({system_id})/Configurations({configuration})",
+                "SystemTreeItem@odata.bind": f"Systems({system_id})/TreeItems({tree_items})"
+            }
+
+            # Set the headers for the request
+            headers = {
+                "Content-Type": "application/json",
+                "Accept": "application/json",
+            }
+
+            # Convert the payload dictionary to a JSON string
+            payload_json = json.dumps(payload)
+
+            # Make the POST request to create an incident
+            response = requests.post(url_post, data=payload_json, headers=headers, auth=auth)
+
+            # Check the response
+            if response.status_code == 201:
+                print(f"Incident created: Date: {response.json()}")
+                return redirect('view_incident', project_id=project_id, system_id=system_id, incident_id=response.json().get('ID'))
+            else:
+                print(f"Failed to create incident. Status code: {response.status_code}")
+                print(response.text)  # Print the response content for debugging
         else:
-            incident_info_form = IncidentInfoForm()
-            equipment_details_form = EquipmentDetailsForm()
-            location_details_form = LocationDetailsForm()
-            incident_details_form = IncidentDetailForm()
-
-    context = {'incident_info_form': incident_info_form, 'equipment_details_form': equipment_details_form, 'location_details_form': location_details_form, 'incident_details_form': incident_details_form, 'view': 'create_incident'
-               }
+            print('incident form not ok')
+            context = {
+            'incident_info_form': incident_info_form,
+            'equipment_details_form': equipment_details_form,
+            'location_details_form': location_details_form,
+            'incident_details_form': incident_details_form,
+            'view': 'create_incident'
+        }
+    else:
+        print("Failed to retrieve configuration and tree item data.")
 
     return render(request, 'base/createIncident.html', context)
 
@@ -185,7 +182,8 @@ def incidentReviewAnalysis(request):
     return render(request, 'base/incidentReviewAnalysis.html')
 
 
-def updateIncident(request, pk):
+def updateIncident(request):
+
     # Use get_object_or_404 to retrieve the IncidentInfo instance
     incident = get_object_or_404(IncidentInfo, pk=pk)
 
@@ -253,27 +251,18 @@ def viewIncident(request, project_id, system_id, incident_id):
 
     response = requests.get(url, auth=auth)
 
+    maintenance_logs_data = viewIncidentMaintananceLogs(project_id, system_id, incident_id)
+
     if response.status_code == 200:
         data = response.json()
 
-        # Convert data to a JSON string with indentation for readability
-        # formatted_data = json.dumps(data, indent=4)
-
-        # Create a HttpResponse with the formatted JSON data
-        # response = HttpResponse(formatted_data, content_type="application/json")
-
-        # return response
-        # return redirect('view_incident', pk=incident.pk)
-        
         # Extract the data you need from the JSON response
         context = {
-            'incident_id': incident_id,
-            'system_id': system_id,
-            'project_id': project_id,
             'incident_data': data,
-            'occurrence_date': datetime.fromisoformat(data['OccurrenceDate'])
+            'OccurrenceDate': data.get('OccurrenceDate').split('T')[0],
+            'maintenance_logs_data': maintenance_logs_data
+            # 'occurrence_date': datetime.fromisoformat(data['OccurrenceDate'])
         }
-
         # Render the template and pass the context
         return render(request, 'base/viewIncident.html', context)
 
@@ -311,6 +300,31 @@ def viewIncident(request, project_id, system_id, incident_id):
     # return render(request, 'base/viewIncident.html', context)
 
 
+def viewIncidentMaintananceLogs(project_id, system_id, incident_id):
+
+    url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/{incident_id}/MaintenanceLogs'
+
+    auth = (settings.API_USERNAME, settings.API_PASSWORD)
+
+    response = requests.get(url, auth=auth)
+
+    if response.status_code == 200:
+        data = response.json()
+
+        # Check if "value" property exists
+        if 'value' in data:
+            # Extract the "value" property
+            maintenance_logs_data = data['value']
+            
+            # Return the "value" property as a JSON response
+            return maintenance_logs_data
+
+        else:
+            return JsonResponse({'error': 'No maintenance logs available'}, status=404)
+    else:
+        print('logs not found')
+        return JsonResponse({'error': 'Logs not found'}, status=404)    
+
 def insert_new_record(request):
     # Add your logic here to insert a new record for the  MAINTENANCE
     # UNDER CONSTRUCTION
@@ -319,9 +333,14 @@ def insert_new_record(request):
     return HttpResponse("New record inserted successfully")
 
 
-    #     # Create a pretty printer
-    #     pretty_printer = pprint.PrettyPrinter(indent=4)
+def maintenanceLogCreate(request):
+    # Handle form submissions if POST request
+    # if request.method == 'POST':
+    #     # Process the form data and create a new maintenance log record
+    #     # ...
 
-    #     # Print the incident data
-    #     print("IncidentInfo Data:")
-    #     pretty_printer.pprint(incident.__dict__)
+    #     # Assuming the form processing is successful, you can close the popup and update the table data
+    #     return render(request, 'maintenanceLogCreate.html')
+    context = {}
+    # If it's not a POST request, simply render the maintenanceLogCreate.html
+    return render(request, 'base/maintenanceLogCreate.html', context)

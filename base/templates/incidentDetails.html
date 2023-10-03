@@ -17,8 +17,7 @@
     <div>
       <div class="input-container" style="width: 100%;">
         <label class="input-label" style="width: 140px; text-align: right;">Incident Description:</label>
-        <textarea name="incident_description" rows="3" class="input-box" style="width: 100%; text-align: left;">
-        {% if incident_data %}{{ incident_data.DescriptionIncident }}{% else %}{{ incident_details.incident_description.value|default:'' }}{% endif %}
+        <textarea name="incident_description" rows="3" class="input-box" style="width: 100%; text-align: left;">{% if incident_data %}{{ incident_data.DescriptionIncident }}{% else %}{{ incident_details.incident_description.value|default:'' }}{% endif %}
     </textarea>
       </div>
       <div class="input-container" style="width: 100%;">
