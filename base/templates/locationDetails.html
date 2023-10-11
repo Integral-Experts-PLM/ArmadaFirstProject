@@ -5,13 +5,13 @@
       <div class="input-container">
         <label class="input-label">Location:</label>
         <input type="text"
-          value="{% if incident_data %}{{ incident_data.UserText4 }}{% else %}{{ incident_info_form.location.value|default:'' }}{% endif %}"
-          class="input-box" name="location" />
+          value="{% if incident_data %}{{ incident_data.UserText4 }}{% else %}{{ incident_info_form.user_text4_location.value|default:'' }}{% endif %}"
+          class="input-box" name="user_text4_location" />
       </div>
       <div class="input-container">
         <label class="input-label">Address:</label>
-        <textarea name="address" rows="3" class="input-box"
-          style="text-align: left; height: 65px; display: flex; flex-wrap: wrap; align-items: flex-start;">{% if incident_data %}{{ incident_data.UserText23 }}&nbsp;{{ incident_data.UserText24 }}{% else %}{{ incident_info_form.address.value|default:'' }}{% endif %}
+        <textarea name="user_text24_address" rows="3" class="input-box"
+          style="text-align: left; height: 65px; display: flex; flex-wrap: wrap; align-items: flex-start;">{% if incident_data %}{{ incident_data.UserText23 }}&nbsp;{{ incident_data.UserText24 }}{% else %}{{ incident_info_form.user_text24_address.value|default:'' }}{% endif %}
 </textarea>
       </div>
     </div>
@@ -19,20 +19,20 @@
       <div class="input-container">
         <label class="input-label">Contact:</label>
         <input type="text"
-          value="{% if incident_data %}{{ incident_data.UserText25 }}{% else %}{{ incident_info_form.contact.value|default:'' }}{% endif %}"
-          class="input-box" name="contact" />
+          value="{% if incident_data %}{{ incident_data.UserText25 }}{% else %}{{ incident_info_form.user_text25_contact.value|default:'' }}{% endif %}"
+          class="input-box" name="user_text25_contact" />
       </div>
       <div class="input-container">
         <label class="input-label">Phone:</label>
         <input type="text"
-          value="{% if incident_data %}{{ incident_data.UserText22 }}{% else %}{{ incident_info_form.phone.value|default:'' }}{% endif %}"
-          class="input-box" name="phone" />
+          value="{% if incident_data %}{{ incident_data.UserText22 }}{% else %}{{ incident_info_form.user_text22_phone.value|default:'' }}{% endif %}"
+          class="input-box" name="user_text22_phone" />
       </div>
       <div class="input-container">
         <label class="input-label">Email:</label>
         <input type="text"
-          value="{% if incident_data %}{{ incident_data.UserText21 }}{% else %}{{ incident_info_form.email.value|default:'' }}{% endif %}"
-          class="input-box" name="email" />
+          value="{% if incident_data %}{{ incident_data.UserText21 }}{% else %}{{ incident_info_form.user_text21_email.value|default:'' }}{% endif %}"
+          class="input-box" name="user_text21_email" />
       </div>
     </div>
   </div>

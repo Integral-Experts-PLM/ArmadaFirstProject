@@ -1,11 +1,9 @@
 <div class="main-input-container">
     <h3 class="title-input-container">Analysis Details</h3>
-
-
     <div style="margin-bottom: 20px; display: flex; flex-direction: row; justify-content: space-between;">
       <div class="input-container" style="width: auto;">
-        <label class="input-label">Team Analyst: ???</label>
-        <input type="text" value="{{ incident_data.team_analysis }}" class="input-box" style="width: auto;" name="team_analysis" />
+        <label class="input-label">Team Analyst:</label>
+        <input type="text" value="{{ incident_data.UserText11 }}" class="input-box" style="width: auto;" name="user_text11_team_analysis" />
       </div>
       <div class="input-container" style="width: auto;">
         <label class="input-label">Failure Detection:</label>
@@ -13,7 +11,7 @@
       </div>
       <div class="input-container" style="width: auto;">
         <label class="input-label">Part Category:</label>
-        <input type="text" value="{{ incident_data.UserText16 }}" class="input-box" style="width: auto;" name="part_category" />
+        <input type="text" value="{{ incident_data.UserText16 }}" class="input-box" style="width: auto;" name="user_text16_part_category" />
       </div>
       <div class="input-container" style="width: auto;">
         <label class="input-label">Failure Mode:</label>
@@ -32,8 +30,8 @@
       </textarea>
       </div>
       <div class="input-container" style="width: 100%; display: flex; justify-content: flex-start;">
-        <label class="input-label" style="width: 122px; text-align: right;">Attachments: ???</label>
-        <input type="file" value="{{ incident_data.attachment }}" class="input-box" style="width: auto;" name="attachment" />
+        <label class="input-label" style="width: 122px; text-align: right;">Attachments:</label>
+        <input type="file" value="{{ incident_data.AttachmentsAnalysis }}" class="input-box" style="width: auto;" name="attachments_analysis" />
       </div>
     </div>
   </div>

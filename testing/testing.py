@@ -2,8 +2,8 @@ def updateIncident(request, pk):
     try:
         incident = get_object_or_404(IncidentInfo, pk=pk)
         equipment = get_object_or_404(EquipmentDetails, pk=pk)
-        location = get_object_or_404(LocationDetails, pk=pk)
-        maintenance = get_object_or_404(MaintananceInfo, pk=pk)
+        user_text4_location = get_object_or_404(LocationDetails, pk=pk)
+        maintenance = get_object_or_404(MaintenanceInfo, pk=pk)
         incident_detail = get_object_or_404(IncidentDetail, pk=pk)
         incident_analysis = get_object_or_404(IncidentAnalysis, pk=pk)
 
@@ -14,8 +14,8 @@ def updateIncident(request, pk):
         # Create forms for each model and populate them with POST data
         incident_form = IncidentInfoForm(request.POST, instance=incident)
         equipment_form = EquipmentDetailsForm(request.POST, instance=equipment)
-        location_form = LocationDetailsForm(request.POST, instance=location)
-        maintenance_form = MaintananceInfoForm(
+        location_form = LocationDetailsForm(request.POST, instance=user_text4_location)
+        maintenance_form = MaintenanceInfoForm(
             request.POST, instance=maintenance)
         incident_detail_form = IncidentDetailForm(
             request.POST, instance=incident_detail)
@@ -44,8 +44,8 @@ def updateIncident(request, pk):
         # Create forms for each model and populate them with instance data
         incident_form = IncidentInfoForm(instance=incident)
         equipment_form = EquipmentDetailsForm(instance=equipment)
-        location_form = LocationDetailsForm(instance=location)
-        maintenance_form = MaintananceInfoForm(instance=maintenance)
+        location_form = LocationDetailsForm(instance=user_text4_location)
+        maintenance_form = MaintenanceInfoForm(instance=maintenance)
         incident_detail_form = IncidentDetailForm(instance=incident_detail)
         incident_analysis_form = IncidentAnalysisForm(
             instance=incident_analysis)

@@ -4,35 +4,35 @@ from django.http import JsonResponse
 from django.conf import settings
 import requests
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
-from .models import IncidentInfo, EquipmentDetails, LocationDetails, MaintananceInfo, IncidentDetail, IncidentAnalysis
-from .forms import IncidentInfoForm, EquipmentDetailsForm, LocationDetailsForm, MaintananceInfoForm, IncidentDetailForm, IncidentAnalysisForm, IncidentInfoIdForm
+from .models import IncidentInfo, EquipmentDetails, LocationDetails, MaintenanceInfo, IncidentDetail, IncidentAnalysis
+from .forms import IncidentInfoForm, EquipmentDetailsForm, LocationDetailsForm, MaintenanceInfoForm, IncidentDetailForm, IncidentAnalysisForm, IncidentInfoIdForm
 
 
 def home(request):
     message = None  # Initialize the message variable
-    incident_id_form = IncidentInfoIdForm(request.POST or None)
+    incident_ID_form = IncidentInfoIdForm(request.POST or None)
 
     if request.method == 'POST':
-        if incident_id_form.is_valid():
-            incident_id = incident_id_form.cleaned_data['incident_id']
-            system_id = incident_id_form.cleaned_data['system_id']
-            project_id = incident_id_form.cleaned_data['project_id']
+        if incident_ID_form.is_valid():
+            incident_ID = incident_ID_form.cleaned_data['incident_ID']
+            system_id = incident_ID_form.cleaned_data['system_id']
+            project_id = incident_ID_form.cleaned_data['project_id']
 
-            url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/{incident_id}'
+            url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/{incident_ID}'
 
             auth = (settings.API_USERNAME, settings.API_PASSWORD)
 
             response = requests.get(url, auth=auth)
             if response.status_code == 200:
-                return redirect('view_incident', project_id=project_id, system_id=system_id, incident_id=incident_id)
+                return redirect('view_incident', project_id=project_id, system_id=system_id, incident_ID=incident_ID)
             else:
                 message = 'Invalid Incident Credentials!'
         else:
             message = 'All Fields Are Required!'
     else:
-        incident_id_form = IncidentInfoIdForm()
+        incident_ID_form = IncidentInfoIdForm()
 
-    context = {'incident_id_form': incident_id_form, 'message': message}
+    context = {'incident_ID_form': incident_ID_form, 'message': message}
     return render(request, 'base/home.html', context)
 
 
@@ -50,15 +50,15 @@ def createIncident(request):
             incident_data.save()
 
             equipment_data = equipment_details_form.save(commit=False)
-            equipment_data.incident_id = incident_data
+            equipment_data.incident_ID = incident_data
             equipment_data.save()
 
             location_details = location_details_form.save(commit=False)
-            location_details.incident_id = incident_data
+            location_details.incident_ID = incident_data
             location_details.save()
 
             incident_details = incident_details_form.save(commit=False)
-            incident_details.incident_id = incident_data
+            incident_details.incident_ID = incident_data
             incident_details.save()
 
             return redirect('home')
@@ -88,11 +88,11 @@ def updateIncident(request, pk):
 
     # Access related objects
     equipment_details = EquipmentDetails.objects.filter(
-        incident_id=incident).first()
+        incident_ID=incident).first()
     location_details = LocationDetails.objects.filter(
-        incident_id=incident).first()
+        incident_ID=incident).first()
     incident_details = IncidentDetail.objects.filter(
-        incident_id=incident).first()
+        incident_ID=incident).first()
 
     if request.method == 'POST':
         # Create forms instances to be updated
@@ -142,9 +142,9 @@ def deleteIncident(request, pk):
     return render(request, 'base/deleteIncident.html', context)
 
 
-def viewIncident(request, project_id, system_id, incident_id):
+def viewIncident(request, project_id, system_id, incident_ID):
 
-    url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/{incident_id}'
+    url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/{incident_ID}'
 
     auth = (settings.API_USERNAME, settings.API_PASSWORD)
 
@@ -177,7 +177,7 @@ def viewIncident(request, project_id, system_id, incident_id):
 
     else:
         message = 'Invalid Incident Credentials!'
-        incident_id_form = IncidentInfoIdForm()
+        incident_ID_form = IncidentInfoIdForm()
 
 
     # # Use get_object_or_404 to retrieve the IncidentInfo instance
@@ -185,15 +185,15 @@ def viewIncident(request, project_id, system_id, incident_id):
 
     # # Access related objects with correct lowercase names
     # equipment_details = EquipmentDetails.objects.filter(
-    #     incident_id=incident).first()
+    #     incident_ID=incident).first()
     # location_details = LocationDetails.objects.filter(
-    #     incident_id=incident).first()
-    # maintenance_info = MaintananceInfo.objects.filter(
-    #     incident_id=incident).first()
+    #     incident_ID=incident).first()
+    # maintenance_info = MaintenanceInfo.objects.filter(
+    #     incident_ID=incident).first()
     # incident_details = IncidentDetail.objects.filter(
-    #     incident_id=incident).first()
+    #     incident_ID=incident).first()
     # incident_analysis = IncidentAnalysis.objects.filter(
-    #     incident_id=incident).first()
+    #     incident_ID=incident).first()
 
     # context = {
     #     'incident': incident,

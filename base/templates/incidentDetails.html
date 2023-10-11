@@ -10,14 +10,14 @@
       <div class="input-container">
         <label class="input-label">Initial Severity:</label>
         <input type="text"
-          value="{% if incident_data %}{{ incident_data.UserText2 }}{% else %}{{ incident_details.initial_severity.value|default:'' }}{% endif %}"
-          class="input-box" name="initial_severity" />
+          value="{% if incident_data %}{{ incident_data.UserText2 }}{% else %}{{ incident_details.user_text2_initial_severity.value|default:'' }}{% endif %}"
+          class="input-box" name="user_text2_initial_severity" />
       </div>
     </div>
     <div>
       <div class="input-container" style="width: 100%;">
         <label class="input-label" style="width: 140px; text-align: right;">Incident Description:</label>
-        <textarea name="incident_description" rows="3" class="input-box" style="width: 100%; text-align: left;">{% if incident_data %}{{ incident_data.DescriptionIncident }}{% else %}{{ incident_details.incident_description.value|default:'' }}{% endif %}
+        <textarea name="description_incident" rows="3" class="input-box" style="width: 100%; text-align: left;">{% if incident_data %}{{ incident_data.DescriptionIncident }}{% else %}{{ incident_details.description_incident.value|default:'' }}{% endif %}
     </textarea>
       </div>
       <div class="input-container" style="width: 100%;">
@@ -27,8 +27,8 @@
       <div class="input-container" style="width: 100%; display: flex; justify-content: flex-start;">
         <label class="input-label" style="width: 122px; text-align: right;">Attachments: ???</label>
         <input type="file"
-          value="{% if incident_data %}{{ incident_data.attachment }}{% else %}{{ incident_details.attachment.value|default:'' }}{% endif %}"
-          class="input-box" style="width: 280px;" name="attachment" />
+          value="{% if incident_data %}{{ incident_data.AttachmentsIncidents }}{% else %}{{ incident_details.attachments_incidents.value|default:'' }}{% endif %}"
+          class="input-box" style="width: 280px;" name="attachments_incidents" />
       </div>
     </div>
   </div>

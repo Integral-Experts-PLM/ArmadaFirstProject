@@ -31,20 +31,20 @@ POST INCIDENT
 https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_1268/Systems(1344)/Incidents
 
 =================================
-===== VIEW MAINTANANCE LOGS =====
+===== VIEW MAINTENANCE LOGS =====
 =================================
 
-GET MAINTANANCE LOGS
+GET MAINTENANCE LOGS
 https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_1268/Systems(1344)/Incidents/1235/MaintenanceLogs
 
-GET SPECIFIC MAINTANANCE LOG
+GET SPECIFIC MAINTENANCE LOG
 https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_1268/Systems(1344)/Incidents/1235/MaintenanceLogs(1168)
 
 ===================================
-===== CREATE MAINTANANCE LOGS =====
+===== CREATE MAINTENANCE LOGS =====
 ===================================
 
-POST MAINTANANCE LOG
+POST MAINTENANCE LOG
 https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_1268/Systems(1344)/Incidents/1235/MaintenanceLogs
 
 Rquest Body

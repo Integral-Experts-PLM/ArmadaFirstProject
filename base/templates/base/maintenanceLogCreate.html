@@ -1,31 +1,51 @@
-{% load static %}
-
-{% block content %}
 <div id="popup" class="popup">
-  <div class="main-input-container popup-content">
-    <span class="popup-close" onclick="closePopup()">
+  <div class="main-input-container" class="popup-content">
+    <button id="close-popup">close</button>
       <h3 class="title-input-container">Maintenance Log Creation</h3>
       <div class="input-container">
-        <label class="input-label">Incident: </label>
-        <input type="text" value="{{ maintenance_info_form.MaintenanceLogIdentifier }}"
-        class="input-box" name="field_1" />
-      </div>
-      <div class="input-container">
-        <label class="input-label">ID: </label>
-        <input type="text" value="{{ maintenance_info_form.ID }}"
-        class="input-box" name="field_2" />
-      </div>
-      <div class="input-container">
-        <label class="input-label">Replaced: </label>
-        <input type="text" value="{{ maintenance_info_form.Replaced }}"
-        class="input-box" name="field_3" />
+        <label class="input-label">Replace Part: </label>
+        <input type="text" value="{{ maintenance_info_form.override_system_tree_item_replaced_part }}"
+        class="input-box" name="override_system_tree_item_replaced_part" />
       </div>
       <div class="input-container">
         <label class="input-label">Item Cost: </label>
-        <input type="text" value="{{ maintenance_info_form.CostItem }}"
-        class="input-box" name="field_4" />
+        <input type="number" value="{{ maintenance_info_form.cost_item }}"
+        class="input-box" name="cost_item" />
       </div>
-    </span>
+      <div class="input-container">
+        <label class="input-label">Elapsed Time (Hrs): </label>
+        <input type="number" value="{{ maintenance_info_form.elapsed_maintenance_time }}"
+        class="input-box" name="elapsed_maintenance_time" />
+      </div>
+      <div class="input-container">
+        <label class="input-label">Maintenance Cost: </label>
+        <input type="number" value="{{ maintenance_info_form.cost_maintenance }}"
+        class="input-box" name="cost_maintenance" />
+      </div>
+      <div class="input-container">
+        <label class="input-label">Personnel Count: </label>
+        <input type="number" value="{{ maintenance_info_form.number_of_men }}"
+        class="input-box" name="number_of_men" />
+      </div>
+      <div class="input-container">
+        <label class="input-label">Start Date: </label>
+        <input type="date" value="{{ maintenance_info_form.maintenance_start_date }}"
+        class="input-box" name="maintenance_start_date" />
+      </div>
+      <div class="input-container">
+        <label class="input-label">Total Maintenance Time: </label>
+        <input type="number" value="{{ maintenance_info_form.total_maintenance_time }}"
+        class="input-box" name="total_maintenance_time" />
+      </div>
+      <div class="input-container">
+        <label class="input-label">Total Maintenance Time: </label>
+        <input type="number" value="{{ maintenance_info_form.user_value2_total_maintenance_time }}"
+        class="input-box" name="user_value2_total_maintenance_time" />
+      </div>
+      <div class="input-container">
+        <label class="input-label">Work Log: </label>
+        <input type="text" value="{{ maintenance_info_form.action_taken_maintenace }}"
+        class="input-box" name="action_taken_maintenace" />
+      </div>
   </div>
 </div>
-{% endblock %}

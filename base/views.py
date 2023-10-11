@@ -4,35 +4,77 @@ from django.http import JsonResponse
 from django.conf import settings
 import requests
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
-from .models import IncidentInfo, EquipmentDetails, LocationDetails, MaintananceInfo, IncidentDetail, IncidentAnalysis
-from .forms import IncidentInfoForm, EquipmentDetailsForm, LocationDetailsForm, MaintananceInfoForm, IncidentDetailForm, IncidentAnalysisForm, IncidentInfoIdForm, IncidentCreationForm
+from .models import IncidentInfo, EquipmentDetails, LocationDetails, MaintenanceInfo, IncidentDetail, IncidentAnalysis
+from .forms import IncidentInfoForm, EquipmentDetailsForm, LocationDetailsForm, MaintenanceInfoForm, IncidentDetailForm, IncidentAnalysisForm, IncidentInfoIdForm, IncidentCreationForm
 from datetime import datetime
+
+auth = (settings.API_USERNAME, settings.API_PASSWORD)
+
+def get_projects():
+    getProjectsUrl = 'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/ProjectMgmt/Projects'
+    try:
+        response = requests.get(getProjectsUrl, auth=auth)
+        if response.status_code == 200:
+            allProjects = response.json()
+            return allProjects
+        else:
+            print(f"Request failed with status code {response.status_code}")
+            return None
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return None
+
+
+def get_systems_from_project(project_id):
+    getSystemsUrl = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems'
+
+    try:
+        response = requests.get(getSystemsUrl, auth=auth)
+        if response.status_code == 200:
+            allSystemsFromProject = response.json()
+            return allSystemsFromProject
+        else:
+            print(project_id)
+            print(f"Request failed with status code {response.status_code}")
+            return None
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return None
+    
 
 def home(request):
     message = None  # Initialize the message variable
-    incident_id_form = IncidentInfoIdForm(request.POST or None)
+    allProjects = get_projects()
+    allSystemsFromProject = []
+
+    # Decode the body to get the string
+    selectedProjectId = request.body.decode('utf-8')
+
+    if selectedProjectId:
+        allSystemsFromProject = get_systems_from_project(selectedProjectId)        
+
+    print(allSystemsFromProject)
 
     if request.method == 'POST':
-        if incident_id_form.is_valid():
-            incident_id = incident_id_form.cleaned_data['incident_id']
-            system_id = incident_id_form.cleaned_data['system_id']
-            project_id = incident_id_form.cleaned_data['project_id']
+        
+        # You can now use selectedProjectId as needed in your view
+        project_id = request.POST.get('project_id')
+        system_id = request.POST.get('system_id')
+        incident_ID = request.POST.get('incident_ID')
 
-            url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/{incident_id}'
+        if project_id and system_id and incident_ID:
 
-            auth = (settings.API_USERNAME, settings.API_PASSWORD)
+            url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/{incident_ID}'
 
             response = requests.get(url, auth=auth)
             if response.status_code == 200:
-                return redirect('view_incident', project_id=project_id, system_id=system_id, incident_id=incident_id)
+                return redirect('view_incident', project_id=project_id, system_id=system_id, incident_ID=incident_ID)
             else:
                 message = 'Invalid Incident Credentials!'
         else:
             message = 'All Fields Are Required!'
-    else:
-        incident_id_form = IncidentInfoIdForm()
 
-    context = {'incident_id_form': incident_id_form, 'message': message}
+    context = {'message': message, 'allProjects': allProjects, 'allSystemsFromProject': allSystemsFromProject}
     return render(request, 'base/home.html', context)
 
 
@@ -47,7 +89,8 @@ def homeCreateIncident(request):
 
             url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents'
 
-            auth = (settings.API_USERNAME, settings.API_PASSWORD)
+            
+
 
             response = requests.get(url, auth=auth)
 
@@ -72,7 +115,8 @@ def createIncident(request, project_id, system_id):
     incident_details_form = IncidentDetailForm(request.POST or None)
 
     # Define authentication credentials
-    auth = (settings.API_USERNAME, settings.API_PASSWORD)
+    
+
 
     # Define base URL
     base_url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/'
@@ -119,22 +163,22 @@ def createIncident(request, project_id, system_id):
 
             # Define the payload for creating an incident
             payload = {
-                "PersonIncidentEntry": incident_data.reportedBy,
-                "UserText13": incident_data.tail_number,
-                "OccurrenceDate": incident_data.incident_date.strftime("%Y-%m-%dT%H:%M:%S+02:00"),
+                "PersonIncidentEntry": incident_data.person_incident_entry,
+                "UserText13": incident_data.user_text13_tail_number,
+                "OccurrenceDate": incident_data.occurrence_date.strftime("%Y-%m-%dT%H:%M:%S+02:00"),
                 # "OccurrenceDate": datetime.now().strftime("%Y-%m-%dT%H:%M:%S+02:00"),
 
                 "SerialNumber": equipment_data.serial_number,
 
-                "UserText4": location_details.location,
-                "UserText23": location_details.address,
-                "UserText25": location_details.contact,
-                "UserText22": location_details.phone,
-                "UserText21": location_details.email,
+                "UserText4": location_details.user_text4_location,
+                "UserText23": location_details.user_text24_address,
+                "UserText25": location_details.user_text25_contact,
+                "UserText22": location_details.user_text22_phone,
+                "UserText21": location_details.user_text21_email,
 
                 "OperatingMode": incident_details.operating_mode,
-                "UserText2": incident_details.initial_severity,
-                "DescriptionIncident": incident_details.incident_description,
+                "UserText2": incident_details.user_text2_initial_severity,
+                "DescriptionIncident": incident_details.description_incident,
 
                 "Configuration@odata.bind": f"Systems({system_id})/Configurations({configuration})",
                 "SystemTreeItem@odata.bind": f"Systems({system_id})/TreeItems({tree_items})"
@@ -155,7 +199,7 @@ def createIncident(request, project_id, system_id):
             # Check the response
             if response.status_code == 201:
                 print(f"Incident created: Date: {response.json()}")
-                return redirect('view_incident', project_id=project_id, system_id=system_id, incident_id=response.json().get('ID'))
+                return redirect('view_incident', project_id=project_id, system_id=system_id, incident_ID=response.json().get('ID'))
             else:
                 print(f"Failed to create incident. Status code: {response.status_code}")
                 print(response.text)  # Print the response content for debugging
@@ -189,11 +233,11 @@ def updateIncident(request):
 
     # Access related objects
     equipment_details = EquipmentDetails.objects.filter(
-        incident_id=incident).first()
+        incident_ID=incident).first()
     location_details = LocationDetails.objects.filter(
-        incident_id=incident).first()
+        incident_ID=incident).first()
     incident_details = IncidentDetail.objects.filter(
-        incident_id=incident).first()
+        incident_ID=incident).first()
 
     if request.method == 'POST':
         # Create forms instances to be updated
@@ -243,15 +287,16 @@ def deleteIncident(request, pk):
     return render(request, 'base/deleteIncident.html', context)
 
 
-def viewIncident(request, project_id, system_id, incident_id):
+def viewIncident(request, project_id, system_id, incident_ID):
 
-    url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/{incident_id}'
+    url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/{incident_ID}'
 
-    auth = (settings.API_USERNAME, settings.API_PASSWORD)
+    
+
 
     response = requests.get(url, auth=auth)
 
-    maintenance_logs_data = viewIncidentMaintananceLogs(project_id, system_id, incident_id)
+    maintenance_logs_data = viewIncidentMaintenanceLogs(project_id, system_id, incident_ID)
 
     if response.status_code == 200:
         data = response.json()
@@ -268,7 +313,7 @@ def viewIncident(request, project_id, system_id, incident_id):
 
     else:
         message = 'Invalid Incident Credentials!'
-        incident_id_form = IncidentInfoIdForm()
+        incident_ID_form = IncidentInfoIdForm()
 
 
     # # Use get_object_or_404 to retrieve the IncidentInfo instance
@@ -276,15 +321,15 @@ def viewIncident(request, project_id, system_id, incident_id):
 
     # # Access related objects with correct lowercase names
     # equipment_details = EquipmentDetails.objects.filter(
-    #     incident_id=incident).first()
+    #     incident_ID=incident).first()
     # location_details = LocationDetails.objects.filter(
-    #     incident_id=incident).first()
-    # maintenance_info = MaintananceInfo.objects.filter(
-    #     incident_id=incident).first()
+    #     incident_ID=incident).first()
+    # maintenance_info = MaintenanceInfo.objects.filter(
+    #     incident_ID=incident).first()
     # incident_details = IncidentDetail.objects.filter(
-    #     incident_id=incident).first()
+    #     incident_ID=incident).first()
     # incident_analysis = IncidentAnalysis.objects.filter(
-    #     incident_id=incident).first()
+    #     incident_ID=incident).first()
 
     # context = {
     #     'incident': incident,
@@ -300,11 +345,42 @@ def viewIncident(request, project_id, system_id, incident_id):
     # return render(request, 'base/viewIncident.html', context)
 
 
-def viewIncidentMaintananceLogs(project_id, system_id, incident_id):
+def viewMaintenanceLogs(request):
+    context = { 'data': 'maintenance logs' }
+    return render(request, 'base/maintenanceLogs.html', context)
 
-    url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/{incident_id}/MaintenanceLogs'
 
-    auth = (settings.API_USERNAME, settings.API_PASSWORD)
+def viewOperatingTimes(request):
+    context = { 'data': 'operating times' }
+    return render(request, 'base/operatingTimes.html', context)
+
+
+def viewIncidentReport(request):
+    context = { 'data': 'incident report' }
+    return render(request, 'base/incidentReport.html', context)
+
+
+def viewAnalysis(request):
+    context = { 'data': 'analysis' }
+    return render(request, 'base/analysis.html', context)
+
+
+def viewReviewBoard(request):
+    context = { 'data': 'review board' }
+    return render(request, 'base/reviewBoard.html', context)
+
+
+def viewOverview(request):
+    context = { 'data': 'overview' }
+    return render(request, 'base/overview.html', context)
+
+
+def viewIncidentMaintenanceLogs(project_id, system_id, incident_ID):
+
+    url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/{incident_ID}/MaintenanceLogs'
+
+    
+
 
     response = requests.get(url, auth=auth)
 

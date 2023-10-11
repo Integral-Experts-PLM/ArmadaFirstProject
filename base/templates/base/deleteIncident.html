@@ -4,8 +4,8 @@
     {% csrf_token %}
     <div class="main-input-container" style="margin-top: 30px; width: 500px;">
         <h3 class="title-input-container">Confirm Delete</h3>
-        <p>Are you sure you want to delete Incident number "{{incident.incident_id}}"?</p>
-            <a href="/view-incident/{{incident.incident_id}}">
+        <p>Are you sure you want to delete Incident number "{{incident.incident_ID}}"?</p>
+            <a href="/view-incident/{{incident.incident_ID}}">
                 <button class="button" style="margin-left: 20px;">Go Back</button>
             </a>
             <input type="submit" value="Delete" class="button" style="margin-left: 20px;">

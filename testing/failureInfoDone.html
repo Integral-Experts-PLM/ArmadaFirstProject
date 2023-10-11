@@ -13,7 +13,7 @@
         </div>
         <div class="input-container">
           <label class="input-label">Incident Date:</label>
-          <input type="date" class="input-box" value="{{ incident.initial_info.incident_date|date:'Y-m-d' }}" name="incident_date" />
+          <input type="date" class="input-box" value="{{ incident.initial_info.occurrence_date|date:'Y-m-d' }}" name="occurrence_date" />
         </div>
         <div class="input-container">
           <label class="input-label">Incident Type:</label>
@@ -26,8 +26,8 @@
       </div>
       <div class="input-container" style="display: flex; flex-direction: column; justify-content: flex-start; margin-left: 20px;">
         <label style="padding-bottom: 10px;">Incident Desc:</label>
-        <textarea class="input-box" name="incident_description" rows="6" cols="50" style="width: 100%;""
-      >"{{ incident.review.incident_description }}"</textarea>
+        <textarea class="input-box" name="description_incident" rows="6" cols="50" style="width: 100%;""
+      >"{{ incident.review.description_incident }}"</textarea>
     </div>
   </div>
 </div>
@@ -66,10 +66,10 @@
         <label class="input-label">Address:</label>
         <textarea
           class="input-box"
-          name="address"
+          name="user_text24_address"
           rows="4"
           cols="50"
-        >"{{ incident.review.address }}"</textarea>
+        >"{{ incident.review.user_text24_address }}"</textarea>
       </div>
     </div>
     <div>
@@ -83,7 +83,7 @@
       </div>
       <div class="input-container">
         <label class="input-label">Phone:</label>
-        <input type="text" class="input-box" value="{{ incident.review.phone }}" name="phone" />
+        <input type="text" class="input-box" value="{{ incident.review.user_text22_phone }}" name="user_text22_phone" />
       </div>
     </div>
   </div>

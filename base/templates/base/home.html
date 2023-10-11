@@ -6,28 +6,82 @@
 
   <div class="main-input-container" style="margin-top: 30px; width: 440px;">
     <h3 class="title-input-container">Search Incident</h3>
+
     <div class="input-container">
-      <label class="input-label">Project Number:</label>
-      <input type="text" class="input-box" name="project_id" />
+      <label for="project_id" class="input-label">Project Number:</label>
+      <select id="project_id" name="project_id" class="input-box">
+        <option value="">Select a Project</option> {# Add a default option #}
+        {% for project in allProjects.value %}
+        <option value="{{ project.ID }}">{{ project.Name }}</option>
+        {% endfor %}
+      </select>
     </div>
 
     <div class="input-container">
-      <label class="input-label">System Number:</label>
-      <input type="text" class="input-box" name="system_id" />
+      <label for="system_id" class="input-label">Project Number:</label>
+      <select id="system_id" name="system_id" class="input-box">
+        <option value="">Select the System</option> {# Add a default option #}
+        {% for system in allSystemsFromProject.value %}
+        <option value="{{ system.ID }}">{{ system.Name }}</option>
+        {% endfor %}
+      </select>
     </div>
 
     <div class="input-container">
       <label class="input-label">Incident Number:</label>
-      <input type="text" class="input-box" name="incident_id" />
+      <input type="text" class="input-box" name="incident_ID" />
     </div>
+
 
     <div style="display: flex; flex-direction: column; align-items: center;">
       {% if message %}
       <p>{{ message }}</p>
       {% endif %}
-      <p></p>
       <input type="submit" value="Find Incident" class="button" style="margin-top: 20px;">
     </div>
   </div>
 </form>
+
+<!-- Include this JavaScript code within your HTML template where you have the project_id select element -->
+<script>
+  const projectIdSelect = document.getElementById('project_id');
+  const systemIdSelect = document.getElementById('system_id');
+
+  projectIdSelect.addEventListener('change', function () {
+    let selectedProjectId = projectIdSelect.value;
+
+    // Send the selectedProjectId as a string to your Django view using an AJAX request
+    fetch('/', {
+      method: 'POST',  // Use POST if you want to send data to the server
+      headers: {
+        'Content-Type': 'text/plain',  // Use text/plain for plain string data
+        'X-CSRFToken': getCookie('csrftoken')  // Include CSRF token if your project uses CSRF protection
+      },
+      body: selectedProjectId  // Send the selectedProjectId as a string
+    })
+      .then(response => {
+        return 'selectedProjectId';
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  });
+
+  // Function to get the CSRF token from cookies
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === name + '=') {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+</script>
+
 {% endblock %}

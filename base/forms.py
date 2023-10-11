@@ -1,44 +1,44 @@
 from django.forms import ModelForm, forms
-from .models import IncidentInfo, EquipmentDetails, LocationDetails, MaintananceInfo, IncidentDetail, IncidentAnalysis
+from .models import IncidentInfo, EquipmentDetails, LocationDetails, MaintenanceInfo, IncidentDetail, IncidentAnalysis
 
 class IncidentInfoIdForm(ModelForm):
     class Meta:
         model = IncidentInfo
-        fields = ['incident_id', 'system_id', 'project_id']
+        fields = ['incident_ID', 'system_id', 'project_id']
 
 class IncidentCreationForm(ModelForm):
     class Meta:
         model = IncidentInfo
         fields = ['system_id', 'project_id']
 
-# 'current_state' must be exclude because it has a default initial value
+# 'workflow_state' must be exclude because it has a default initial value
 class IncidentInfoForm(ModelForm):
     class Meta:
         model = IncidentInfo
-        exclude = ['current_state', 'project_id', 'system_id', 'incident_id']
+        exclude = ['workflow_state', 'project_id', 'system_id', 'incident_ID']
 
-# 'incident_id' must be exclude because it is asign automaticaly
+# 'incident_ID' must be exclude because it is asign automaticaly
 class EquipmentDetailsForm(ModelForm):
     class Meta:
         model = EquipmentDetails
-        exclude = ['incident_id']
+        exclude = ['incident_ID']
 
-# 'incident_id' must be exclude because it is asign automaticaly
+# 'incident_ID' must be exclude because it is asign automaticaly
 class LocationDetailsForm(ModelForm):
     class Meta:
         model = LocationDetails
-        exclude = ['incident_id']
+        exclude = ['incident_ID']
 
-class MaintananceInfoForm(ModelForm):
+class MaintenanceInfoForm(ModelForm):
     class Meta:
-        model = MaintananceInfo
-        exclude = ['incident_id']
+        model = MaintenanceInfo
+        exclude = ['incident_ID', 'maintenance_log_identifier']
 
-# 'incident_id' must be exclude because it is asign automaticaly
+# 'incident_ID' must be exclude because it is asign automaticaly
 class IncidentDetailForm(ModelForm):
     class Meta:
         model = IncidentDetail
-        exclude = ['incident_id']
+        exclude = ['incident_ID']
 
 class IncidentAnalysisForm(ModelForm):
     class Meta:
