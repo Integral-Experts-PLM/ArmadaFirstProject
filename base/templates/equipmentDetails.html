@@ -14,13 +14,13 @@
     </div>
     <div class="input-container">
       <label class="input-label">TSN:</label>
-      <input type="text"
+      <input type="number"
         value="{% if incident_data %}{{ incident_data.MeterReading }}{% else %}{{ equipment_details_form.meter_reading_tsn.value|default:'' }}{% endif %}"
         class="input-box" name="meter_reading_tsn" />
     </div>
     <div class="input-container">
       <label class="input-label">TSO:</label>
-      <input type="text"
+      <input type="number"
         value="{% if incident_data %}{{ incident_data.TimeToFailure }}{% else %}{{ equipment_details_form.time_to_failure_tso.value|default:'' }}{% endif %}"
         class="input-box" name="time_to_failure_tso" />
     </div>

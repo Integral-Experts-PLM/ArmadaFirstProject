@@ -20,6 +20,11 @@ urlpatterns = [
     # popup
     path('maintenance-log-create/', views.maintenanceLogCreate, name='maintenance_log_create'),
 
+    # only get data, no page render
+    path('get-systems/', views.get_systems, name='get_systems'),
+    path('get-incidents/', views.get_incidents, name='get_incidents'),
+
+
 
     path('insert-new-record/', views.insert_new_record, name='insert_new_record'),
     # in the future, this page will need a pk

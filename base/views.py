@@ -8,8 +8,11 @@ from .models import IncidentInfo, EquipmentDetails, LocationDetails, Maintenance
 from .forms import IncidentInfoForm, EquipmentDetailsForm, LocationDetailsForm, MaintenanceInfoForm, IncidentDetailForm, IncidentAnalysisForm, IncidentInfoIdForm, IncidentCreationForm
 from datetime import datetime
 
+# global credentials to be used on all calls
 auth = (settings.API_USERNAME, settings.API_PASSWORD)
 
+
+# get projects to populate the dropdowns
 def get_projects():
     getProjectsUrl = 'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/ProjectMgmt/Projects'
     try:
@@ -23,47 +26,62 @@ def get_projects():
     except Exception as e:
         print(f"An error occurred: {e}")
         return None
+    
 
-
-def get_systems_from_project(project_id):
-    getSystemsUrl = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems'
+# get systems to populate the dropdowns
+def get_systems(request):
+    selectedProjectId = request.body.decode('utf-8')
+    
+    getSystemsUrl = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{selectedProjectId}/Systems'
 
     try:
         response = requests.get(getSystemsUrl, auth=auth)
         if response.status_code == 200:
             allSystemsFromProject = response.json()
-            return allSystemsFromProject
+            systems_data = [{'ID': system['ID'], 'Name': system['Name']} for system in allSystemsFromProject['value']]
+            return JsonResponse({'allSystemsFromProject': systems_data})
         else:
-            print(project_id)
+            print(selectedProjectId)
             print(f"Request failed with status code {response.status_code}")
             return None
     except Exception as e:
         print(f"An error occurred: {e}")
         return None
-    
+
+
+# get incidents to populate the dropdowns
+def get_incidents(request):
+    data = json.loads(request.body.decode('utf-8'))
+    selectedProjectId = data.get('selectedProjectId')
+    selectedSystemId = data.get('selectedSystemId')
+
+    getIncidentsUrl = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{selectedProjectId}/Systems({selectedSystemId})/Incidents'
+
+    try:
+        response = requests.get(getIncidentsUrl, auth=auth)
+        if response.status_code == 200:
+            allIncidentsFromSystem = response.json()
+            incidents_data = [{'ID': incident['ID']} for incident in allIncidentsFromSystem['value']]
+            return JsonResponse({'allIncidentsFromSystem': incidents_data})
+        else:
+            print(f"Request failed with status code {response.status_code}")
+            return None
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return None
+
 
 def home(request):
     message = None  # Initialize the message variable
     allProjects = get_projects()
-    allSystemsFromProject = []
-
-    # Decode the body to get the string
-    selectedProjectId = request.body.decode('utf-8')
-
-    if selectedProjectId:
-        allSystemsFromProject = get_systems_from_project(selectedProjectId)        
-
-    print(allSystemsFromProject)
 
     if request.method == 'POST':
-        
         # You can now use selectedProjectId as needed in your view
         project_id = request.POST.get('project_id')
         system_id = request.POST.get('system_id')
-        incident_ID = request.POST.get('incident_ID')
+        incident_ID = request.POST.get('incident_id')
 
         if project_id and system_id and incident_ID:
-
             url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/{incident_ID}'
 
             response = requests.get(url, auth=auth)
@@ -74,36 +92,31 @@ def home(request):
         else:
             message = 'All Fields Are Required!'
 
-    context = {'message': message, 'allProjects': allProjects, 'allSystemsFromProject': allSystemsFromProject}
+    context = {'message': message, 'allProjects': allProjects}
     return render(request, 'base/home.html', context)
 
 
 def homeCreateIncident(request):
     message = None  # Initialize the message variable
-    incident_creation_form = IncidentCreationForm(request.POST or None)
+    allProjects = get_projects()
 
     if request.method == 'POST':
-        if incident_creation_form.is_valid():
-            system_id = incident_creation_form.cleaned_data['system_id']
-            project_id = incident_creation_form.cleaned_data['project_id']
+        # You can now use selectedProjectId as needed in your view
+        project_id = request.POST.get('project_id')
+        system_id = request.POST.get('system_id')
 
-            url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents'
+        url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents'
 
-            
+        response = requests.get(url, auth=auth)
 
-
-            response = requests.get(url, auth=auth)
-
-            if response.status_code == 200:
-                return redirect('create_incident', project_id=project_id, system_id=system_id)
-            else:
-                message = 'Invalid Credentials!'
+        if response.status_code == 200:
+            return redirect('create_incident', project_id=project_id, system_id=system_id)
         else:
-            message = 'All Fields Are Required!'
+            message = 'Invalid Credentials!'
     else:
-        incident_creation_form = IncidentCreationForm()
+        message = 'All Fields Are Required!'
 
-    context = {'incident_creation_form': incident_creation_form, 'message': message}
+    context = {'message': message, 'allProjects': allProjects}
     return render(request, 'base/homeCreate.html', context)
 
 
@@ -113,10 +126,6 @@ def createIncident(request, project_id, system_id):
     equipment_details_form = EquipmentDetailsForm(request.POST or None)
     location_details_form = LocationDetailsForm(request.POST or None)
     incident_details_form = IncidentDetailForm(request.POST or None)
-
-    # Define authentication credentials
-    
-
 
     # Define base URL
     base_url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/'
@@ -151,11 +160,8 @@ def createIncident(request, project_id, system_id):
         if request.method == 'POST' and incident_info_form.is_valid() and equipment_details_form.is_valid() and location_details_form.is_valid() and incident_details_form.is_valid():
 
             incident_data = incident_info_form.save(commit=False)
-
             equipment_data = equipment_details_form.save(commit=False)
-
             location_details = location_details_form.save(commit=False)
-
             incident_details = incident_details_form.save(commit=False)
 
             # Define the URL for creating an incident
@@ -164,11 +170,19 @@ def createIncident(request, project_id, system_id):
             # Define the payload for creating an incident
             payload = {
                 "PersonIncidentEntry": incident_data.person_incident_entry,
-                "UserText13": incident_data.user_text13_tail_number,
                 "OccurrenceDate": incident_data.occurrence_date.strftime("%Y-%m-%dT%H:%M:%S+02:00"),
-                # "OccurrenceDate": datetime.now().strftime("%Y-%m-%dT%H:%M:%S+02:00"),
+                # I believe this configuration is the relation with the outside configuration - further review
+                # "configuration": incident_data.configuration,
+                "UserText13": incident_data.user_text13_tail_number,
+                "UserText17": incident_data.user_text17_mission_effect,
 
+                # I believe this systemTreeItem is the relation with the outside systemTreeItem - further review
+                # "SystemTreeItem": equipment_data.failed_component,
                 "SerialNumber": equipment_data.serial_number,
+                "MeterReading": equipment_data.meter_reading_tsn,
+                "TimeToFailure": equipment_data.time_to_failure_tso,
+                "UserText10": equipment_data.user_text10_oem,
+                "UserText11": equipment_data.analysis_team,
 
                 "UserText4": location_details.user_text4_location,
                 "UserText23": location_details.user_text24_address,
@@ -179,6 +193,8 @@ def createIncident(request, project_id, system_id):
                 "OperatingMode": incident_details.operating_mode,
                 "UserText2": incident_details.user_text2_initial_severity,
                 "DescriptionIncident": incident_details.description_incident,
+                # attachments are getting error. in relex is the type of string but here supose to be file - further review
+                # "AttachmentsIncidents": incident_details.attachments_incidents,
 
                 "Configuration@odata.bind": f"Systems({system_id})/Configurations({configuration})",
                 "SystemTreeItem@odata.bind": f"Systems({system_id})/TreeItems({tree_items})"
@@ -204,7 +220,7 @@ def createIncident(request, project_id, system_id):
                 print(f"Failed to create incident. Status code: {response.status_code}")
                 print(response.text)  # Print the response content for debugging
         else:
-            print('incident form not ok')
+            print('incident form not ok', incident_info_form, equipment_details_form, location_details_form, incident_details_form)
             context = {
             'incident_info_form': incident_info_form,
             'equipment_details_form': equipment_details_form,

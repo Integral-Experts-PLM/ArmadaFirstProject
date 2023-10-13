@@ -20,8 +20,8 @@ class EquipmentDetails(models.Model):
     incident_ID = models.ForeignKey(IncidentInfo, on_delete=models.CASCADE)
     failed_component = models.CharField(max_length=200, null=True, blank=True)
     serial_number = models.CharField(max_length=200, null=True, blank=True)
-    meter_reading_tsn = models.CharField(max_length=200, null=True, blank=True)
-    time_to_failure_tso = models.CharField(max_length=200, null=True, blank=True)
+    meter_reading_tsn = models.FloatField(null=True, blank=True)
+    time_to_failure_tso = models.FloatField(null=True, blank=True)
     user_text10_oem = models.CharField(max_length=200, null=True, blank=True)
     analysis_team = models.CharField(max_length=200, null=True, blank=True)
 
@@ -32,6 +32,8 @@ class LocationDetails(models.Model):
     incident_ID = models.ForeignKey(IncidentInfo, on_delete=models.CASCADE)
     user_text4_location = models.CharField(max_length=200, null=True, blank=True)
     user_text24_address = models.TextField(null=True, blank=True)
+    user_text24_city = models.CharField(max_length=200, null=True, blank=True)
+    user_text16_zip = models.CharField(max_length=200, null=True, blank=True)
     user_text25_contact = models.CharField(max_length=200, null=True, blank=True)
     user_text22_phone = models.CharField(max_length=200, null=True, blank=True)
     user_text21_email = models.CharField(max_length=200, null=True, blank=True)
@@ -61,7 +63,7 @@ class IncidentDetail(models.Model):
     user_text2_initial_severity = models.CharField(max_length=200, null=True, blank=True)
     description_incident = models.TextField(null=True, blank=True)
     maintenance = models.ForeignKey(MaintenanceInfo, on_delete=models.CASCADE, null=True, blank=True)
-    attachments_incidents = models.FileField(null=True, blank=True)
+    attachments_incidents = models.CharField(max_length=200, null=True, blank=True)
 
     def __str__(self):
         return str(self.incident_ID.incident_ID)
