@@ -1,9 +1,22 @@
 <div class="navbar" style="background-color: #5c6571;">
-    <a href="{% url 'view_all_incidents' %}" class="custom-link">Incidents</a>
-    <a href="{% url 'maintenance_logs' %}" class="custom-link">View Maintenance Logs</a>
-    <a href="{% url 'operating_times' %}" class="custom-link">Operation Times</a>
-    <a href="{% url 'incident_report' %}" class="custom-link">Incident Report</a>
-    <a href="{% url 'analysis' %}" class="custom-link">Analysis</a>
-    <a href="{% url 'review_board' %}" class="custom-link">Review Board</a>
-    <a href="{% url 'overview' %}" class="custom-link">Overview</a>
+    <a href="{% url 'view_all_incidents' %}" name="view-all-incidents" class="custom-link">FRACAS Incidents</a>
+    <a href="{% url 'maintenance_logs' %}" name="maintenance-logs" class="custom-link">FRACAS Maintenance Logs</a>
+    <a href="{% url 'operating_times' %}" name="operating-times" class="custom-link">FRACAS Operation Times</a>
+    <a href="{% url 'incident_report' %}" name="incident-report" class="custom-link">Incident Report</a>
+    <a href="{% url 'analysis' %}" name="analysis" class="custom-link">Analysis</a>
+    <a href="{% url 'review_board' %}" name="review-board" class="custom-link">Review Board</a>
+    <a href="{% url 'overview' %}" name="overview" class="custom-link">Overview</a>
 </div>
+
+<script>
+    function highlightActiveLink() {
+        let currentURL = window.location.pathname;
+        let anchors = document.querySelectorAll('.custom-link');
+        for (let i = 0; i < anchors.length; i++) {
+            if (currentURL.includes(anchors[i].getAttribute('name'))) {
+                anchors[i].style.backgroundColor = '#4b5057';
+            }
+        }
+    }
+    window.onload = highlightActiveLink;
+</script>

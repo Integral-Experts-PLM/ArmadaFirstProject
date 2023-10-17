@@ -11,10 +11,15 @@
     <script src="{% static 'js/popup.js' %}"></script>
 </head>
 
-<body>
+<body style="display: flex; flex-direction: column; height: 100vh; margin: 0;">
     {% include 'navbar.html' %}
-    {% block content %}
-    {% endblock %}
+    <div style="flex-grow: 1; overflow: auto;">
+        {% block content %}
+        {% endblock %}
+    </div>
+    {% if request.path != '/' and '/create-incident' not in request.path %}
+    {% include 'subIncidentsTabs.html' %}
+    {% endif %}
 </body>
 
 </html>

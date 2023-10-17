@@ -1,9 +1,8 @@
 {% extends 'index.html' %}
 
+{% load static %}
+
 {% block content %}
-<div style="width: 100%;">
-    {% include 'subIncidentsTabs.html' %}
-</div>
 <table>
     <tr>
         <th></th>
@@ -48,65 +47,72 @@
     </tr>
     {% endfor %}
 
-    <script>
-        // Initialize selectedIncidentId with the default or initial value
-        let selectedIncidentId = "{{ selectedIncidentId }}";
-        console.log('Initial selected: ', selectedIncidentId);
+    <tr style="background-color: #ffce55; height: 10px;">
+        <td colspan="18" style="text-align: center; cursor: pointer;">
+            <a href="{% url 'create_incident' %}" style="display: block; width: 100%; height: 100%;">
+                Click here to insert a new record
+            </a>
+        </td>
+    </tr>
+</table>
 
-        // Function to get the CSRF token from cookies
-        function getCookie(name) {
-            let cookieValue = null;
-            if (document.cookie && document.cookie !== '') {
-                const cookies = document.cookie.split(';');
-                for (let i = 0; i < cookies.length; i++) {
-                    const cookie = cookies[i].trim();
-                    if (cookie.substring(0, name.length + 1) === name + '=') {
-                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                        break;
-                    }
+<script>
+    // Initialize selectedIncidentId with the default or initial value
+    let selectedIncidentId = document.getElementsByClassName('clickable-row')[0].getAttribute('value')
+
+    // Function to get the CSRF token from cookies
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === name + '=') {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
                 }
             }
-            return cookieValue;
+        }
+        return cookieValue;
+    }
+
+    const rows = document.querySelectorAll('.clickable-row');
+
+    rows.forEach(row => {
+        row.addEventListener('click', () => {
+            const clickedIncidentId = row.getAttribute('value');
+            selectedIncidentId = clickedIncidentId;
+
+            // Remove 'selected' class from all rows
+            rows.forEach(r => r.classList.remove('selected'));
+
+            // Mark the clicked row as selected
+            row.classList.add('selected');
+
+            // Send the selectedIncidentId to your Django view if needed
+            fetch('/view-all-incidents/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'text/plain',
+                    'X-CSRFToken': getCookie('csrftoken'),
+                },
+                body: selectedIncidentId,
+            }).then(handleResponse)
+                .catch(handleError);
+        })
+
+        function handleResponse(response) {
+            if (!response.ok) {
+                throw new Error('Request failed');
+            }
+            window.location.href = "{% url 'incident_report' %}";
+            return response.json();
         }
 
-        const rows = document.querySelectorAll('.clickable-row');
+        function handleError(error) {
+            console.error('Error:', error);
+        }
+    });
+</script>
 
-        rows.forEach(row => {
-            row.addEventListener('click', () => {
-                const clickedIncidentId = row.getAttribute('value');
-                selectedIncidentId = clickedIncidentId;
-
-                // Remove 'selected' class from all rows
-                rows.forEach(r => r.classList.remove('selected'));
-
-                // Mark the clicked row as selected
-                row.classList.add('selected');
-
-                console.log('Selected incident ID: ', selectedIncidentId);
-
-                // Send the selectedIncidentId to your Django view if needed
-                fetch('/view-all-incidents/', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'text/plain',
-                        'X-CSRFToken': getCookie('csrftoken'),
-                    },
-                    body: selectedIncidentId,
-                }).then(handleResponse)
-                    .catch(handleError);
-            })
-
-            function handleResponse(response) {
-                if (!response.ok) {
-                    throw new Error('Request failed');
-                }
-                return response.json();
-            }
-
-            function handleError(error) {
-                console.error('Error:', error);
-            }
-        });
-    </script>
-
-    {% endblock %}
+{% endblock %}

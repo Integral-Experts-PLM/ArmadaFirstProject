@@ -50,28 +50,6 @@ def get_systems(request):
         return None
 
 
-# get incidents to populate the dropdowns
-def get_incidents(request):
-    data = json.loads(request.body.decode('utf-8'))
-    selectedProjectId = data.get('selectedProjectId')
-    selectedSystemId = data.get('selectedSystemId')
-
-    getIncidentsUrl = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{selectedProjectId}/Systems({selectedSystemId})/Incidents'
-
-    try:
-        response = requests.get(getIncidentsUrl, auth=auth)
-        if response.status_code == 200:
-            allIncidentsFromSystem = response.json()
-            incidents_data = [{'ID': incident['ID']} for incident in allIncidentsFromSystem['value']]
-            return JsonResponse({'allIncidentsFromSystem': incidents_data})
-        else:
-            print(f"Request failed with status code {response.status_code}")
-            return None
-    except Exception as e:
-        print(f"An error occurred: {e}")
-        return None
-
-
 def home(request):
     message = None  # Initialize the message variable
     allProjects = get_projects()
@@ -86,6 +64,9 @@ def home(request):
 
             response = requests.get(url, auth=auth)
             if response.status_code == 200:
+                data = response.json()
+                if data.get('value'):
+                    request.session['incident_ID'] = data['value'][0]['ID']
                 # Store the values in the session
                 request.session['project_id'] = project_id
                 request.session['system_id'] = system_id
@@ -99,31 +80,10 @@ def home(request):
     return render(request, 'base/home.html', context)
 
 
-def homeCreateIncident(request):
-    message = None  # Initialize the message variable
-    allProjects = get_projects()
-
-    if request.method == 'POST':
-        # You can now use selectedProjectId as needed in your view
-        project_id = request.POST.get('project_id')
-        system_id = request.POST.get('system_id')
-
-        url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents'
-
-        response = requests.get(url, auth=auth)
-
-        if response.status_code == 200:
-            return redirect('create_incident', project_id=project_id, system_id=system_id)
-        else:
-            message = 'Invalid Credentials!'
-    else:
-        message = 'All Fields Are Required!'
-
-    context = {'message': message, 'allProjects': allProjects}
-    return render(request, 'base/homeCreate.html', context)
-
-
-def createIncident(request, project_id, system_id):
+def createIncident(request):
+    project_id = request.session.get('project_id')
+    system_id = request.session.get('system_id')
+    
     # Create forms for the incident creation
     incident_info_form = IncidentInfoForm(request.POST or None)
     equipment_details_form = EquipmentDetailsForm(request.POST or None)
@@ -217,8 +177,11 @@ def createIncident(request, project_id, system_id):
 
             # Check the response
             if response.status_code == 201:
+                data = response.json()
+                if data.get('value'):
+                    request.session['incident_ID'] = data['value'][0]['ID']
                 print(f"Incident created: Date: {response.json()}")
-                return redirect('view_all_incidents', project_id=project_id, system_id=system_id, incident_ID=response.json().get('ID'))
+                return redirect('incident_report')
             else:
                 print(f"Failed to create incident. Status code: {response.status_code}")
                 print(response.text)  # Print the response content for debugging
@@ -314,7 +277,6 @@ def viewAllIncidents(request):
         # Get the selected incident ID from the POST request
         incident_ID = request.body.decode('utf-8')
         request.session['incident_ID'] = incident_ID
-        print('Selected incident ID from front: ', incident_ID)
     else:
         # If not a POST request, use the session variable as the initial selected incident ID
         incident_ID = request.session.get('incident_ID', 'default-incident-id')
@@ -365,35 +327,6 @@ def viewIncident(request):
     else:
         message = 'Invalid Incident Credentials!'
         incident_ID_form = IncidentInfoIdForm()
-
-
-# def viewIncident(request):
-#     project_id = request.session.get('project_id')
-#     system_id = request.session.get('system_id')
-#     incident_ID = request.session.get('incident_ID')
-
-#     url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/{incident_ID}'
-
-#     response = requests.get(url, auth=auth)
-
-#     maintenance_logs_data = incidentMaintenanceLogs(project_id, system_id, incident_ID)
-
-#     if response.status_code == 200:
-#         data = response.json()
-
-#         # Extract the data you need from the JSON response
-#         context = {
-#             'incident_data': data,
-#             'OccurrenceDate': data.get('OccurrenceDate').split('T')[0],
-#             'maintenance_logs_data': maintenance_logs_data,
-#             # 'occurrence_date': datetime.fromisoformat(data['OccurrenceDate'])
-#         }
-#         # Render the template and pass the context
-#         return render(request, 'base/viewIncident.html', context)
-
-#     else:
-#         message = 'Invalid Incident Credentials!'
-#         incident_ID_form = IncidentInfoIdForm()
 
 
 def viewMaintenanceLogs(request):

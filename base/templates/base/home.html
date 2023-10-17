@@ -1,115 +1,104 @@
 {% extends 'index.html' %}
 
+{% load static %}
+
 {% block content %}
-  <form method="post">
-    {% csrf_token %}
-    <div class="main-input-container" style="margin-top: 30px; width: 440px;">
-      <h3 class="title-input-container">Search Incident</h3>
-      <div class="input-container">
-        <label for="project_id" class="input-label">Project Name:</label>
-        <select id="project_id" name="project_id" class="input-box">
-          <option value="">Select Project</option>
-          {% for project in allProjects.value %}
-            <option value="{{ project.ID }}">{{ project.Name }}</option>
-          {% endfor %}
-        </select>
-      </div>
-      <div class="input-container">
-        <label for="system_id" class="input-label">System Name:</label>
-        <select id="system_id" name="system_id" class="input-box" disabled>
-          <option value="">Select System</option>
-        </select>
-      </div>
-      <div style="display: flex; flex-direction: column; align-items: center;">
-        {% if message %}
-          <p>{{ message }}</p>
-        {% endif %}
-        <input type="submit" value="Find Incident" class="button" style="margin-top: 20px;">
-      </div>
+<form id="incident-form" method="post"> {% csrf_token %}
+  <div class="main-input-container" style="margin-top: 30px; width: 440px;">
+    <h3 class="title-input-container">Search Incident</h3>
+    <div class="input-container">
+      <label for="project_id" class="input-label">Project Name:</label>
+      <select id="project_id" name="project_id" class="input-box">
+        <option value="">Select Project</option>
+        {% for project in allProjects.value %}
+        <option value="{{ project.ID }}">{{ project.Name }}</option>
+        {% endfor %}
+      </select>
     </div>
-  </form>
+    <div class="input-container">
+      <label for="system_id" class="input-label">System Name:</label>
+      <select id="system_id" name="system_id" class="input-box" disabled>
+        <option value="">Select System</option>
+      </select>
+    </div>
+    <div style="display: flex; flex-direction: column; align-items: center;">
+      {% if message %}
+      <p>{{ message }}</p>
+      {% endif %}
+    </div>
+  </div>
+</form>
 
-  <script>
-    const projectIdSelect = document.getElementById('project_id');
-    const systemIdSelect = document.getElementById('system_id');
+<script>
+  const projectIdSelect = document.getElementById('project_id');
+  const systemIdSelect = document.getElementById('system_id');
 
-    projectIdSelect.addEventListener('change', handleProjectChange);
-    systemIdSelect.addEventListener('change', handleSystemChange);
+  projectIdSelect.addEventListener('change', handleProjectChange);
+  systemIdSelect.addEventListener('change', checkFormAndSubmit);
 
-    // Function to get the CSRF token from cookies
-    function getCookie(name) {
-      let cookieValue = null;
-      if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-          const cookie = cookies[i].trim();
-          if (cookie.substring(0, name.length + 1) === name + '=') {
-            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-            break;
-          }
+  function checkFormAndSubmit() {
+    if (projectIdSelect.value && systemIdSelect.value) {
+      // Both selects have values, so submit the form
+      document.getElementById('incident-form').submit();
+    }
+  }
+
+  // Function to get the CSRF token from cookies
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === name + '=') {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
         }
       }
-      return cookieValue;
     }
+    return cookieValue;
+  }
 
-    function handleProjectChange() {
-      let selectedProjectId = projectIdSelect.value;
+  function handleProjectChange() {
+    let selectedProjectId = projectIdSelect.value;
 
-      // Send the selectedProjectId as a string to your Django view using an AJAX request
-      fetch('/get-systems/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'text/plain',
-          'X-CSRFToken': getCookie('csrftoken'),
-          'X-Requested-With': 'XMLHttpRequest',
-        },
-        body: selectedProjectId,
+    // Send the selectedProjectId as a string to your Django view using an AJAX request
+    fetch('/get-systems/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'text/plain',
+        'X-CSRFToken': getCookie('csrftoken'),
+        'X-Requested-With': 'XMLHttpRequest',
+      },
+      body: selectedProjectId,
+    })
+      .then(handleResponse)
+      .then(data => {
+        populateDropdown(systemIdSelect, data.allSystemsFromProject, "Name");
+        systemIdSelect.removeAttribute('disabled');
       })
-        .then(handleResponse)
-        .then(data => {
-          populateDropdown(systemIdSelect, data.allSystemsFromProject, "Name");
-          systemIdSelect.removeAttribute('disabled');
-        })
-        .catch(handleError);
-    }
+      .catch(handleError);
+  }
 
-    function handleSystemChange() {
-      let selectedProjectId = projectIdSelect.value;
-      let selectedSystemId = systemIdSelect.value;
-
-      // Send the selectedSystemId and selectedProjectId to your Django view using an AJAX request
-      fetch('/get-incidents/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-CSRFToken': getCookie('csrftoken'),
-          'X-Requested-With': 'XMLHttpRequest',
-        },
-        body: JSON.stringify({ selectedProjectId, selectedSystemId }),
-      })
-        .then(handleResponse)
-        .catch(handleError);
+  function handleResponse(response) {
+    if (!response.ok) {
+      throw new Error('Request failed');
     }
+    return response.json();
+  }
 
-    function handleResponse(response) {
-      if (!response.ok) {
-        throw new Error('Request failed');
-      }
-      return response.json();
-    }
+  function handleError(error) {
+    console.error('Error:', error);
+  }
 
-    function handleError(error) {
-      console.error('Error:', error);
-    }
-
-    function populateDropdown(selectElement, options, selectType) {
-      selectElement.innerHTML = '<option value="">Select...</option>';
-      options.forEach(option => {
-        let newOption = document.createElement('option');
-        newOption.value = option.ID;
-        newOption.text = option[selectType];
-        selectElement.appendChild(newOption);
-      });
-    }
-  </script>
+  function populateDropdown(selectElement, options, selectType) {
+    selectElement.innerHTML = '<option value="">Select...</option>';
+    options.forEach(option => {
+      let newOption = document.createElement('option');
+      newOption.value = option.ID;
+      newOption.text = option[selectType];
+      selectElement.appendChild(newOption);
+    });
+  }
+</script>
 {% endblock %}

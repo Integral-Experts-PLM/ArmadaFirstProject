@@ -4,8 +4,7 @@ from . import views
 urlpatterns = [
     # main crud
     path('', views.home, name='home'),
-    path('home-create-incident/', views.homeCreateIncident, name='home_create_incident'),
-    path('create-incident/<str:project_id>/<str:system_id>/', views.createIncident, name='create_incident'),
+    path('create-incident/', views.createIncident, name='create_incident'),
     path('update-incident/<str:project_id>/<str:system_id>/<str:incident_ID>/', views.updateIncident, name='update_incident'),
     path('delete-incident/<str:pk>/', views.deleteIncident, name='delete_incident'),
 
@@ -23,7 +22,6 @@ urlpatterns = [
 
     # only get data, no page render
     path('get-systems/', views.get_systems, name='get_systems'),
-    path('get-incidents/', views.get_incidents, name='get_incidents'),
 
 
 
