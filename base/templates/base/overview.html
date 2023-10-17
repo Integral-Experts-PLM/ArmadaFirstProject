@@ -1,8 +1,37 @@
-<p>{{data}}</p>
-<button onclick="goBack()" class="btn btn-primary">Go Back</button>
+{% extends 'index.html' %}
 
-<script>
-    function goBack() {
-        window.history.back();
-    }
-</script>
+{% load static %}
+
+{% block content %}
+
+<div style="width: 100%;">
+    {% include 'subIncidentsTabs.html' %}
+</div>
+<div style="display: flex; flex-direction: column; align-items: center; pointer-events: none; margin: 0px 20px 0px 20px;">
+    <div style="display: flex; justify-content: space-between; margin-top: 30px; width: 100%;">
+        {% include 'incidentInfo.html' %}
+        <div style="height: 100%; display: flex; flex-direction: column; align-items: center;">
+            <div style="height: 220px;">
+                <img src="{% static 'images/escudoArmada.png' %}" alt="Escudo Armada" style="height: auto;">
+            </div>
+            {% include 'currentState.html' %}
+        </div>
+        {% include 'equipmentDetails.html' %}
+    </div>
+    <div style="margin-top: 20px; width: 100%;">
+        {% include 'locationDetails.html' %}
+    </div>
+    <div style="margin-top: 20px; width: 100%;">
+        {% include 'incidentDetails.html' %}
+    </div>
+    <div style="margin: 20px 0px 20px 0px; width: 100%;">
+        {% include 'analysisDetails.html' %}
+    </div>
+    <div style="margin: 20px 0px 20px 0px; width: 100%;">
+        <h3>REVIEW TO BE CREATED</h3>
+        <h3>REST NOT FOUND</h3>
+        <h3>DATA NOT FOUND</h3>
+        <h3>WAITING ARMADA REPLY</h3>
+    </div>
+</div>
+{% endblock %}

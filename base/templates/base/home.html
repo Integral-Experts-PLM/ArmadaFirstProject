@@ -20,12 +20,6 @@
           <option value="">Select System</option>
         </select>
       </div>
-      <div class="input-container">
-        <label for="incident_id" class="input-label">Incident Number:</label>
-        <select id="incident_id" name="incident_id" class="input-box" disabled>
-          <option value="">Select Incident</option>
-        </select>
-      </div>
       <div style="display: flex; flex-direction: column; align-items: center;">
         {% if message %}
           <p>{{ message }}</p>
@@ -38,7 +32,6 @@
   <script>
     const projectIdSelect = document.getElementById('project_id');
     const systemIdSelect = document.getElementById('system_id');
-    const incidentIdSelect = document.getElementById('incident_id');
 
     projectIdSelect.addEventListener('change', handleProjectChange);
     systemIdSelect.addEventListener('change', handleSystemChange);
@@ -95,10 +88,6 @@
         body: JSON.stringify({ selectedProjectId, selectedSystemId }),
       })
         .then(handleResponse)
-        .then(data => {
-          populateDropdown(incidentIdSelect, data.allIncidentsFromSystem, "ID");
-          incidentIdSelect.removeAttribute('disabled');
-        })
         .catch(handleError);
     }
 

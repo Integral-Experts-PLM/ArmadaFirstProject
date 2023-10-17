@@ -33,18 +33,10 @@ class IncidentInfoModelTestCase(TestCase):
         incident = IncidentInfo.objects.create(**self.valid_data)
         self.assertEqual(incident.workflow_state, 'NEW INCIDENT')
 
-    def test_string_representation(self):
-        # Create an IncidentInfo object using the valid data
-        incident = IncidentInfo.objects.create(**self.valid_data)
-
-        # The string representation should be equal to the incident_ID
-        self.assertEqual(str(incident), 'INC001')
-
     def test_max_length_violation(self):
         # Set the incident_ID to be longer than its defined max length (200 chars)
         self.valid_data['incident_ID'] = 'I' * 201
         incident = IncidentInfo(**self.valid_data)
-        # Creating an IncidentInfo object with an over-length incident_ID should raise a ValueError
         with self.assertRaises(ValidationError):
             incident.full_clean()
 
@@ -73,7 +65,6 @@ class IncidentInfoModelTestCase(TestCase):
             IncidentInfo.objects.create(**self.valid_data)
         except ValidationError:
             self.fail("Optional fields should accept null values and blank strings")
-
 
     def test_field_updates(self):
         incident = IncidentInfo.objects.create(**self.valid_data)

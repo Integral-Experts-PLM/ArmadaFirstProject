@@ -3,6 +3,7 @@ import json
 from django.http import JsonResponse
 from django.conf import settings
 import requests
+from django.urls import reverse
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
 from .models import IncidentInfo, EquipmentDetails, LocationDetails, MaintenanceInfo, IncidentDetail, IncidentAnalysis
 from .forms import IncidentInfoForm, EquipmentDetailsForm, LocationDetailsForm, MaintenanceInfoForm, IncidentDetailForm, IncidentAnalysisForm, IncidentInfoIdForm, IncidentCreationForm
@@ -79,14 +80,16 @@ def home(request):
         # You can now use selectedProjectId as needed in your view
         project_id = request.POST.get('project_id')
         system_id = request.POST.get('system_id')
-        incident_ID = request.POST.get('incident_id')
 
-        if project_id and system_id and incident_ID:
-            url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/{incident_ID}'
+        if project_id and system_id:
+            url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/'
 
             response = requests.get(url, auth=auth)
             if response.status_code == 200:
-                return redirect('view_incident', project_id=project_id, system_id=system_id, incident_ID=incident_ID)
+                # Store the values in the session
+                request.session['project_id'] = project_id
+                request.session['system_id'] = system_id
+                return redirect('view_all_incidents')
             else:
                 message = 'Invalid Incident Credentials!'
         else:
@@ -215,7 +218,7 @@ def createIncident(request, project_id, system_id):
             # Check the response
             if response.status_code == 201:
                 print(f"Incident created: Date: {response.json()}")
-                return redirect('view_incident', project_id=project_id, system_id=system_id, incident_ID=response.json().get('ID'))
+                return redirect('view_all_incidents', project_id=project_id, system_id=system_id, incident_ID=response.json().get('ID'))
             else:
                 print(f"Failed to create incident. Status code: {response.status_code}")
                 print(response.text)  # Print the response content for debugging
@@ -272,7 +275,7 @@ def updateIncident(request):
             location_details_form.save()
             incident_details_form.save()
 
-            return redirect('view_incident', pk=incident.pk)
+            return redirect('view_all_incidents', pk=incident.pk)
     else:
         # Initialize forms with existing data
         incident_info_form = IncidentInfoForm(instance=incident)
@@ -303,16 +306,48 @@ def deleteIncident(request, pk):
     return render(request, 'base/deleteIncident.html', context)
 
 
-def viewIncident(request, project_id, system_id, incident_ID):
+def viewAllIncidents(request):
+    project_id = request.session.get('project_id')
+    system_id = request.session.get('system_id')
 
-    url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/{incident_ID}'
+    if request.method == 'POST':
+        # Get the selected incident ID from the POST request
+        incident_ID = request.body.decode('utf-8')
+        request.session['incident_ID'] = incident_ID
+        print('Selected incident ID from front: ', incident_ID)
+    else:
+        # If not a POST request, use the session variable as the initial selected incident ID
+        incident_ID = request.session.get('incident_ID', 'default-incident-id')
 
-    
-
+    url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/'
 
     response = requests.get(url, auth=auth)
 
-    maintenance_logs_data = viewIncidentMaintenanceLogs(project_id, system_id, incident_ID)
+    if response.status_code == 200:
+        data = response.json()
+
+        # Extract the data you need from the JSON response
+        context = {
+            'incidents_data': data['value'],
+            'page': 'view-all-indicents',
+            'selectedIncidentId': incident_ID,  # Pass the current selected incident ID to the template
+        }
+        # Render the template and pass the context
+        return render(request, 'base/viewAllIncidents.html', context)
+    else:
+        message = 'No incidents found!'
+
+
+def viewIncident(request):
+    project_id = request.session.get('project_id')
+    system_id = request.session.get('system_id')
+    incident_ID = request.session.get('incident_ID')
+
+    url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/{incident_ID}'
+
+    response = requests.get(url, auth=auth)
+
+    maintenance_logs_data = incidentMaintenanceLogs(project_id, system_id, incident_ID)
 
     if response.status_code == 200:
         data = response.json()
@@ -321,7 +356,7 @@ def viewIncident(request, project_id, system_id, incident_ID):
         context = {
             'incident_data': data,
             'OccurrenceDate': data.get('OccurrenceDate').split('T')[0],
-            'maintenance_logs_data': maintenance_logs_data
+            'maintenance_logs_data': maintenance_logs_data,
             # 'occurrence_date': datetime.fromisoformat(data['OccurrenceDate'])
         }
         # Render the template and pass the context
@@ -332,70 +367,198 @@ def viewIncident(request, project_id, system_id, incident_ID):
         incident_ID_form = IncidentInfoIdForm()
 
 
-    # # Use get_object_or_404 to retrieve the IncidentInfo instance
-    # incident = get_object_or_404(IncidentInfo, pk=pk)
+# def viewIncident(request):
+#     project_id = request.session.get('project_id')
+#     system_id = request.session.get('system_id')
+#     incident_ID = request.session.get('incident_ID')
 
-    # # Access related objects with correct lowercase names
-    # equipment_details = EquipmentDetails.objects.filter(
-    #     incident_ID=incident).first()
-    # location_details = LocationDetails.objects.filter(
-    #     incident_ID=incident).first()
-    # maintenance_info = MaintenanceInfo.objects.filter(
-    #     incident_ID=incident).first()
-    # incident_details = IncidentDetail.objects.filter(
-    #     incident_ID=incident).first()
-    # incident_analysis = IncidentAnalysis.objects.filter(
-    #     incident_ID=incident).first()
+#     url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/{incident_ID}'
 
-    # context = {
-    #     'incident': incident,
-    #     'equipment_details': equipment_details,
-    #     'location_details': location_details,
-    #     'maintenance_info': maintenance_info,
-    #     'incident_details': incident_details,
-    #     'incident_analysis': incident_analysis,
-    #     'view': 'view_incident',
-    # }
+#     response = requests.get(url, auth=auth)
 
-    # # Render the template and pass the context
-    # return render(request, 'base/viewIncident.html', context)
+#     maintenance_logs_data = incidentMaintenanceLogs(project_id, system_id, incident_ID)
+
+#     if response.status_code == 200:
+#         data = response.json()
+
+#         # Extract the data you need from the JSON response
+#         context = {
+#             'incident_data': data,
+#             'OccurrenceDate': data.get('OccurrenceDate').split('T')[0],
+#             'maintenance_logs_data': maintenance_logs_data,
+#             # 'occurrence_date': datetime.fromisoformat(data['OccurrenceDate'])
+#         }
+#         # Render the template and pass the context
+#         return render(request, 'base/viewIncident.html', context)
+
+#     else:
+#         message = 'Invalid Incident Credentials!'
+#         incident_ID_form = IncidentInfoIdForm()
 
 
 def viewMaintenanceLogs(request):
-    context = { 'data': 'maintenance logs' }
-    return render(request, 'base/maintenanceLogs.html', context)
-
-
-def viewOperatingTimes(request):
-    context = { 'data': 'operating times' }
-    return render(request, 'base/operatingTimes.html', context)
-
-
-def viewIncidentReport(request):
-    context = { 'data': 'incident report' }
-    return render(request, 'base/incidentReport.html', context)
-
-
-def viewAnalysis(request):
-    context = { 'data': 'analysis' }
-    return render(request, 'base/analysis.html', context)
-
-
-def viewReviewBoard(request):
-    context = { 'data': 'review board' }
-    return render(request, 'base/reviewBoard.html', context)
-
-
-def viewOverview(request):
-    context = { 'data': 'overview' }
-    return render(request, 'base/overview.html', context)
-
-
-def viewIncidentMaintenanceLogs(project_id, system_id, incident_ID):
+    message = None
+    project_id = request.session.get('project_id')
+    system_id = request.session.get('system_id')
+    incident_ID = request.session.get('incident_ID')
 
     url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/{incident_ID}/MaintenanceLogs'
 
+
+    response = requests.get(url, auth=auth)
+
+    if response.status_code == 200:
+        data = response.json()
+        # Check if "value" property exists
+        if 'value' in data:
+            # Extract the "value" property
+            maintenance_logs_data = data['value']
+        else:
+            message = 'This incident has no maintenance logs yet!'
+    else:
+        return JsonResponse({'error': 'Logs not found'}, status=404)
+    context = {
+        'maintenance_logs_data': maintenance_logs_data,
+        'message': message,
+        'page': 'maintenance-logs',
+    }
+    return render(request, 'base/maintenanceLogs.html', context) 
+
+
+def viewOperatingTimes(request):
+    message = None
+    project_id = request.session.get('project_id')
+    system_id = request.session.get('system_id')
+
+    url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/OperatingTimes'
+
+
+    response = requests.get(url, auth=auth)
+
+    if response.status_code == 200:
+        data = response.json()
+        # Check if "value" property exists
+        if 'value' in data:
+            # Extract the "value" property
+            operating_times = data['value']
+        else:
+            message = 'This incident has no operating times yet!'
+    else:
+        return JsonResponse({'error': 'Operating times not found'}, status=404)
+    context = {
+        'operating_times': operating_times,
+        'message': message,
+        'page': 'operating-times',
+    }
+    return render(request, 'base/operatingTimes.html', context) 
+
+
+def viewIncidentReport(request):
+    message = None
+    project_id = request.session.get('project_id')
+    system_id = request.session.get('system_id')
+    incident_ID = request.session.get('incident_ID')
+
+    url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/{incident_ID}'
+
+    response = requests.get(url, auth=auth)
+
+    maintenance_logs_data = incidentMaintenanceLogs(project_id, system_id, incident_ID)
+
+    if response.status_code == 200:
+        data = response.json()
+    else:
+        return JsonResponse({'error': 'Incident not found'}, status=404)
     
+    context = {
+        'incident_data': data,
+        'OccurrenceDate': data.get('OccurrenceDate').split('T')[0],
+        # 'occurrence_date': datetime.fromisoformat(data['OccurrenceDate'])
+        'maintenance_logs_data': maintenance_logs_data,
+        'message': message,
+        'page': 'incident-report',
+    }
+    return render(request, 'base/incidentReport.html', context) 
+
+
+def viewAnalysis(request):
+    message = None
+    project_id = request.session.get('project_id')
+    system_id = request.session.get('system_id')
+    incident_ID = request.session.get('incident_ID')
+
+    url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/{incident_ID}'
+
+    response = requests.get(url, auth=auth)
+
+    if response.status_code == 200:
+        data = response.json()
+    else:
+        return JsonResponse({'error': 'Incident not found'}, status=404)
+    
+    context = {
+        'incident_data': data,
+        'OccurrenceDate': data.get('OccurrenceDate').split('T')[0],
+        # 'occurrence_date': datetime.fromisoformat(data['OccurrenceDate'])
+        'message': message,
+        'page': 'analysis',
+    }
+    return render(request, 'base/analysis.html', context) 
+
+
+def viewReviewBoard(request):
+    message = None
+    project_id = request.session.get('project_id')
+    system_id = request.session.get('system_id')
+    incident_ID = request.session.get('incident_ID')
+
+    url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/{incident_ID}'
+
+    response = requests.get(url, auth=auth)
+
+    if response.status_code == 200:
+        data = response.json()
+    else:
+        return JsonResponse({'error': 'Incident not found'}, status=404)
+    
+    context = {
+        'incident_data': data,
+        'OccurrenceDate': data.get('OccurrenceDate').split('T')[0],
+        # 'occurrence_date': datetime.fromisoformat(data['OccurrenceDate'])
+        'message': message,
+        'page': 'review-board',
+    }
+    return render(request, 'base/reviewBoard.html', context) 
+
+
+def viewOverview(request):
+    message = None
+    project_id = request.session.get('project_id')
+    system_id = request.session.get('system_id')
+    incident_ID = request.session.get('incident_ID')
+
+    url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/{incident_ID}'
+
+    response = requests.get(url, auth=auth)
+
+    if response.status_code == 200:
+        data = response.json()
+    else:
+        return JsonResponse({'error': 'Incident not found'}, status=404)
+    
+    context = {
+        'incident_data': data,
+        'OccurrenceDate': data.get('OccurrenceDate').split('T')[0],
+        # 'occurrence_date': datetime.fromisoformat(data['OccurrenceDate'])
+        'message': message,
+        'page': 'overview',
+    }
+    return render(request, 'base/overview.html', context) 
+
+
+def incidentMaintenanceLogs(project_id, system_id, incident_ID):
+
+    url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/{incident_ID}/MaintenanceLogs'
 
 
     response = requests.get(url, auth=auth)

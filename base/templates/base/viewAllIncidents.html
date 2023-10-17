@@ -1,0 +1,112 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<div style="width: 100%;">
+    {% include 'subIncidentsTabs.html' %}
+</div>
+<table>
+    <tr>
+        <th></th>
+        <th>ID</th>
+        <th>Reported By</th>
+        <th>Failure Component</th>
+        <th>Incident Date</th>
+        <th>Date Closed</th>
+        <th>Closed</th>
+        <th>Relevant?</th>
+        <th>Chargeable?</th>
+        <th>OEM</th>
+        <th>Part Category</th>
+        <th>Failure Mode</th>
+        <th>Initial Severity</th>
+        <th>Close Out Severity</th>
+        <th>Workflow State</th>
+        <th>Tail Number</th>
+        <th>Operating Mode</th>
+        <th>Dispositioned By</th>
+    </tr>
+    {% for incident in incidents_data %}
+    <tr class="clickable-row" value="{{ incident.ID }}" style="cursor: pointer;">
+        <td>{{ forloop.counter }}</td>
+        <td>{{ incident.ID }}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+    {% endfor %}
+
+    <script>
+        // Initialize selectedIncidentId with the default or initial value
+        let selectedIncidentId = "{{ selectedIncidentId }}";
+        console.log('Initial selected: ', selectedIncidentId);
+
+        // Function to get the CSRF token from cookies
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === name + '=') {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        const rows = document.querySelectorAll('.clickable-row');
+
+        rows.forEach(row => {
+            row.addEventListener('click', () => {
+                const clickedIncidentId = row.getAttribute('value');
+                selectedIncidentId = clickedIncidentId;
+
+                // Remove 'selected' class from all rows
+                rows.forEach(r => r.classList.remove('selected'));
+
+                // Mark the clicked row as selected
+                row.classList.add('selected');
+
+                console.log('Selected incident ID: ', selectedIncidentId);
+
+                // Send the selectedIncidentId to your Django view if needed
+                fetch('/view-all-incidents/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'text/plain',
+                        'X-CSRFToken': getCookie('csrftoken'),
+                    },
+                    body: selectedIncidentId,
+                }).then(handleResponse)
+                    .catch(handleError);
+            })
+
+            function handleResponse(response) {
+                if (!response.ok) {
+                    throw new Error('Request failed');
+                }
+                return response.json();
+            }
+
+            function handleError(error) {
+                console.error('Error:', error);
+            }
+        });
+    </script>
+
+    {% endblock %}

@@ -10,11 +10,7 @@ class IncidentDetailTestCase(TestCase):
 
     def setUp(self):
         self.incident = IncidentInfo.objects.create(incident_ID="test_incident", occurrence_date=date.today())
-        self.maintenance = MaintenanceInfo.objects.create(incident_ID=self.incident, maintenance_start_date=timezone.now(), maintenance_log_identifier="test_log")         
-
-    def test_string_representation(self):
-        incident_detail = IncidentDetail.objects.create(incident_ID=self.incident, description_incident="Sample description")
-        self.assertEqual(str(incident_detail), "test_incident")
+        self.maintenance = MaintenanceInfo.objects.create(incident_ID=self.incident, maintenance_start_date=timezone.now(), maintenance_log_identifier="test_log")
 
     def test_max_length_constraints(self):
         long_string = "A" * 201

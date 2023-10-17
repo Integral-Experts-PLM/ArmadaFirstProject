@@ -1,8 +1,14 @@
-<p>{{data}}</p>
-<button onclick="goBack()" class="btn btn-primary">Go Back</button>
+{% extends 'index.html' %}
 
-<script>
-    function goBack() {
-        window.history.back();
-    }
-</script>
+{% load static %}
+
+{% block content %}
+
+<div style="width: 100%;">
+    {% include 'subIncidentsTabs.html' %}
+</div>
+
+<p>{{ maintenance_logs_data }}</p>
+<p>{{ message }}</p>
+
+{% endblock %}

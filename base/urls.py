@@ -2,14 +2,15 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    # main crud
     path('', views.home, name='home'),
     path('home-create-incident/', views.homeCreateIncident, name='home_create_incident'),
     path('create-incident/<str:project_id>/<str:system_id>/', views.createIncident, name='create_incident'),
-    path('view-incident/<str:project_id>/<str:system_id>/<str:incident_ID>/', views.viewIncident, name='view_incident'),
     path('update-incident/<str:project_id>/<str:system_id>/<str:incident_ID>/', views.updateIncident, name='update_incident'),
     path('delete-incident/<str:pk>/', views.deleteIncident, name='delete_incident'),
 
     # subTabs
+    path('view-all-incidents/', views.viewAllIncidents, name='view_all_incidents'),
     path('maintenance-logs/', views.viewMaintenanceLogs, name='maintenance_logs'),
     path('operating-times/', views.viewOperatingTimes, name='operating_times'),
     path('incident-report/', views.viewIncidentReport, name='incident_report'),
