@@ -1,0 +1,11 @@
+{% load custom_filters %} 
+<tr class="clickable-row" value="{{ operating_times.ID }}" style="cursor: pointer;">
+    <td>{{ forloop.counter }}</td>
+    <td>{{ operating.Identifier }}</td>
+    <td>{{ operating.Configuration }}</td>
+    <td>{{ operating.UserText1|extract_after_colon }}</td>
+    <td>{{ operating.StartDate|format_datetime }}</td>
+    <td>{{ operating.EndDate|format_datetime }}</td>
+    <td>{{ operating.OperationalTime }}</td>
+    <td>{{ operating.MultiplicativeAdjustment }}</td>
+</tr>

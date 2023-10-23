@@ -1,3 +1,4 @@
+{% load custom_filters %} 
 <div class="main-input-container">
     <h3 class="title-input-container">Analysis Details</h3>
     <div style="margin-bottom: 20px; display: flex; flex-direction: row; justify-content: space-between;">
@@ -7,15 +8,15 @@
       </div>
       <div class="input-container" style="width: auto;">
         <label class="input-label">Failure Detection:</label>
-        <input type="text" value="{{ incident_data.FailureDetection }}" class="input-box" style="width: auto;" name="failure_detection" />
+        <input type="text" value="{{ incident_data.FailureDetection|extract_after_colon }}" class="input-box" style="width: auto;" name="failure_detection" />
       </div>
       <div class="input-container" style="width: auto;">
         <label class="input-label">Part Category:</label>
-        <input type="text" value="{{ incident_data.UserText16 }}" class="input-box" style="width: auto;" name="user_text16_part_category" />
+        <input type="text" value="{{ incident_data.UserText16|extract_after_colon }}" class="input-box" style="width: auto;" name="user_text16_part_category" />
       </div>
       <div class="input-container" style="width: auto;">
         <label class="input-label">Failure Mode:</label>
-        <input type="text" value="{{ incident_data.FailureMode }}" class="input-box" style="width: auto;" name="failure_mode" />
+        <input type="text" value="{{ incident_data.FailureMode|extract_after_colon }}" class="input-box" style="width: auto;" name="failure_mode" />
       </div>
     </div>
     <div>

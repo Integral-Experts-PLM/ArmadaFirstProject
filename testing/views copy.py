@@ -74,14 +74,6 @@ def createIncident(request):
     return render(request, 'base/createIncident.html', context)
 
 
-def incidentReviewAnalysis(request):
-    # UNDER CONSTRUCTION
-    # incident = get_object_or_404(IncidentInfo.objects.select_related('initial_info', 'detail_info', 'review', 'analysis'), pk=str(pk))
-    # context = {'incident': incident}
-
-    return render(request, 'base/incidentReviewAnalysis.html')
-
-
 def updateIncident(request, pk):
     # Use get_object_or_404 to retrieve the IncidentInfo instance
     incident = get_object_or_404(IncidentInfo, pk=pk)
@@ -207,14 +199,6 @@ def viewIncident(request, project_id, system_id, incident_ID):
 
     # # Render the template and pass the context
     # return render(request, 'base/viewIncident.html', context)
-
-
-def insert_new_record(request):
-    # Add your logic here to insert a new record for the  MAINTENANCE
-    # UNDER CONSTRUCTION
-    # For example, you can save data to the database or perform any desired action.
-    # You can customize the response as needed.
-    return HttpResponse("New record inserted successfully")
 
 
     #     # Create a pretty printer

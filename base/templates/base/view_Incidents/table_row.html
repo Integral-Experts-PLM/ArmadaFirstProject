@@ -1,0 +1,21 @@
+{% load custom_filters %} 
+<tr class="clickable-row" value="{{ incident.ID }}" style="cursor: pointer;">
+    <td>{{ forloop.counter }}</td>
+    <td>{{ incident.ID }}</td>
+    <td>{{ incident.PersonIncidentEntry }}</td>
+    <td>{{ incident.SystemTreeItem }}</td>
+    <td>{{ incident.OccurrenceDate|format_datetime }}</td>
+    <td>{{ incident.CloseOutEndDate|format_datetime }}</td>
+    <td>{{ incident.Closed }}</td>
+    <td>{{ incident.Relevant }}</td>
+    <td>{{ incident.Chargeable }}</td>
+    <td>{{ incident.UserText10|extract_after_colon }}</td>
+    <td>{{ incident.UserText16|extract_after_colon }}</td>
+    <td>{{ incident.FailureMode|extract_after_colon }}</td>
+    <td>{{ incident.UserText2|extract_after_colon }}</td>
+    <td>{{ incident.UserText18|extract_after_colon }}</td>
+    <td>{{ incident.WorkflowState }}</td>
+    <td>{{ incident.UserText13|extract_after_colon }}</td>
+    <td>{{ incident.OperatingMode|extract_after_colon }}</td>
+    <td>{{ incident.Approval }}</td>
+</tr>

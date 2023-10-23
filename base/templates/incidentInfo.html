@@ -1,3 +1,4 @@
+{% load custom_filters %} 
 <div class="main-input-container">
     <h3 class="title-input-container">Incident Information</h3>
     <div class="input-container">
@@ -27,13 +28,13 @@
     <div class="input-container">
       <label class="input-label">Tail Number:</label>
       <input type="text"
-        value="{% if incident_data %}{{ incident_data.UserText13 }}{% else %}{{ incident_info_form.user_text13_tail_number.value|default:'' }}{% endif %}"
+        value="{% if incident_data %}{{ incident_data.UserText13|extract_after_colon }}{% else %}{{ incident_info_form.user_text13_tail_number.value|default:'' }}{% endif %}"
         class="input-box" name="user_text13_tail_number" />
     </div>
     <div class="input-container">
       <label class="input-label">Mission Effect:</label>
       <input type="text"
-        value="{% if incident_data %}{{ incident_data.UserText17 }}{% else %}{{ incident_info_form.user_text17_mission_effect.value|default:'' }}{% endif %}"
+        value="{% if incident_data %}{{ incident_data.UserText17|extract_after_colon }}{% else %}{{ incident_info_form.user_text17_mission_effect.value|default:'' }}{% endif %}"
         class="input-box" name="user_text17_mission_effect" />
     </div>
 </div>

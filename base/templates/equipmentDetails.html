@@ -1,3 +1,4 @@
+{% load custom_filters %} 
 <div class="main-input-container">
     <h3 class="title-input-container">Equipment Details</h3>
     <div class="input-container">
@@ -27,7 +28,7 @@
     <div class="input-container">
       <label class="input-label">OEM:</label>
       <input type="text"
-        value="{% if incident_data %}{{ incident_data.UserText10 }}{% else %}{{ equipment_details_form.user_text10_oem.value|default:'' }}{% endif %}"
+        value="{% if incident_data %}{{ incident_data.UserText10|extract_after_colon }}{% else %}{{ equipment_details_form.user_text10_oem.value|default:'' }}{% endif %}"
         class="input-box" name="user_text10_oem" />
     </div>
     <div class="input-container">

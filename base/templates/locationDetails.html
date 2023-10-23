@@ -1,3 +1,4 @@
+{% load custom_filters %} 
 <div class="main-input-container">
   <h3 class="title-input-container">Location Details</h3>
   <div style="display: flex; flex-direction: row; justify-content: space-around;">
@@ -5,7 +6,7 @@
       <div class="input-container">
         <label class="input-label">Location:</label>
         <input type="text"
-          value="{% if incident_data %}{{ incident_data.UserText4 }}{% else %}{{ location_details_form.user_text4_location.value|default:'' }}{% endif %}"
+          value="{% if incident_data %}{{ incident_data.UserText4|extract_after_colon }}{% else %}{{ location_details_form.user_text4_location.value|default:'' }}{% endif %}"
           class="input-box" name="user_text4_location" />
       </div>
       <div class="input-container">

@@ -30,75 +30,81 @@
 </form>
 
 <script>
-  const projectIdSelect = document.getElementById('project_id');
-  const systemIdSelect = document.getElementById('system_id');
+  document.addEventListener('DOMContentLoaded', function () {
+    // This code will run after the DOM has fully loaded.
+    const projectIdSelect = document.getElementById('project_id');
+    const systemIdSelect = document.getElementById('system_id');
 
-  projectIdSelect.addEventListener('change', handleProjectChange);
-  systemIdSelect.addEventListener('change', checkFormAndSubmit);
-
-  function checkFormAndSubmit() {
-    if (projectIdSelect.value && systemIdSelect.value) {
-      // Both selects have values, so submit the form
-      document.getElementById('incident-form').submit();
+    if (projectIdSelect) {
+      projectIdSelect.addEventListener('change', handleProjectChange);
+      systemIdSelect.addEventListener('change', checkFormAndSubmit);
     }
-  }
+    
 
-  // Function to get the CSRF token from cookies
-  function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-      const cookies = document.cookie.split(';');
-      for (let i = 0; i < cookies.length; i++) {
-        const cookie = cookies[i].trim();
-        if (cookie.substring(0, name.length + 1) === name + '=') {
-          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-          break;
-        }
+    function checkFormAndSubmit() {
+      if (projectIdSelect.value && systemIdSelect.value) {
+        // Both selects have values, so submit the form
+        document.getElementById('incident-form').submit();
       }
     }
-    return cookieValue;
-  }
 
-  function handleProjectChange() {
-    let selectedProjectId = projectIdSelect.value;
-
-    // Send the selectedProjectId as a string to your Django view using an AJAX request
-    fetch('/get-systems/', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'text/plain',
-        'X-CSRFToken': getCookie('csrftoken'),
-        'X-Requested-With': 'XMLHttpRequest',
-      },
-      body: selectedProjectId,
-    })
-      .then(handleResponse)
-      .then(data => {
-        populateDropdown(systemIdSelect, data.allSystemsFromProject, "Name");
-        systemIdSelect.removeAttribute('disabled');
-      })
-      .catch(handleError);
-  }
-
-  function handleResponse(response) {
-    if (!response.ok) {
-      throw new Error('Request failed');
+    // Function to get the CSRF token from cookies
+    function getCookie(name) {
+      let cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+          const cookie = cookies[i].trim();
+          if (cookie.substring(0, name.length + 1) === name + '=') {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
+        }
+      }
+      return cookieValue;
     }
-    return response.json();
-  }
 
-  function handleError(error) {
-    console.error('Error:', error);
-  }
+    function handleProjectChange() {
+      let selectedProjectId = projectIdSelect.value;
 
-  function populateDropdown(selectElement, options, selectType) {
-    selectElement.innerHTML = '<option value="">Select...</option>';
-    options.forEach(option => {
-      let newOption = document.createElement('option');
-      newOption.value = option.ID;
-      newOption.text = option[selectType];
-      selectElement.appendChild(newOption);
-    });
-  }
+      // Send the selectedProjectId as a string to your Django view using an AJAX request
+      fetch('/get-systems/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'text/plain',
+          'X-CSRFToken': getCookie('csrftoken'),
+          'X-Requested-With': 'XMLHttpRequest',
+        },
+        body: selectedProjectId,
+      })
+        .then(handleResponse)
+        .then(data => {
+          systemIdSelect.removeAttribute('disabled');
+          populateDropdown(systemIdSelect, data.allSystemsFromProject, "Name");
+        })
+        .catch(handleError);
+    }
+
+    function handleResponse(response) {
+      if (!response.ok) {
+        throw new Error('Request failed');
+      }
+      return response.json();
+    }
+
+    function handleError(error) {
+      console.error('Error:', error);
+    }
+
+    function populateDropdown(selectElement, options, selectType) {
+      selectElement.innerHTML = '<option value="">Select...</option>';
+      options.forEach(option => {
+        let newOption = document.createElement('option');
+        newOption.value = option.ID;
+        newOption.text = option[selectType];
+        selectElement.appendChild(newOption);
+      });
+    }
+  });
 </script>
 {% endblock %}

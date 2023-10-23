@@ -1,3 +1,32 @@
+{% load custom_filters %} 
+<style>
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  th,
+  td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+  }
+
+  th {
+    background-color: #e4eef3;
+  }
+
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+    /* Light gray for even rows */
+  }
+
+  tr:nth-child(odd) {
+    background-color: white;
+    /* White for odd rows */
+  }
+</style>
+
 <table>
   <tr>
     <th></th>
@@ -10,28 +39,29 @@
     <th>Work Log</th>
     <th>Total Maintenance Time</th>
     <th>Total Maintenance Time</th>
-    <th>Start Date</th>
     <th>Maintenance Cost</th>
+    <th>Start Date</th>
   </tr>
   {% for log in maintenance_logs_data %}
   <tr>
     <td>{{ forloop.counter }}</td>
-    <td>{{ log.incident_ID }}</td>
+    <td>{{ log.ID }}</td>
     <td>{{ log.MaintenanceLogIdentifier }}</td>
-    <td>{{ log.override_system_tree_item_replaced_part }}</td>
+    <td>{{ log.Replaced }}</td>
     <td>{{ log.CostItem }}</td>
     <td>{{ log.NumberofMen }}</td>
     <td>{{ log.ElapsedMaintenanceTime }}</td>
-    <td>{{ log.ActionTakenMaintenace }}</td>
+    <td>{{ log.ActionsTakenMaintenance }}</td>
     <td>{{ log.TotalMaintenanceTime }}</td>
     <td>{{ log.UserValue2 }}</td>
-    <td>{{ log.MaintenanceStartDate }}</td>
     <td>{{ log.CostMaintenance }}</td>
+    <td>{{ log.MaintenanceStartDate|format_datetime }}</td>
   </tr>
   {% endfor %}
   <tr style="background-color: #ffce55; height: 10px;">
     <td colspan="12" style="text-align: center; cursor: pointer;">
-      <a id="open-popup" href="{% url 'maintenance_log_create' %}">Click here to insert a new record</a>
+      <a href="{% url 'maintenance_log_create' %}" style="display: block; width: 100%; height: 100%;">Click here to
+        insert a new record</a>
     </td>
   </tr>
 </table>

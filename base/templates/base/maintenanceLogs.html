@@ -4,7 +4,8 @@
 
 {% block content %}
 
-<p>{{ maintenance_logs_data }}</p>
-<p>{{ message }}</p>
+<div class="input-container" style="width: 100%;">
+    {% include 'maintenance.html' %}
+  </div>
 
 {% endblock %}

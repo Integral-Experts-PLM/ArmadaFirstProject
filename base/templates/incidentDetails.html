@@ -1,16 +1,17 @@
+{% load custom_filters %} 
 <div class="main-input-container">
     <h3 class="title-input-container">Incident Details</h3>
     <div style="display: flex; flex-direction: row; justify-content: space-around;">
       <div class="input-container">
         <label class="input-label">Operating Mode:</label>
         <input type="text"
-          value="{% if incident_data %}{{ incident_data.OperatingMode }}{% else %}{{ incident_details_form.operating_mode.value|default:'' }}{% endif %}"
+          value="{% if incident_data %}{{ incident_data.OperatingMode|extract_after_colon }}{% else %}{{ incident_details_form.operating_mode.value|default:'' }}{% endif %}"
           class="input-box" name="operating_mode" />
       </div>
       <div class="input-container">
         <label class="input-label">Initial Severity:</label>
         <input type="text"
-          value="{% if incident_data %}{{ incident_data.UserText2 }}{% else %}{{ incident_details_form.user_text2_initial_severity.value|default:'' }}{% endif %}"
+          value="{% if incident_data %}{{ incident_data.UserText2|extract_after_colon }}{% else %}{{ incident_details_form.user_text2_initial_severity.value|default:'' }}{% endif %}"
           class="input-box" name="user_text2_initial_severity" />
       </div>
     </div>
