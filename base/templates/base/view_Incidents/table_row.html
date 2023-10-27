@@ -3,7 +3,7 @@
     <td>{{ forloop.counter }}</td>
     <td>{{ incident.ID }}</td>
     <td>{{ incident.PersonIncidentEntry }}</td>
-    <td>{{ incident.SystemTreeItem }}</td>
+    <td>{{ incident.SystemTreeItem.SystemTreeIdentifier }}</td>
     <td>{{ incident.OccurrenceDate|format_datetime }}</td>
     <td>{{ incident.CloseOutEndDate|format_datetime }}</td>
     <td>{{ incident.Closed }}</td>

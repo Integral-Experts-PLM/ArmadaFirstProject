@@ -22,7 +22,16 @@
         <div style="margin: 20px 0px 20px 0px; width: 100%;">
             {% include 'incidentDetails.html' %}
         </div>
-        <input type="submit" value="Create Incident" class="button" style="margin-bottom: 20px;">
+        <div style="display: flex; justify-content: center; padding-bottom: 20px;">
+            <input type="submit" value="Create Incident" class="button" style="margin-bottom: 20px;">
+            <button onclick="goBack()" class="button" style="margin-left: 20px;">Back</button>
+        </div>
     </form>
 </div>
+<script>
+    function goBack() {
+        window.history.back();
+    }
+</script>
+
 {% endblock %}

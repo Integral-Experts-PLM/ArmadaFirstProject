@@ -2,10 +2,13 @@
 <div class="main-input-container">
     <h3 class="title-input-container">Equipment Details</h3>
     <div class="input-container">
-      <label class="input-label">Failed Component: ???</label>
-      <input type="text"
-        value="{% if incident_data %}{{ incident_data.SystemTreeItem }}{% else %}{{ equipment_details_form.failed_component.value|default:'' }}{% endif %}"
-        class="input-box" name="failed_component" />
+      <label class="input-label">Failed Component:</label>
+      <div class="input-container">
+        <label class="input-label">Item Name:</label>
+        <select id="tree_item_id" name="tree_item_id" class="input-box" disabled>
+          <option value="">Select Item</option>
+        </select>
+      </div>
     </div>
     <div class="input-container">
       <label class="input-label">Serial Number:</label>

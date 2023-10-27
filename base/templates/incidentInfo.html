@@ -20,10 +20,10 @@
         class="input-box" name="occurrence_date" />
     </div>
     <div class="input-container">
-      <label class="input-label">Configuration: ???</label>
+      <label class="input-label">Configuration:</label>
       <input type="text"
-        value="{% if incident_data %}{{ incident_data.configuration }}{% else %}{{ incident_info_form.configuration.value|default:'' }}{% endif %}"
-        class="input-box" name="configuration" />
+        value="{{ configuration_id }}"
+        class="input-box" name="configuration" disabled/>
     </div>
     <div class="input-container">
       <label class="input-label">Tail Number:</label>

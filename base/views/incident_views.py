@@ -8,8 +8,11 @@ auth = (settings.API_USERNAME, settings.API_PASSWORD)
 # auth = ('fksdjñl', settings.API_PASSWORD)
 
 def viewAllIncidents(request):
-    project_id = request.session.get('project_id')
-    system_id = request.session.get('system_id')
+    # project_id = request.session.get('project_id')
+    # system_id = request.session.get('system_id')
+    # configuration_id = request.session.get('configuration_id')
+    # tree_item_id = request.session.get('tree_item_id')
+    incident_ID = None
 
     if request.method == 'POST':
         # Get the selected incident ID from the POST request
@@ -18,24 +21,33 @@ def viewAllIncidents(request):
     else:
         # If not a POST request, use the session variable as the initial selected incident ID
         incident_ID = request.session.get('incident_ID', 'default-incident-id')
+    
+    context = request.session.get('context_data', {})
 
-    url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/'
-
-    response = requests.get(url, auth=auth)
-
-    if response.status_code == 200:
-        data = response.json()
-
-        # Extract the data you need from the JSON response
-        context = {
-            'incidents_data': data['value'],
-            'page': 'view-all-indicents',
-            'selectedIncidentId': incident_ID,  # Pass the current selected incident ID to the template
-        }
-        # Render the template and pass the context
-        return render(request, 'base/view_incidents/viewAllIncidents.html', context)
+    if len(context['incidents_data']) > 0:
+        context['selectedIncidentId'] = incident_ID
     else:
-        message = 'No incidents found!'
+        print('no incidents found')
+
+    
+    return render(request, 'base/view_incidents/viewAllIncidents.html', context)
+    # url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents?$expand=Configuration,SystemTreeItem'
+    # response = requests.get(url, auth=auth)
+    # if response.status_code == 200:
+    #     filtered_incidents = None
+    #     data = response.json()
+    #     allIncidents = data['value']
+    #     if tree_item_id != '0':
+    #         filtered_incidents = [incident for incident in allIncidents if incident['Configuration'].get('ID') == int(configuration_id) and incident['SystemTreeItem'].get('ID') == int(tree_item_id)]
+    #     else:
+    #         filtered_incidents = [incident for incident in allIncidents if incident['Configuration'].get('ID') == int(configuration_id)]
+    #     context = {
+    #         'incidents_data': filtered_incidents,
+    #         'page': 'view-all-incidents',
+    #         'selectedIncidentId': incident_ID,
+    #     }
+    # else:
+    #     return
 
 
 def viewIncidentReport(request):
@@ -44,26 +56,33 @@ def viewIncidentReport(request):
     system_id = request.session.get('system_id')
     incident_ID = request.session.get('incident_ID')
 
-    maintenace = maintenanceLogs(request)
+    maintenance = maintenanceLogs(request)
 
-    url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/{incident_ID}'
+    globalContext = request.session.get('context_data', {})
 
-    response = requests.get(url, auth=auth)
-
-    if response.status_code == 200:
-        data = response.json()
+    if len(globalContext['incidents_data']) > 0:
+        url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/{incident_ID}?$expand=Configuration,SystemTreeItem'
+        response = requests.get(url, auth=auth)
+        if response.status_code == 200:
+            data = response.json()
+        else:
+            return JsonResponse({'error': 'Incident not found'}, status=404)
+        context = {
+            'incident_data': data,
+            'configuration_id': data['Configuration']['ConfigurationIdentifier'],
+            'tree_item_id': data['SystemTreeItem']['SystemTreeIdentifier'],
+            'OccurrenceDate': data['OccurrenceDate'].split('T')[0],
+            'maintenance_logs_data': maintenance['maintenance_logs_data'],
+            'maintenance_logs_message': maintenance['message'],
+            'page': 'incident-report',
+            # 'occurrence_date': datetime.fromisoformat(data['OccurrenceDate'])
+        }
     else:
-        return JsonResponse({'error': 'Incident not found'}, status=404)
-    
-    context = {
-        'incident_data': data,
-        'OccurrenceDate': data.get('OccurrenceDate').split('T')[0],
-        'maintenance_logs_data': maintenace['maintenance_logs_data'],
-        'maintenance_logs_message': maintenace['message'],
-        'message': message,
-        'page': 'incident-report',
-        # 'occurrence_date': datetime.fromisoformat(data['OccurrenceDate'])
-    }
+        context = {
+            'message': 'There are no FRACAS Incidents',
+            'page': 'incident-report',
+        }
+
     return render(request, 'base/incidentReport.html', context) 
 
 
@@ -73,22 +92,32 @@ def viewAnalysis(request):
     system_id = request.session.get('system_id')
     incident_ID = request.session.get('incident_ID')
 
-    url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/{incident_ID}'
+    globalContext = request.session.get('context_data', {})
 
-    response = requests.get(url, auth=auth)
+    if len(globalContext['incidents_data']) > 0:
+        url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/{incident_ID}?$expand=Configuration,SystemTreeItem'
 
-    if response.status_code == 200:
-        data = response.json()
+        response = requests.get(url, auth=auth)
+
+        if response.status_code == 200:
+            data = response.json()
+        else:
+            return JsonResponse({'error': 'Incident not found'}, status=404)
+        
+        context = {
+            'incident_data': data,
+            'configuration_id': data['Configuration']['ConfigurationIdentifier'],
+            'tree_item_id': data['SystemTreeItem']['SystemTreeIdentifier'],
+            'OccurrenceDate': data.get('OccurrenceDate').split('T')[0],
+            # 'occurrence_date': datetime.fromisoformat(data['OccurrenceDate'])
+            'page': 'analysis',
+        }
     else:
-        return JsonResponse({'error': 'Incident not found'}, status=404)
-    
-    context = {
-        'incident_data': data,
-        'OccurrenceDate': data.get('OccurrenceDate').split('T')[0],
-        # 'occurrence_date': datetime.fromisoformat(data['OccurrenceDate'])
-        'message': message,
-        'page': 'analysis',
-    }
+        context = {
+            'message': 'There are no FRACAS Incidents',
+            'page': 'incident-report',
+        }
+
     return render(request, 'base/analysis.html', context) 
 
 
@@ -98,22 +127,32 @@ def viewReviewBoard(request):
     system_id = request.session.get('system_id')
     incident_ID = request.session.get('incident_ID')
 
-    url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/{incident_ID}'
+    globalContext = request.session.get('context_data', {})
 
-    response = requests.get(url, auth=auth)
+    if len(globalContext['incidents_data']) > 0:
+        url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/{incident_ID}?$expand=Configuration,SystemTreeItem'
 
-    if response.status_code == 200:
-        data = response.json()
+        response = requests.get(url, auth=auth)
+
+        if response.status_code == 200:
+            data = response.json()
+        else:
+            return JsonResponse({'error': 'Incident not found'}, status=404)
+        
+        context = {
+            'incident_data': data,
+            'configuration_id': data['Configuration']['ConfigurationIdentifier'],
+            'tree_item_id': data['SystemTreeItem']['SystemTreeIdentifier'],
+            'OccurrenceDate': data.get('OccurrenceDate').split('T')[0],
+            # 'occurrence_date': datetime.fromisoformat(data['OccurrenceDate'])
+            'page': 'review-board',
+        }
     else:
-        return JsonResponse({'error': 'Incident not found'}, status=404)
-    
-    context = {
-        'incident_data': data,
-        'OccurrenceDate': data.get('OccurrenceDate').split('T')[0],
-        # 'occurrence_date': datetime.fromisoformat(data['OccurrenceDate'])
-        'message': message,
-        'page': 'review-board',
-    }
+        context = {
+            'message': 'There are no FRACAS Incidents',
+            'page': 'incident-report',
+        }
+
     return render(request, 'base/reviewBoard.html', context) 
 
 
@@ -125,23 +164,33 @@ def viewOverview(request):
 
     maintenace = maintenanceLogs(request)
 
-    url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/{incident_ID}'
+    globalContext = request.session.get('context_data', {})
 
-    response = requests.get(url, auth=auth)
+    if len(globalContext['incidents_data']) > 0:
+        url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/{incident_ID}?$expand=Configuration,SystemTreeItem'
 
-    if response.status_code == 200:
-        data = response.json()
+        response = requests.get(url, auth=auth)
+
+        if response.status_code == 200:
+            data = response.json()
+        else:
+            return JsonResponse({'error': 'Incident not found'}, status=404)
+        
+        context = {
+            'incident_data': data,
+            'configuration_id': data['Configuration']['ConfigurationIdentifier'],
+            'tree_item_id': data['SystemTreeItem']['SystemTreeIdentifier'],
+            'OccurrenceDate': data.get('OccurrenceDate').split('T')[0],
+            # 'occurrence_date': datetime.fromisoformat(data['OccurrenceDate'])
+            'maintenance_logs_data': maintenace['maintenance_logs_data'],
+            'maintenance_logs_message': maintenace['message'],
+            'page': 'overview',
+        }
     else:
-        return JsonResponse({'error': 'Incident not found'}, status=404)
-    
-    context = {
-        'incident_data': data,
-        'OccurrenceDate': data.get('OccurrenceDate').split('T')[0],
-        # 'occurrence_date': datetime.fromisoformat(data['OccurrenceDate'])
-        'maintenance_logs_data': maintenace['maintenance_logs_data'],
-        'maintenance_logs_message': maintenace['message'],
-        'message': message,
-        'page': 'overview',
-    }
+        context = {
+            'message': 'There are no FRACAS Incidents',
+            'page': 'incident-report',
+        }
+
     return render(request, 'base/overview.html', context) 
 

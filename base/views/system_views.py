@@ -7,7 +7,6 @@ auth = (settings.API_USERNAME, settings.API_PASSWORD)
 # get systems to populate the dropdowns
 def get_systems(request):
     selectedProjectId = request.body.decode('utf-8')
-    
     getSystemsUrl = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{selectedProjectId}/Systems'
 
     try:

@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 from django.conf import settings
 from ... models import IncidentInfo
-from ... views.views import home
+from ... views.home_views import home
 from unittest.mock import patch
 
 class HomeViewTestCase(TestCase):
@@ -13,7 +13,7 @@ class HomeViewTestCase(TestCase):
     def test_home_view_with_authenticated_user(self):
         self.client.login(username=settings.API_USERNAME, password=settings.API_PASSWORD)
         url = reverse('home')
-        with patch('base.views.views.get_projects') as mock_get_projects:
+        with patch('base.views.home_views.get_projects') as mock_get_projects:
             mock_get_projects.return_value = [{'project_id': 1, 'name': 'Project 1'}, {'project_id': 2, 'name': 'Project 2'}]
             response = self.client.get(url)
         self.assertEqual(response.status_code, 200)
@@ -30,7 +30,7 @@ class HomeViewTestCase(TestCase):
         # Test that the view handles the case where no projects are returned.
         self.client.login(username=settings.API_USERNAME, password=settings.API_PASSWORD)
         url = reverse('home')
-        with patch('base.views.views.get_projects') as mock_get_projects:
+        with patch('base.views.home_views.get_projects') as mock_get_projects:
             mock_get_projects.return_value = []  # Simulate no projects being returned.
             response = self.client.get(url)
         self.assertEqual(response.status_code, 200)

@@ -1,28 +1,42 @@
-            payload = {
-                "PersonIncidentEntry": incident_data.person_incident_entry,
-                "OccurrenceDate": incident_data.occurrence_date.strftime("%Y-%m-%dT%H:%M:%S+02:00"),
-                "configuration": incident_data.configuration,
-                "UserText13": incident_data.user_text13_tail_number,
-                "UserText17": incident_data.user_text17_mission_effect,
+def viewAllIncidents(request):
+    project_id = request.session.get('project_id')
+    system_id = request.session.get('system_id')
+    configuration_id = int(request.session.get('configuration_id'))
+    tree_item_id = request.session.get('tree_item_id')
 
-                "SystemTreeItem": equipment_data.failed_component,
-                "SerialNumber": equipment_data.serial_number,
-                "MeterReading": equipment_data.meter_reading_tsn,
-                "TimeToFailure": equipment_data.time_to_failure_tso,
-                "UserText10": equipment_data.user_text10_oem,
-                "UserText11": equipment_data.analysis_team,
+    if request.method == 'POST':
+        # Get the selected incident ID from the POST request
+        incident_ID = request.body.decode('utf-8')
+        request.session['incident_ID'] = incident_ID
+    else:
+        # If not a POST request, use the session variable as the initial selected incident ID
+        incident_ID = request.session.get('incident_ID', 'default-incident-id')
 
-                "UserText4": location_details.user_text4_location,
-                "UserText23": location_details.user_text24_address,
-                "UserText25": location_details.user_text25_contact,
-                "UserText22": location_details.user_text22_phone,
-                "UserText21": location_details.user_text21_email,
+    url = None
+    if tree_item_id != 0:
+        url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/$expand=Configuration($select=ID),TreeItems
+    else :
+        url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents?$expand=Configuration'
 
-                "OperatingMode": incident_details.operating_mode,
-                "UserText2": incident_details.user_text2_initial_severity,
-                "DescriptionIncident": incident_details.description_incident,
-                # "AttachmentsIncidents": incident_details.attachments_incidents,
+/Project_<projectID>/Systems(<systemID>)/FMEAs?$expand=TreeItems($select=ID,SystemTreeIdentifier)
 
-                "Configuration@odata.bind": f"Systems({system_id})/Configurations({configuration})",
-                "SystemTreeItem@odata.bind": f"Systems({system_id})/TreeItems({tree_items})"
-            }
+    response = requests.get(url, auth=auth)
+    if response.status_code == 200:
+        data = response.json()
+        allIncidents = data['value']
+
+        if tree_item_id != 0:
+            print('not all incidents')
+            filtered_incidents = [incident for incident in allIncidents if incident['SystemTreeItems'].get('ID') == tree_item_id]
+        else:
+            print('it is all incidents')
+            filtered_incidents = [incident for incident in allIncidents if incident['Configuration'].get('ID') == configuration_id]
+
+        context = {
+            'incidents_data': filtered_incidents,
+            'page': 'view-all-incidents',
+            'selectedIncidentId': incident_ID,  # Pass the current selected incident ID to the template
+        }
+        return render(request, 'base/view_incidents/viewAllIncidents.html', context)
+    else:
+        message = 'No incidents found!'
