@@ -1,0 +1,15 @@
+{% load custom_filters %} 
+<tr>
+    <td>{{ forloop.counter }}</td>
+    <td>{{ incident_ID }}</td>
+    <td>{{ log.MaintenanceLogIdentifier }}</td>
+    <td>{{ log.Replaced }}</td>
+    <td>{{ log.CostItem }}</td>
+    <td>{{ log.NumberofMen }}</td>
+    <td>{{ log.ElapsedMaintenanceTime }}</td>
+    <td>{{ log.ActionsTakenMaintenance }}</td>
+    <td>{{ log.TotalMaintenanceTime }}</td>
+    <td>{{ log.UserValue2 }}</td>
+    <td>{{ log.CostMaintenance }}</td>
+    <td>{{ log.MaintenanceStartDate|format_datetime }}</td>
+</tr>

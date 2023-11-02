@@ -1,21 +1,23 @@
 from django.urls import path
-from .views import home_views, system_views, tree_items_views, configuration_views, incident_views, maintenanceLogs_views, operatingTimes_views
+from .views import home_views, system_views, tree_items_views, configuration_views, maintenanceLogs_views, operatingTimes_views
+from .views.incident_views import read_incident_views, create_incident_views, update_incident_views, delete_incident_views
 
 urlpatterns = [
     # main crud
     path('', home_views.home, name='home'),
-    path('create-incident/', home_views.createIncident, name='create_incident'),
-    path('update-incident/<str:project_id>/<str:system_id>/<str:incident_ID>/', home_views.updateIncident, name='update_incident'),
-    path('delete-incident/<str:pk>/', home_views.deleteIncident, name='delete_incident'),
+    path('create-incident/', create_incident_views.createIncidentForms, name='create_incident'),
+    path('update-incident/<str:project_id>/<str:system_id>/<str:incident_ID>/', update_incident_views.updateIncident, name='update_incident'),
+    path('delete-incident/<str:pk>/', delete_incident_views.deleteIncident, name='delete_incident'),
 
     # subTabs
-    path('view-all-incidents/', incident_views.viewAllIncidents, name='view_all_incidents'),
+    path('view-all-incidents/', read_incident_views.viewAllIncidents, name='view_all_incidents'),
+    path('get-incident-data/', read_incident_views.getIncidentData, name='get-incident-data'),
     path('maintenance-logs/', maintenanceLogs_views.viewMaintenanceLogs, name='maintenance_logs'),
     path('operating-times/', operatingTimes_views.viewOperatingTimes, name='operating_times'),
-    path('incident-report/', incident_views.viewIncidentReport, name='incident_report'),
-    path('analysis/', incident_views.viewAnalysis, name='analysis'),
-    path('review-board/', incident_views.viewReviewBoard, name='review_board'),
-    path('overview/', incident_views.viewOverview, name='overview'),
+    path('incident-report/', read_incident_views.viewIncidentReport, name='incident_report'),
+    path('analysis/', read_incident_views.viewAnalysis, name='analysis'),
+    path('review-board/', read_incident_views.viewReviewBoard, name='review_board'),
+    path('overview/', read_incident_views.viewOverview, name='overview'),
 
     # maintenance
     path('maintenance-log-create/', home_views.maintenanceLogCreate, name='maintenance_log_create'),

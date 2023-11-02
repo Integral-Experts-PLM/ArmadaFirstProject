@@ -66,15 +66,15 @@
     <div class="table-container">
         <table>
             <thead>
-                {% include 'base/operatingTimes/table_header.html' %}
+                {% include 'base/maintenance_logs/table_header.html' %}
             </thead>
-            {% for operating in operating_times %}
-                {% include 'base/operatingTimes/table_row.html' %}
+            {% for log in maintenance_logs_data %}
+                {% include 'base/maintenance_logs/table_row.html' %}
             {% endfor %}
 
             <tr style="background-color: #ffce55; height: 10px;">
-                <td colspan="8" style="text-align: center; cursor: pointer;">
-                    <a href="{% url 'create_incident' %}" style="display: block; width: 100%; height: 100%;">
+                <td colspan="12" style="text-align: center; cursor: pointer;">
+                    <a href="{% url 'maintenance_log_create' %}" style="display: block; width: 100%; height: 100%;">
                         Click here to insert a new record
                     </a>
                 </td>

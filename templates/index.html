@@ -10,9 +10,9 @@
     <link rel="stylesheet" type="text/css" href="{% static 'styles/main.css' %}">
 </head>
 
-<body style="display: flex; flex-direction: column; height: 100vh; margin: 0;">
+<body>
     {% include 'navbar.html' %}
-    <div style="flex-grow: 1; overflow: auto;">
+    <div style="flex-grow: 1; overflow: auto; width: 100vw;">
         {% block content %}
         {% endblock %}
     </div>
@@ -21,4 +21,4 @@
     {% endif %}
 </body>
 
-</html>
+<html>

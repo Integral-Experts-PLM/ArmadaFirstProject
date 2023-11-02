@@ -21,12 +21,8 @@
         </div>
         {% include 'equipmentDetails.html' %}
     </div>
-    <div style="margin-top: 20px; width: 100%;">
-        {% include 'locationDetails.html' %}
-    </div>
-    <div style="margin-top: 20px; width: 100%;">
-        {% include 'incidentDetails.html' %}
-    </div>
+    {% include 'locationDetails.html' %}
+    {% include 'incidentDetails.html' %}
 </div>
 {% endif %}
 {% endblock %}

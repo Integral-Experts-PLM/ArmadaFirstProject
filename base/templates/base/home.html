@@ -3,7 +3,7 @@
 {% load static %}
 
 {% block content %}
-<form id="incident-form" method="post"> {% csrf_token %}
+<form id="incident-form" method="post" style="display: flex; justify-content: center;"> {% csrf_token %}
   <div class="main-input-container" style="margin-top: 30px; width: 440px;">
     <h3 class="title-input-container">Search Incident</h3>
     <div class="input-container">
@@ -26,12 +26,14 @@
       <select id="configuration_id" name="configuration_id" class="input-box" disabled>
         <option value="">Select Configuration</option>
       </select>
+      <input type="hidden" id="configuration_name" name="configuration_name" value="">
     </div>
     <div class="input-container">
       <label class="input-label">Item Name:</label>
       <select id="tree_item_id" name="tree_item_id" class="input-box" disabled>
         <option value="">Select Item or All Items</option>
       </select>
+      <input type="hidden" id="tree_item_name" name="tree_item_name" value="">
     </div>
 
     <div id="messageContainer" style="display: flex; flex-direction: column; align-items: center;">
@@ -48,7 +50,9 @@
     const projectIdSelect = document.getElementById('project_id');
     const systemIdSelect = document.getElementById('system_id');
     const configurationIdSelect = document.getElementById('configuration_id');
+    const configurationNameSelect = document.getElementById('configuration_name');
     const treeItemIdSelect = document.getElementById('tree_item_id');
+    const treeItemNameSelect = document.getElementById('tree_item_name');
 
     if (projectIdSelect) {
       projectIdSelect.addEventListener('change', handleProjectChange);
@@ -58,6 +62,13 @@
     }
 
     function checkFormAndSubmit() {
+      const selectedItemName = treeItemIdSelect.options[treeItemIdSelect.selectedIndex].text;
+      if(selectedItemName != 'All Items') {
+        treeItemNameSelect.value = selectedItemName;
+      } else {
+        treeItemNameSelect.value = null;
+      }
+
       if (projectIdSelect.value && systemIdSelect.value && configurationIdSelect.value && treeItemIdSelect.value) {
         document.getElementById('incident-form').submit();
       }
@@ -130,11 +141,12 @@
     }
 
     function handleConfigurationChange() {
-      messageContainer.textContent = '';
-      let selectedProjectId = projectIdSelect.value;
-      let selectedSystemtId = systemIdSelect.value;
-      let selectedConfigurationId = configurationIdSelect.value;
-      let requestBody = {
+      const selectedProjectId = projectIdSelect.value;
+      const selectedSystemtId = systemIdSelect.value;
+      const selectedConfigurationId = configurationIdSelect.value;
+      const selectedConfigurationName = configurationIdSelect.options[configurationIdSelect.selectedIndex].text;
+      configurationNameSelect.value = selectedConfigurationName;
+      const requestBody = {
         projectId: selectedProjectId,
         systemId: selectedSystemtId,
         configurationId: selectedConfigurationId,

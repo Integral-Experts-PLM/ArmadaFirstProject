@@ -1,0 +1,66 @@
+{% load custom_filters %}
+<div class="main-input-container">
+  <h3 class="title-input-container">Review Details</h3>
+  <div style="margin-bottom: 20px; display: flex; flex-direction: row; justify-content: space-between;">
+    <div class="input-container" style="width: auto;">
+      <label class="input-label">Dispositioned By:</label>
+      <input type="text" value="" class="input-box" style="width: auto;" name="" />
+    </div>
+    <div class="input-container" style="width: auto;">
+      <label class="input-label">Date Closed:</label>
+      <input type="text" value="" class="input-box" style="width: auto;" name="" />
+    </div>
+    <div class="input-container" style="width: auto;">
+      <label class="input-label">Initial Severity:</label>
+      <input type="text" value="" class="input-box" style="width: auto;" name="" />
+    </div>
+  </div>
+  <div>
+    <div class="input-container" style="width: 100%;">
+      <label class="input-label" style="width: 140px; text-align: right;">Remarks:</label>
+      <textarea name="" rows="6" class="input-box" style="width: 100%; text-align: left;">???
+      </textarea>
+    </div>
+    <div class="input-container" style="width: 100%; justify-content: space-between; margin-top: 10px;">
+      <div class="input-container" style="width: auto;">
+        <label class="input-label">Disposition:</label>
+        <div class="input-container" style="padding: 0; margin-right: 30px;">
+          <input type="checkbox" id="closed" name="disposition" value="selected" />
+          <label for="closed" style="margin-left: 10px;">Closed</label>
+        </div>
+        <div class="input-container" style="padding: 0; margin-right: 30px;">
+          <input type="checkbox" id="relevant" name="disposition" value="selected" />
+          <label for="relevant" style="margin-left: 10px;">Relevant?</label>
+        </div>
+        <div class="input-container" style="padding: 0; margin-right: 30px;">
+          <input type="checkbox" id="chargeable" name="disposition" value="selected" />
+          <label for="chargeable" style="margin-left: 10px;">Chargeable?</label>
+        </div>
+      </div>
+      <div class="input-container">
+        <label for="severity" class="input-label">Close Out Severity:</label>
+        <select id="severity" name="severity" class="input-box">
+          <option value="">Select Close Out Severity</option>
+          <option value="option1">Option 1</option>
+          <option value="option2">Option 2</option>
+          <option value="option3">Option 3</option>
+        </select>
+      </div>
+    </div>
+    <div class="input-container" style="width: 100%; justify-content: space-between;">
+      <div class="input-container" style="width: 100%; display: flex; justify-content: flex-start;">
+        <label class="input-label" style="width: 122px; text-align: right;">Attachments:</label>
+        <input type="file" value="" class="input-box" style="width: auto;" name="" />
+      </div>
+      <div class="input-container">
+        <label for="frb" class="input-label">FRB Decision:</label>
+        <select id="frb" name="frb" class="input-box">
+          <option value="">Select FRB Decision</option>
+          <option value="option1">Option 1</option>
+          <option value="option2">Option 2</option>
+          <option value="option3">Option 3</option>
+        </select>
+      </div>
+    </div>
+  </div>
+</div>

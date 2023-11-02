@@ -45,6 +45,7 @@
     th {
         background-color: #e4eef3;
         vertical-align: middle;
+        overflow: hidden;
     }
 
     tr:nth-child(even) {
@@ -109,16 +110,14 @@
             row.addEventListener('click', () => {
                 const clickedIncidentId = row.getAttribute('value');
                 selectedIncidentId = clickedIncidentId;
-                console.log("selectedIncidentId in for", selectedIncidentId)
-
                 // Remove 'selected' class from all rows
                 rows.forEach(r => r.classList.remove('selected'));
-
                 // Mark the clicked row as selected
                 row.classList.add('selected');
 
                 // Send the selectedIncidentId to your Django view if needed
-                fetch('/view-all-incidents/', {
+                // fetch('/view-all-incidents/', {
+                fetch('/get-incident-data/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'text/plain',

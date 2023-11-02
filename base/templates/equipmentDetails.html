@@ -3,12 +3,16 @@
     <h3 class="title-input-container">Equipment Details</h3>
     <div class="input-container">
       <label class="input-label">Failed Component:</label>
-      <div class="input-container">
-        <label class="input-label">Item Name:</label>
-        <select id="tree_item_id" name="tree_item_id" class="input-box" disabled>
-          <option value="">Select Item</option>
-        </select>
-      </div>
+        {% if not tree_item_name %}
+          <select id="tree_item_name" name="tree_item_name" class="input-box">
+            <option value="">Select Item</option>
+              {% for item in tree_items_data %}
+                <option value="{{ item.Name }}">{{ item.Name }}</option>
+              {% endfor %}
+          </select>
+        {% else %}
+          <input type="text" value="{{ tree_item_name }}" id="tree_item_name" name="tree_item_name" class="input-box">
+        {% endif %}
     </div>
     <div class="input-container">
       <label class="input-label">Serial Number:</label>
@@ -19,13 +23,13 @@
     <div class="input-container">
       <label class="input-label">TSN:</label>
       <input type="number"
-        value="{% if incident_data %}{{ incident_data.MeterReading }}{% else %}{{ equipment_details_form.meter_reading_tsn.value|default:'' }}{% endif %}"
+        value="{% if incident_data and incident_data.MeterReading is not None %}{{ incident_data.MeterReading }}{% else %}{{ equipment_details_form.meter_reading_tsn.value|default:'' }}{% endif %}"
         class="input-box" name="meter_reading_tsn" />
     </div>
     <div class="input-container">
       <label class="input-label">TSO:</label>
       <input type="number"
-        value="{% if incident_data %}{{ incident_data.TimeToFailure }}{% else %}{{ equipment_details_form.time_to_failure_tso.value|default:'' }}{% endif %}"
+        value="{% if incident_data and incident_data.TimeToFailure is not None %}{{ incident_data.TimeToFailure }}{% else %}{{ equipment_details_form.time_to_failure_tso.value|default:'' }}{% endif %}"
         class="input-box" name="time_to_failure_tso" />
     </div>
     <div class="input-container">

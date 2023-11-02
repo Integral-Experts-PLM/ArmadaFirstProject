@@ -6,14 +6,17 @@ from django.shortcuts import render
 auth = (settings.API_USERNAME, settings.API_PASSWORD)
 
 def viewMaintenanceLogs(request):
-    maintenace = maintenanceLogs(request)
+    maintenance = maintenanceLogs(request)
+    # incident_ID = request.session.get('incident_ID')
     
     context = {
-        'maintenance_logs_data': maintenace['maintenance_logs_data'],
-        'message': maintenace['message'],
+        'maintenance_logs_data': maintenance['maintenance_logs_data'],
+        'incident_ID':  maintenance['incident_ID'],
+        'message': maintenance['message'],
         'page': 'maintenance-logs',
     }
-    return render(request, 'base/maintenanceLogs.html', context) 
+    # return render(request, 'base/maintenanceLogs.html', context) 
+    return render(request, 'base/maintenance_logs/maintenance_logs.html', context) 
 
 def maintenanceLogs(request):
     project_id = request.session.get('project_id')
@@ -24,6 +27,7 @@ def maintenanceLogs(request):
 
     context = {
         'maintenance_logs_data': None,
+        'incident_ID': incident_ID,
         'message': None,
     }
 

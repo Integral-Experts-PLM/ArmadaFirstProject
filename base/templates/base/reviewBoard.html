@@ -9,7 +9,8 @@
     <p style="font-size: 16px; font-weight: bold;">{{ message }}</p>
 </div>
 {% else %}
-<div style="display: flex; flex-direction: column; align-items: center; pointer-events: none; margin: 0px 20px 0px 20px;">
+<div
+    style="display: flex; flex-direction: column; align-items: center; pointer-events: none; margin: 0px 20px 0px 20px;">
     <div style="display: flex; justify-content: space-between; margin-top: 30px; width: 100%;">
         {% include 'incidentInfo.html' %}
         <div style="height: 100%; display: flex; flex-direction: column; align-items: center;">
@@ -20,12 +21,7 @@
         </div>
         {% include 'equipmentDetails.html' %}
     </div>
-    <div style="margin: 20px 0px 20px 0px; width: 100%;">
-        <h3>REVIEW TO BE CREATED</h3>
-        <h3>REST NOT FOUND</h3>
-        <h3>DATA NOT FOUND</h3>
-        <h3>WAITING ARMADA REPLY</h3>
-    </div>
+    {% include 'reviewDetails.html' %}
 </div>
 {% endif %}
 

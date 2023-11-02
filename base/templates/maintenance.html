@@ -1,67 +1,82 @@
 {% load custom_filters %} 
 <style>
+  .container {
+      height: 100%;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+  }
+
+  .table-container {
+      flex: 1;
+      overflow: auto;
+  }
+
   table {
-    width: 100%;
-    border-collapse: collapse;
+      table-layout: fixed;
+      width: 100%;
   }
 
   th,
+  
   td {
-    border: 1px solid #ccc;
-    padding: 8px;
-    text-align: left;
+      text-align: center;
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+  }
+
+  table td {
+      text-align: left;
+      white-space: wrap;
+      overflow: hidden;
+      vertical-align: middle;
+  }
+
+  thead {
+      position: sticky;
+      top: 0;
   }
 
   th {
-    background-color: #e4eef3;
+      background-color: #e4eef3;
+      vertical-align: middle;
+      overflow: hidden;
   }
 
   tr:nth-child(even) {
-    background-color: #f2f2f2;
-    /* Light gray for even rows */
+      background-color: #f2f2f2;
+      /* Light gray for even rows */
   }
 
   tr:nth-child(odd) {
-    background-color: white;
-    /* White for odd rows */
+      background-color: white;
+      /* White for odd rows */
+  }
+
+  .selected {
+      background-color: yellow;
   }
 </style>
 
-<table>
-  <tr>
-    <th></th>
-    <th>Incident</th>
-    <th>ID</th>
-    <th>Replaced</th>
-    <th>Item Cost</th>
-    <th>Personnel Count</th>
-    <th>Elapsed Time (Hrs)</th>
-    <th>Work Log</th>
-    <th>Total Maintenance Time</th>
-    <th>Total Maintenance Time</th>
-    <th>Maintenance Cost</th>
-    <th>Start Date</th>
-  </tr>
-  {% for log in maintenance_logs_data %}
-  <tr>
-    <td>{{ forloop.counter }}</td>
-    <td>{{ log.ID }}</td>
-    <td>{{ log.MaintenanceLogIdentifier }}</td>
-    <td>{{ log.Replaced }}</td>
-    <td>{{ log.CostItem }}</td>
-    <td>{{ log.NumberofMen }}</td>
-    <td>{{ log.ElapsedMaintenanceTime }}</td>
-    <td>{{ log.ActionsTakenMaintenance }}</td>
-    <td>{{ log.TotalMaintenanceTime }}</td>
-    <td>{{ log.UserValue2 }}</td>
-    <td>{{ log.CostMaintenance }}</td>
-    <td>{{ log.MaintenanceStartDate|format_datetime }}</td>
-  </tr>
-  {% endfor %}
-  <tr style="background-color: #ffce55; height: 10px;">
-    <td colspan="12" style="text-align: center; cursor: pointer;">
-      <a href="{% url 'maintenance_log_create' %}" style="display: block; width: 100%; height: 100%;">Click here to
-        insert a new record</a>
-    </td>
-  </tr>
-</table>
+<div class="container">
+  <div class="table-container">
+      <table>
+          <thead>
+              {% include 'base/maintenance_logs/table_header.html' %}
+          </thead>
+          {% for log in maintenance_logs_data %}
+              {% include 'base/maintenance_logs/table_row.html' %}
+          {% endfor %}
+
+          <tr style="background-color: #ffce55; height: 10px;">
+              <td colspan="12" style="text-align: center; cursor: pointer;">
+                  <a href="{% url 'maintenance_log_create' %}" style="display: block; width: 100%; height: 100%;">
+                      Click here to insert a new record
+                  </a>
+              </td>
+          </tr>
+      </table>
+  </div>
+</div>

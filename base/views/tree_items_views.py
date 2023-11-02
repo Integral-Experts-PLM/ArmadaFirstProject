@@ -21,6 +21,8 @@ def get_tree_items(request):
             tree_items_data = [{'ID': treeItem['ID'], 'Name': treeItem['SystemTreeIdentifier']} for treeItem in allTreeItemsFromProjectSystemConfiguration['value']]
             # Prepend the default item "All Items"
             tree_items_data.insert(0, {'ID': 0, 'Name': 'All Items'})
+            request.session['tree_items_data'] = tree_items_data[1:] #in the session we only want the items names
+
             return JsonResponse({'allTreeItemsFromProjectSystemConfiguration': tree_items_data})
         elif response.status_code == 400:
             return JsonResponse({'allTreeItemsFromProjectSystemConfiguration': None})

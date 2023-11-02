@@ -9,7 +9,6 @@
     <p style="font-size: 16px; font-weight: bold;">{{ message }}</p>
 </div>
 {% else %}
-
 <div
     style="display: flex; flex-direction: column; align-items: center; pointer-events: none; margin: 0px 20px 0px 20px;">
     <div style="display: flex; justify-content: space-between; margin-top: 30px; width: 100%;">
@@ -22,10 +21,7 @@
         </div>
         {% include 'equipmentDetails.html' %}
     </div>
-    <div style="margin: 20px 0px 20px 0px; width: 100%;">
-        {% include 'analysisDetails.html' %}
-    </div>
+    {% include 'analysisDetails.html' %}
 </div>
 {% endif %}
-
 {% endblock %}

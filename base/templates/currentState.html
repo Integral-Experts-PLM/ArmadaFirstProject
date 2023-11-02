@@ -1,10 +1,7 @@
 <div style="display: flex; flex-direction: column; align-items: center; color: blue; font-weight: bold;">
   <label style="margin-bottom: 5px;">Current Workflow State:</label>
-  <input
-    type="text"
-    value="{% if incident_data %}{{ incident_data.WorkflowState }}{% else %}NEW INCIDENT{% endif %}"
+  <input type="text" value="{% if incident_data %}{{ incident_data.WorkflowState }}{% else %}NEW INCIDENT{% endif %}"
     class="input-box"
     style="font-weight: bold; background-color: yellow; text-align: center; color: black; margin: 0px 10px 0px 10px;"
-    name="workflow_state"
-  />
+    name="workflow_state" />
 </div>
