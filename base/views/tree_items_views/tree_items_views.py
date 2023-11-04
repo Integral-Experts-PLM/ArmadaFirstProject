@@ -12,13 +12,13 @@ def get_tree_items(request):
     selectedSystemId = request_data.get('systemId')
     selectedConfigurationId = request_data.get('configurationId')
     
-    getSystemTreeItemUrl = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{selectedProjectId}/Systems({selectedSystemId})/Configurations({selectedConfigurationId})/SystemTreeItems?$select=ID,ParentID,SystemTreeIdentifier'
+    getSystemTreeItemUrl = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{selectedProjectId}/Systems({selectedSystemId})/Configurations({selectedConfigurationId})/SystemTreeItems?$select=ID,ParentID,Name'
 
     try:
         response = requests.get(getSystemTreeItemUrl, auth=auth)
         if response.status_code == 200:
             allTreeItemsFromProjectSystemConfiguration = response.json()
-            tree_items_data = [{'ID': treeItem['ID'], 'Name': treeItem['SystemTreeIdentifier']} for treeItem in allTreeItemsFromProjectSystemConfiguration['value']]
+            tree_items_data = [{'ID': treeItem['ID'], 'Name': treeItem['Name']} for treeItem in allTreeItemsFromProjectSystemConfiguration['value']]
             # Prepend the default item "All Items"
             tree_items_data.insert(0, {'ID': 0, 'Name': 'All Items'})
             request.session['tree_items_data'] = tree_items_data[1:] #in the session we only want the items names
@@ -32,3 +32,4 @@ def get_tree_items(request):
     except Exception as e:
         print(f"An error occurred: {e}")
         return  HttpResponseServerError("An error occurred while fetching systems data")
+    

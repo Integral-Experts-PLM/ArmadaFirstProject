@@ -9,7 +9,6 @@ def viewOperatingTimes(request):
     message = None
     project_id = request.session.get('project_id')
     system_id = request.session.get('system_id')
-
     url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/OperatingTimes'
 
     response = requests.get(url, auth=auth)

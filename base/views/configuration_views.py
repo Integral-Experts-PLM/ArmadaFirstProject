@@ -17,7 +17,7 @@ def get_configurations(request):
         response = requests.get(getConfigurationsUrl, auth=auth)
         if response.status_code == 200:
             allConfigurationsFromProjectAndSystem = response.json()
-            configurations_data = [{'ID': configuration['ID'], 'Name': configuration['ConfigurationIdentifier']} for configuration in allConfigurationsFromProjectAndSystem['value']]
+            configurations_data = [{'ID': configuration['ID'], 'Name': configuration['Model']} for configuration in allConfigurationsFromProjectAndSystem['value']]
             return JsonResponse({'allConfigurationsFromProjectAndSystem': configurations_data})
         else:
             print(f"Request failed with status code {response.status_code}")

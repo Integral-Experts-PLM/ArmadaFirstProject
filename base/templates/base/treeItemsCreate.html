@@ -1,0 +1,183 @@
+{% extends 'index.html' %}
+
+{% load static %}
+
+{% block content %}
+<form id="incident-form" method="POST" style="display: flex; justify-content: center;"> {% csrf_token %}
+    <div class="main-input-container" style="margin-top: 30px; width: 500px;">
+        <h3 class="title-input-container">Create Item</h3>
+        <div class="input-container">
+            <label for="project_id" class="input-label">Project Name:</label>
+            <select id="project_id" name="project_id" class="input-box">
+              <option value="">Select Project</option>
+              {% for project in allProjects.value %}
+              <option value="{{ project.ID }}">{{ project.Name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <div class="input-container">
+            <label class="input-label">System Name:</label>
+            <select id="system_id" name="system_id" class="input-box" disabled>
+              <option value="">Select System</option>
+            </select>
+          </div>
+        <div class="input-container">
+            <label class="input-label">Parent: </label>
+            <select id="parent_id" name="parent_id" class="input-box" disabled>
+                <option value="">Select Parent Name</option>
+              </select>
+              <input type="hidden" id="parent_name" name="parent_name" value="">
+        </div>
+        <div class="input-container">
+            <label class="input-label">Is Part: </label>
+            <input type="checkbox" id="IsPart" value="{{ tree_items_form_data.IsPart }}" class="input-box" name="IsPart" />
+        </div>
+        <div style="display: flex; justify-content: center; padding: 20px 0 10px 0;">
+            <input type="submit" value="Create Item" onclick="checkFormAndSubmit()" class="button">
+        </div>
+    </div>
+</form>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // This code will run after the DOM has fully loaded.
+      const projectIdSelect = document.getElementById('project_id');
+      const systemIdSelect = document.getElementById('system_id');
+      const parentIdSelect = document.getElementById('configuration_id');
+      const parentNameSelect = document.getElementById('parent_name');
+  
+      if (projectIdSelect) {
+        projectIdSelect.addEventListener('change', handleProjectChange);
+        systemIdSelect.addEventListener('change', handleSystemChange);
+        parentIdSelect.addEventListener('change', handleParentChange);
+      }
+  
+      function checkFormAndSubmit() {
+            if (projectIdSelect.value && systemIdSelect.value && parentIdSelect.value) {
+                document.getElementById('incident-form').submit();
+            }
+        }
+  
+      // Function to get the CSRF token from cookies
+      function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+          const cookies = document.cookie.split(';');
+          for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === name + '=') {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+            }
+          }
+        }
+        return cookieValue;
+      }
+  
+      function handleProjectChange() {
+        messageContainer.textContent = '';
+        let selectedProjectId = projectIdSelect.value;
+  
+        // Send the selectedProjectId as a string to your Django view using an AJAX request
+        fetch('/get-systems/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'text/plain',
+            'X-CSRFToken': getCookie('csrftoken'),
+            'X-Requested-With': 'XMLHttpRequest',
+          },
+          body: selectedProjectId,
+        })
+          .then(handleResponse)
+          .then(data => {
+            systemIdSelect.removeAttribute('disabled');
+            populateDropdown(systemIdSelect, data.allSystemsFromProject, "Name");
+          })
+          .catch(handleError);
+      }
+  
+      function handleSystemChange() {
+        messageContainer.textContent = '';
+        let selectedProjectId = projectIdSelect.value;
+        let selectedSystemtId = systemIdSelect.value;
+        let requestBody = {
+          projectId: selectedProjectId,
+          systemId: selectedSystemtId
+        };
+        let requestBodyJSON = JSON.stringify(requestBody);
+  
+        // Send the selectedProjectId as a string to your Django view using an AJAX request
+        fetch('/get-configurations/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'text/plain',
+            'X-CSRFToken': getCookie('csrftoken'),
+            'X-Requested-With': 'XMLHttpRequest',
+          },
+          body: requestBodyJSON,
+        })
+          .then(handleResponse)
+          .then(data => {
+            parentIdSelect.removeAttribute('disabled');
+            populateDropdown(parentIdSelect, data.allConfigurationsFromProjectAndSystem, "Name");
+          })
+          .catch(handleError);
+      }
+  
+      function handleParentChange() {
+        const selectedProjectId = projectIdSelect.value;
+        const selectedSystemtId = systemIdSelect.value;
+        const selectedParentId = parentIdSelect.value;
+        const selectedParentName = parentIdSelect.options[parentIdSelect.selectedIndex].text;
+        parentNameSelect.value = selectedParentName;
+        const requestBody = {
+          projectId: selectedProjectId,
+          systemId: selectedSystemtId,
+          parentId: selectedParentId,
+        };
+        let requestBodyJSON = JSON.stringify(requestBody);
+        // Send the selectedProjectId as a string to your Django view using an AJAX request
+        fetch('/get-tree-items-to-create/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'text/plain',
+            'X-CSRFToken': getCookie('csrftoken'),
+            'X-Requested-With': 'XMLHttpRequest',
+          },
+          body: requestBodyJSON,
+        })
+          .then(handleResponse)
+          .then(data => {
+            // if (data.allTreeItemsFromProjectSystemConfiguration == null) {
+            //   messageContainer.textContent = 'No Items for this combination!';
+            // } else
+            {
+              parentIdSelect.removeAttribute('disabled');
+              populateDropdown(parentIdSelect, data.allTreeItemsFromProjectSystemConfiguration, "Name");
+            }
+          })
+          .catch(handleError);
+      }
+  
+      function handleResponse(response) {
+        if (!response.ok) {
+          throw new Error('Request failed');
+        }
+        return response.json();
+      }
+  
+      function handleError(error) {
+        console.error('Error:', error);
+      }
+  
+      function populateDropdown(selectElement, options, selectType) {
+        selectElement.innerHTML = '<option value="">Select...</option>';
+        options.forEach(option => {
+          let newOption = document.createElement('option');
+          newOption.value = option.ID;
+          newOption.text = option[selectType];
+          selectElement.appendChild(newOption);
+        });
+      }
+    });
+  </script>
+  {% endblock %}

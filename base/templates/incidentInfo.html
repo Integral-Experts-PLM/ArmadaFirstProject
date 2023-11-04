@@ -1,40 +1,41 @@
-{% load custom_filters %} 
+{% load custom_filters %}
 <div class="main-input-container">
-    <h3 class="title-input-container">Incident Information</h3>
-    <div class="input-container">
-      <label class="input-label">Incident ID:</label>
-      <input type="text"
-        value="{% if incident_data %}{{ incident_data.ID }}{% else %}{{ incident_info_form.incident_ID.value|default:'' }}{% endif %}"
-        class="input-box" name="incident_ID" />
-    </div>
-    <div class="input-container">
-      <label class="input-label">Reported By:</label>
-      <input type="text"
-        value="{% if incident_data %}{{ incident_data.PersonIncidentEntry }}{% else %}{{ incident_info_form.person_incident_entry.value|default:'' }}{% endif %}"
-        class="input-box" name="person_incident_entry" />
-    </div>
-    <div class="input-container">
-      <label class="input-label">Incident Date:</label>
-      <input type="date"
-        value="{% if incident_data %}{{ OccurrenceDate }}{% else %}{{ incident_info_form.occurrence_date.value|default:''|date:'Y-m-d' }}{% endif %}"
-        class="input-box" name="occurrence_date" />
-    </div>
-    <div class="input-container">
-      <label class="input-label">Configuration</label>
-      <input type="text"
-        value="{{ configuration_name }}"
-        class="input-box" name="configuration" disabled/>
-    </div>
-    <div class="input-container">
-      <label class="input-label">Tail Number:</label>
-      <input type="text"
-        value="{% if incident_data %}{{ incident_data.UserText13|extract_after_colon }}{% else %}{{ incident_info_form.user_text13_tail_number.value|default:'' }}{% endif %}"
-        class="input-box" name="user_text13_tail_number" />
-    </div>
-    <div class="input-container">
-      <label class="input-label">Mission Effect:</label>
-      <input type="text"
-        value="{% if incident_data %}{{ incident_data.UserText17|extract_after_colon }}{% else %}{{ incident_info_form.user_text17_mission_effect.value|default:'' }}{% endif %}"
-        class="input-box" name="user_text17_mission_effect" />
-    </div>
+  <h3 class="title-input-container">Incident Information</h3>
+  {% if 'create-incident' not in request.path %}
+  <div class="input-container">
+    <label class="input-label">Incident ID:</label>
+    <input type="text"
+      value="{% if incident_data %}{{ incident_data.IncidentIdentifier }}{% else %}{{ incident_info_form.incident_ID.value|default:'' }}{% endif %}"
+      class="input-box" name="incident_ID" />
+  </div>
+  {% endif %}
+  <div class="input-container">
+    <label class="input-label">Reported By:</label>
+    <input type="text"
+      value="{% if incident_data %}{{ incident_data.PersonIncidentEntry }}{% else %}{{ incident_info_form.person_incident_entry.value|default:'' }}{% endif %}"
+      class="input-box" name="person_incident_entry" />
+  </div>
+  <div class="input-container">
+    <label class="input-label">Incident Date:</label>
+    <input type="date"
+      value="{% if incident_data %}{{ OccurrenceDate }}{% else %}{{ incident_info_form.occurrence_date.value|default:''|date:'Y-m-d' }}{% endif %}"
+      class="input-box" name="occurrence_date" />
+  </div>
+  <div class="input-container">
+    <label class="input-label">Configuration: </label>
+    <input type="text" value="{{ configuration_name }}" class="input-box" name="configuration" disabled />
+    <input type="hidden" value="{{ configuration_id }}" class="input-box" name="configuration_id" disabled />
+  </div>
+  <div class="input-container">
+    <label class="input-label">Tail Number:</label>
+    <input type="text"
+      value="{% if incident_data %}{{ incident_data.UserText13|extract_after_colon }}{% else %}{{ incident_info_form.user_text13_tail_number.value|default:'' }}{% endif %}"
+      class="input-box" name="user_text13_tail_number" />
+  </div>
+  <div class="input-container">
+    <label class="input-label">Mission Effect:</label>
+    <input type="text"
+      value="{% if incident_data %}{{ incident_data.UserText17|extract_after_colon }}{% else %}{{ incident_info_form.user_text17_mission_effect.value|default:'' }}{% endif %}"
+      class="input-box" name="user_text17_mission_effect" />
+  </div>
 </div>

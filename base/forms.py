@@ -1,5 +1,5 @@
 from django.forms import ModelForm, forms
-from .models import IncidentInfo, EquipmentDetails, LocationDetails, MaintenanceInfo, IncidentDetail, IncidentAnalysis
+from .models import IncidentInfo, EquipmentDetails, LocationDetails, MaintenanceInfo, IncidentDetail, IncidentAnalysis, OperatingTimes
 
 class IncidentInfoIdForm(ModelForm):
     class Meta:
@@ -44,3 +44,10 @@ class IncidentAnalysisForm(ModelForm):
     class Meta:
         model = IncidentAnalysis
         fields = '__all__'
+
+# 'operational_time' must be exclude because it not editable
+# this is an console error, ask armada
+class operatingTimesForm(ModelForm):
+    class Meta:
+        model = OperatingTimes
+        exclude = ['operational_time']

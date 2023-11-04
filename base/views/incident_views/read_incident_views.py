@@ -48,28 +48,32 @@ def viewIncidentReport(request):
     configuration_name = request.session.get('configuration_name')
     maintenance = maintenanceLogs(request)
     globalContext = request.session.get('context_data', {})
+
     incidents_dict = request.session.get('incidents_dict', {})
 
     if len(globalContext['incidents_data']) > 0:
-        # url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/{incident_ID}?$expand=Configuration,SystemTreeItem'
+        # url = f'https://fracas.integralplm.com/WindchillRisndRkAeliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/{incident_ID}?$expand=Configuration,SystemTreeItem'
         # response = requests.get(url, auth=auth)
         # if response.status_code == 200:
         #     data = response.json()
         # else:
         #     return JsonResponse({'error': 'Incident not found'}, status=404)
 
-        data = incidents_dict.get(incident_ID)
-        
+        data = incidents_dict.get(str(incident_ID))
+        # print('data', data)
+
+
         context = {
             'incident_data': data,
             'incident_ID': incident_ID,
             'configuration_name': configuration_name,
-            'tree_item_name': data['SystemTreeItem']['SystemTreeIdentifier'],
+            'tree_item_name': data['SystemTreeItem']['Name'],
             'OccurrenceDate': data['OccurrenceDate'].split('T')[0],
             'maintenance_logs_data': maintenance['maintenance_logs_data'],
             'maintenance_logs_message': maintenance['message'],
             'page': 'incident-report',
         }
+
     else:
         context = {
             'message': 'There are no FRACAS Incidents',
@@ -98,12 +102,12 @@ def viewAnalysis(request):
         # else:
         #     return JsonResponse({'error': 'Incident not found'}, status=404)
 
-        data = incidents_dict.get(incident_ID)
+        data = incidents_dict.get(str(incident_ID))
         
         context = {
             'incident_data': data,
             'configuration_name': configuration_name,
-            'tree_item_name': data['SystemTreeItem']['SystemTreeIdentifier'],
+            'tree_item_name': data['SystemTreeItem']['Name'],
             'OccurrenceDate': data.get('OccurrenceDate').split('T')[0],
             'page': 'analysis',
         }
@@ -135,12 +139,12 @@ def viewReviewBoard(request):
         # else:
         #     return JsonResponse({'error': 'Incident not found'}, status=404)
 
-        data = incidents_dict.get(incident_ID)
+        data = incidents_dict.get(str(incident_ID))
         
         context = {
           'incident_data': data,
             'configuration_name': configuration_name,
-            'tree_item_name': data['SystemTreeItem']['SystemTreeIdentifier'],
+            'tree_item_name': data['SystemTreeItem']['Name'],
             'OccurrenceDate': data.get('OccurrenceDate').split('T')[0],
             'page': 'review-board',
         }
@@ -173,13 +177,13 @@ def viewOverview(request):
         # else:
         #     return JsonResponse({'error': 'Incident not found'}, status=404)
 
-        data = incidents_dict.get(incident_ID)
+        data = incidents_dict.get(str(incident_ID))
         
         context = {
             'incident_data': data,
             'incident_ID': incident_ID,
             'configuration_name': configuration_name,
-            'tree_item_name': data['SystemTreeItem']['SystemTreeIdentifier'],
+            'tree_item_name': data['SystemTreeItem']['Name'],
             'OccurrenceDate': data.get('OccurrenceDate').split('T')[0],
             'maintenance_logs_data': maintenace['maintenance_logs_data'],
             'maintenance_logs_message': maintenace['message'],

@@ -9,6 +9,9 @@ def viewMaintenanceLogs(request):
     maintenance = maintenanceLogs(request)
     # incident_ID = request.session.get('incident_ID')
     
+    # if not len(maintenance['maintenance_logs_data']):
+    #     message = "There are no maintenance logs yet!"
+
     context = {
         'maintenance_logs_data': maintenance['maintenance_logs_data'],
         'incident_ID':  maintenance['incident_ID'],
@@ -35,14 +38,15 @@ def maintenanceLogs(request):
 
     if response.status_code == 200:
         data = response.json()
-
         # Check if "value" property exists
         if 'value' in data:
             # Extract the "value" property
             context['maintenance_logs_data'] = data['value']
         else:
-            context['message'] = 'This incident has no maintenance logs yet!'
-            return JsonResponse({'error': 'No maintenance logs available'}, status=404)
+            return JsonResponse({'error': 'There is no "value" on this data'}, status=404)
+        
+        if not len(context['maintenance_logs_data']):
+            context['message'] = "There are no maintenance logs yet!"
     else:
         return JsonResponse({'error': 'No maintenance logs available'}, status=404)
     return context

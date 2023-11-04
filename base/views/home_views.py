@@ -7,7 +7,6 @@ from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
 from ..models import IncidentInfo, EquipmentDetails, LocationDetails, MaintenanceInfo, IncidentDetail, IncidentAnalysis
 from ..forms import IncidentInfoForm, EquipmentDetailsForm, LocationDetailsForm, MaintenanceInfoForm, IncidentDetailForm, IncidentAnalysisForm, IncidentInfoIdForm, IncidentCreationForm
 from datetime import datetime
-from .maintenanceLogs_views import maintenanceLogs
 
 #===========================================================================
 # global credentials to be used on all calls

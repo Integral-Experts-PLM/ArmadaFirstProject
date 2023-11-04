@@ -1,0 +1,60 @@
+{% extends 'index.html' %}
+
+{% load static %}
+
+{% block content %}
+<style>
+    /* Apply the color to the placeholder text for input elements with the class "input-box" */
+    .input-box::placeholder {
+        color: rgb(152, 152, 152); /* Replace with the desired color value */
+    }
+</style>
+<form method="POST" style="display: flex; justify-content: center;"> {% csrf_token %}
+    <div class="main-input-container" style="margin-top: 30px; width: 500px;">
+        <h3 class="title-input-container">Search Incident</h3>
+        <div class="input-container">
+            <label class="input-label" style="width: 160px;">ID: </label>
+            <input type="text" value="{{ operating_time_form_data.identifier }}" class="input-box" name="identifier" placeholder="Must be an unique identifier!"/>
+        </div>
+        <div class="input-container">
+            <label class="input-label" style="width: 160px;">Configuration: </label>
+            <input type="text" value="{{ configuration_name }}" class="input-box" name="configuration" disabled />
+            <input type="hidden" value="{{ configuration_id }}" class="input-box" name="configuration_id" disabled />
+        </div>
+        <div class="input-container">
+            <label class="input-label" style="width: 160px;">Tail Number: </label>
+            <input type="text" value="{{ operating_time_form_data.user_text1_tail_number }}" class="input-box"
+                name="user_text1_tail_number" placeholder="Must be a valid number!"/>
+        </div>
+        <div class="input-container">
+            <label class="input-label" style="width: 160px;">Start Time: </label>
+            <input type="date" value="{{ operating_time_form_data.start_date }}" class="input-box" name="start_date" />
+        </div>
+        <div class="input-container">
+            <label class="input-label" style="width: 160px;">End Time: </label>
+            <input type="date" value="{{ operating_time_form_data.end_date }}" class="input-box" name="end_date" />
+        </div>
+        <!-- <div class="input-container">
+            <label class="input-label" style="width: 160px;">Operational Time: </label>
+            <input type="number" step="0.01" value="{{ operating_time_form_data.operational_time }}" class="input-box"
+                name="operational_time" />
+        </div> -->
+        <div class="input-container">
+            <label class="input-label" style="width: 160px;">Multiplicative Adjustment: </label>
+            <input type="number" step="0.01" value="{{ operating_time_form_data.multiplicative_djustment }}"
+                class="input-box" name="multiplicative_djustment" />
+        </div>
+
+        {% if message %}
+                    <h3 style="font-weight: bold; color: red; text-align: center; margin-top: 10px;">
+                        {{ message }}
+                    </h3>
+            {% endif %}
+
+
+        <div style="display: flex; justify-content: center; padding: 20px 0 10px 0;">
+            <input type="submit" value="Create Operating Time" class="button">
+        </div>
+    </div>
+</form>
+{% endblock %}

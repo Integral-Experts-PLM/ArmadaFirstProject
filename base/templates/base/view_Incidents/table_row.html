@@ -1,9 +1,9 @@
 {% load custom_filters %} 
 <tr class="clickable-row" value="{{ incident.ID }}" style="cursor: pointer;">
     <td>{{ forloop.counter }}</td>
-    <td>{{ incident.ID }}</td>
+    <td>{{ incident.IncidentIdentifier }}</td>
     <td>{{ incident.PersonIncidentEntry }}</td>
-    <td>{{ incident.SystemTreeItem.SystemTreeIdentifier }}</td>
+    <td>{{ incident.SystemTreeItem.Name }}</td>
     <td>{{ incident.OccurrenceDate|format_datetime }}</td>
     <td>{{ incident.CloseOutEndDate|format_datetime }}</td>
     <td>{{ incident.Closed }}</td>

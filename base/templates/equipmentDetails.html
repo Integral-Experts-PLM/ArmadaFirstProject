@@ -3,16 +3,27 @@
     <h3 class="title-input-container">Equipment Details</h3>
     <div class="input-container">
       <label class="input-label">Failed Component:</label>
-        {% if not tree_item_name %}
-          <select id="tree_item_name" name="tree_item_name" class="input-box">
-            <option value="">Select Item</option>
-              {% for item in tree_items_data %}
-                <option value="{{ item.Name }}">{{ item.Name }}</option>
-              {% endfor %}
-          </select>
-        {% else %}
-          <input type="text" value="{{ tree_item_name }}" id="tree_item_name" name="tree_item_name" class="input-box">
-        {% endif %}
+      {% if not tree_item_name %}
+      <select id="tree_item_name" name="tree_item_name" class="input-box">
+          <option value="">Select Item</option>
+          {% for item in tree_items_data %}
+          <option value="{{ item.Name }}" data-id="{{ item.ID }}">{{ item.Name }}</option>
+          {% endfor %}
+      </select>
+      <input type="hidden" id="tree_item_id" name="tree_item_id" class="input-box">
+      <script>
+          // JavaScript to set the hidden input's value when an option is selected
+          document.getElementById('tree_item_name').addEventListener('change', function () {
+              var selectedOption = this.options[this.selectedIndex];
+              var treeItemIdInput = document.getElementById('tree_item_id');
+              treeItemIdInput.value = selectedOption.getAttribute('data-id');
+              console.log('treeItemIdInput', treeItemIdInput.value)
+          });
+      </script>
+      {% else %}
+        <input type="text" value="{{ tree_item_name }}" id="tree_item_name" name="tree_item_name" class="input-box">
+        <input type="hidden" value="{{ tree_item_id }}" id="tree_item_id" name="tree_item_id" class="input-box">
+      {% endif %}
     </div>
     <div class="input-container">
       <label class="input-label">Serial Number:</label>

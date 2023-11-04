@@ -4,43 +4,45 @@
   <div style="margin-bottom: 20px; display: flex; flex-direction: row; justify-content: space-between;">
     <div class="input-container" style="width: auto;">
       <label class="input-label">Dispositioned By:</label>
-      <input type="text" value="" class="input-box" style="width: auto;" name="" />
+      <input type="text" value="{{ incident_data.Approval}}" class="input-box" style="width: auto;" name="approval" />
     </div>
     <div class="input-container" style="width: auto;">
       <label class="input-label">Date Closed:</label>
-      <input type="text" value="" class="input-box" style="width: auto;" name="" />
+      <input type="text" value="{{ incident_data.CloseOutEndDate }}" class="input-box" style="width: auto;"
+        name="lose_out_end_date" />
     </div>
     <div class="input-container" style="width: auto;">
       <label class="input-label">Initial Severity:</label>
-      <input type="text" value="" class="input-box" style="width: auto;" name="" />
+      <input type="text" value="{{ incident_data.UserText2|extract_after_colon}}" class="input-box" style="width: auto;"
+        name="user_text2_initial_severity" />
     </div>
   </div>
   <div>
     <div class="input-container" style="width: 100%;">
       <label class="input-label" style="width: 140px; text-align: right;">Remarks:</label>
-      <textarea name="" rows="6" class="input-box" style="width: 100%; text-align: left;">???
+      <textarea name="remarks_close_out" rows="6" class="input-box" style="width: 100%; text-align: left;">{{ incident_data.RemarksCloseOut}}
       </textarea>
     </div>
     <div class="input-container" style="width: 100%; justify-content: space-between; margin-top: 10px;">
       <div class="input-container" style="width: auto;">
         <label class="input-label">Disposition:</label>
         <div class="input-container" style="padding: 0; margin-right: 30px;">
-          <input type="checkbox" id="closed" name="disposition" value="selected" />
+          <input type="checkbox" id="closed" name="closed" value="{{ incident_data.Closed}}" {% if incident_data.Closed %}checked{% endif %}/>
           <label for="closed" style="margin-left: 10px;">Closed</label>
         </div>
         <div class="input-container" style="padding: 0; margin-right: 30px;">
-          <input type="checkbox" id="relevant" name="disposition" value="selected" />
+          <input type="checkbox" id="relevant" name="relevant" value="{{ incident_data.Relevant}}" {% if incident_data.Relevant %}checked{% endif %}/>
           <label for="relevant" style="margin-left: 10px;">Relevant?</label>
         </div>
         <div class="input-container" style="padding: 0; margin-right: 30px;">
-          <input type="checkbox" id="chargeable" name="disposition" value="selected" />
+          <input type="checkbox" id="chargeable" name="chargeable" value="{{ incident_data.Chargeable}}" {% if incident_data.Chargeable %}checked{% endif %}/>
           <label for="chargeable" style="margin-left: 10px;">Chargeable?</label>
         </div>
       </div>
       <div class="input-container">
-        <label for="severity" class="input-label">Close Out Severity:</label>
-        <select id="severity" name="severity" class="input-box">
-          <option value="">Select Close Out Severity</option>
+        <label for="user_text18_close_out_severity" class="input-label">Close Out Severity:</label>
+        <select id="user_text18_close_out_severity" name="user_text18_close_out_severity" class="input-box">
+          <option value="{{ incident_data.UserText18}}">Select Close Out Severity</option>
           <option value="option1">Option 1</option>
           <option value="option2">Option 2</option>
           <option value="option3">Option 3</option>
@@ -50,12 +52,13 @@
     <div class="input-container" style="width: 100%; justify-content: space-between;">
       <div class="input-container" style="width: 100%; display: flex; justify-content: flex-start;">
         <label class="input-label" style="width: 122px; text-align: right;">Attachments:</label>
-        <input type="file" value="" class="input-box" style="width: auto;" name="" />
+        <input type="file" value="{{ incident_data.AttachmentsCloseOut}}" class="input-box" style="width: auto;"
+          name="attachments_close_out" />
       </div>
       <div class="input-container">
-        <label for="frb" class="input-label">FRB Decision:</label>
-        <select id="frb" name="frb" class="input-box">
-          <option value="">Select FRB Decision</option>
+        <label for="user_text19_frb_decision" class="input-label">FRB Decision:</label>
+        <select id="user_text19_frb_decision" name="user_text19_frb_decision" class="input-box">
+          <option value="{{ incident_data.UserText19}}">Select FRB Decision</option>
           <option value="option1">Option 1</option>
           <option value="option2">Option 2</option>
           <option value="option3">Option 3</option>

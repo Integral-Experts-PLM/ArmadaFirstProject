@@ -81,4 +81,15 @@ class IncidentAnalysis(models.Model):
 
     def __str__(self):
         return str(self.incident_ID.incident_ID)
-    
+
+class OperatingTimes(models.Model):
+    identifier = models.CharField(max_length=200, null=True, blank=True)
+    configuration = models.CharField(max_length=200, null=True, blank=True)
+    user_text1_tail_number = models.CharField(max_length=200, null=True, blank=True)
+    start_date = models.DateTimeField()
+    end_date = models.DateTimeField()
+    operational_time = models.FloatField(null=True, blank=True)
+    multiplicative_djustment = models.FloatField(null=True, blank=True)
+
+    def __str__(self):
+        return str(self.identifier)

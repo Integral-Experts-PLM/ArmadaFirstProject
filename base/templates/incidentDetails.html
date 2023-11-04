@@ -1,35 +1,37 @@
-{% load custom_filters %} 
+{% load custom_filters %}
 <div class="main-input-container">
-    <h3 class="title-input-container">Incident Details</h3>
-    <div style="display: flex; flex-direction: row; justify-content: space-around;">
-      <div class="input-container">
-        <label class="input-label">Operating Mode:</label>
-        <input type="text"
-          value="{% if incident_data %}{{ incident_data.OperatingMode|extract_after_colon }}{% else %}{{ incident_details_form.operating_mode.value|default:'' }}{% endif %}"
-          class="input-box" name="operating_mode" />
-      </div>
-      <div class="input-container">
-        <label class="input-label">Initial Severity:</label>
-        <input type="text"
-          value="{% if incident_data %}{{ incident_data.UserText2|extract_after_colon }}{% else %}{{ incident_details_form.user_text2_initial_severity.value|default:'' }}{% endif %}"
-          class="input-box" name="user_text2_initial_severity" />
-      </div>
+  <h3 class="title-input-container">Incident Details</h3>
+  <div style="display: flex; flex-direction: row; justify-content: space-around;">
+    <div class="input-container">
+      <label class="input-label">Operating Mode:</label>
+      <input type="text"
+        value="{% if incident_data %}{{ incident_data.OperatingMode|extract_after_colon }}{% else %}{{ incident_details_form.operating_mode.value|default:'' }}{% endif %}"
+        class="input-box" name="operating_mode" />
     </div>
-    <div>
-      <div class="input-container" style="width: 100%;">
-        <label class="input-label" style="width: 140px; text-align: right;">Incident Description:</label>
-        <textarea name="description_incident" rows="3" class="input-box" style="width: 100%; text-align: left;">{% if incident_data %}{{ incident_data.DescriptionIncident }}{% else %}{{ incident_details_form.description_incident.value|default:'' }}{% endif %}
-    </textarea>
-      </div>
-      <div class="input-container" style="width: 100%;">
-        <label class="input-label" style="width: 140px; text-align: right;">Maintenance: </label>
-        {% include 'maintenance.html' %}
-      </div>
-      <div class="input-container" style="width: 100%; display: flex; justify-content: flex-start;">
-        <label class="input-label" style="width: 122px; text-align: right;">Attachments: ???</label>
-        <input type="file"
-          value="{% if incident_data %}{{ incident_data.AttachmentsIncidents }}{% else %}{{ incident_details_form.attachments_incidents.value|default:'' }}{% endif %}"
-          class="input-box" style="width: 280px;" name="attachments_incidents" />
-      </div>
+    <div class="input-container">
+      <label class="input-label">Initial Severity:</label>
+      <input type="text"
+        value="{% if incident_data %}{{ incident_data.UserText2|extract_after_colon }}{% else %}{{ incident_details_form.user_text2_initial_severity.value|default:'' }}{% endif %}"
+        class="input-box" name="user_text2_initial_severity" />
     </div>
   </div>
+  <div>
+    <div class="input-container" style="width: 100%;">
+      <label class="input-label" style="width: 140px; text-align: right;">Incident Description:</label>
+      <textarea name="description_incident" rows="3" class="input-box" style="width: 100%; text-align: left;">{% if incident_data %}{{ incident_data.DescriptionIncident }}{% else %}{{ incident_details_form.description_incident.value|default:'' }}{% endif %}
+    </textarea>
+    </div>
+    {% if 'create-incident' not in request.path %}
+    <div class="input-container" style="width: 100%;">
+      <label class="input-label" style="width: 140px; text-align: right;">Maintenance: </label>
+      {% include 'maintenance.html' %}
+    </div>
+    {% endif %}
+    <div class="input-container" style="width: 100%; display: flex; justify-content: flex-start;">
+      <label class="input-label" style="width: 122px; text-align: right;">Attachments: ???</label>
+      <input type="file"
+        value="{% if incident_data %}{{ incident_data.AttachmentsIncidents }}{% else %}{{ incident_details_form.attachments_incidents.value|default:'' }}{% endif %}"
+        class="input-box" style="width: 280px;" name="attachments_incidents" />
+    </div>
+  </div>
+</div>

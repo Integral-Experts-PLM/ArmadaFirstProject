@@ -16,7 +16,7 @@
         {% block content %}
         {% endblock %}
     </div>
-    {% if request.path != '/' and '/create-incident' not in request.path %}
+    {% if request.path != '/' %}
     {% include 'subIncidentsTabs.html' %}
     {% endif %}
 </body>
