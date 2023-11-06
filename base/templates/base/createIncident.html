@@ -1,26 +1,18 @@
 {% extends 'index.html' %}
 
-{% load static %}
-
 {% block content %}
 <form method="POST">
     {% csrf_token %}
-    <div style="display: flex; flex-direction: column; align-items: center; margin: 0px 20px 0px 20px;">
-        <div style="display: flex; justify-content: space-between; margin-top: 30px; width: 100%;">
-            {% include 'incidentInfo.html' %}
-            <div
-                style="height: 100%; display: flex; flex-direction: column ; align-items: center; justify-content: space-between;">
-                <img src="{% static 'images/escudoArmada.png' %}" alt="Escudo Armada" style="height: 214px;">
-                {% include 'currentState.html' %}
-            </div>
-            {% include 'equipmentDetails.html' %}
-        </div>
-        {% include 'locationDetails.html' %}
-        {% include 'incidentDetails.html' %}
+    <div
+    style="display: flex; flex-direction: column; align-items: center; margin: 0px 20px 0px 20px;">
+    <div style="display: flex; justify-content: space-between; margin-top: 30px; width: 100%;">
+        {% include 'createIncident.html' %}
     </div>
     <div style="display: flex; justify-content: center; padding-bottom: 20px;">
         <input type="submit" value="Create Incident" class="button">
     </div>
+</div>
+
 </form>
 
 {% endblock %}

@@ -93,3 +93,22 @@ class OperatingTimes(models.Model):
 
     def __str__(self):
         return str(self.identifier)
+
+class CreateIncident(models.Model):
+    identifier = models.CharField(max_length=200, null=True, blank=True)
+    project_id = models.CharField(max_length=200)
+    system_id = models.CharField(max_length=200)
+    configuration = models.CharField(max_length=200,)
+    system_tree_item = models.CharField(max_length=200, null=True, blank=True)
+    name = models.CharField(max_length=200, null=True, blank=True)
+    user_text22_failure_detection_situation = models.CharField(max_length=200, null=True, blank=True)
+    user_text23_failure_buque_situation = models.CharField(max_length=200, null=True, blank=True)
+    user_text24_failure_effect_item = models.CharField(max_length=200, null=True, blank=True)
+    user_text25_failure_evidence = models.CharField(max_length=200, null=True, blank=True)
+    occurrence_date = models.DateTimeField()
+    occurrence_time = models.DateTimeField()
+    description_incident =  models.TextField(null=True, blank=True)
+    user_text26_user_failure_detection = models.CharField(max_length=200, null=True, blank=True)
+
+    def __str__(self):
+        return self.identifier

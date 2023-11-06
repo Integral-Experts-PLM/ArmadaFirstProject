@@ -8,17 +8,7 @@ auth = (settings.API_USERNAME, settings.API_PASSWORD)
 
 def viewAllIncidents(request):
     incident_ID = None
-
-    # if request.method == 'POST':
-    #     # Get the selected incident ID from the POST request
-    #     incident_ID = request.body.decode('utf-8')
-    #     request.session['incident_ID'] = incident_ID
-    # else:
-    #     # If not a POST request, use the session variable as the initial selected incident ID
-    #     incident_ID = request.session.get('incident_ID', 'default-incident-id')
-        # If not a POST request, use the session variable as the initial selected incident ID
     incident_ID = request.session.get('incident_ID', 'default-incident-id')
-    
     globalContext = request.session.get('context_data', {})
 
     if len(globalContext['incidents_data']) > 0:
@@ -52,17 +42,7 @@ def viewIncidentReport(request):
     incidents_dict = request.session.get('incidents_dict', {})
 
     if len(globalContext['incidents_data']) > 0:
-        # url = f'https://fracas.integralplm.com/WindchillRisndRkAeliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/{incident_ID}?$expand=Configuration,SystemTreeItem'
-        # response = requests.get(url, auth=auth)
-        # if response.status_code == 200:
-        #     data = response.json()
-        # else:
-        #     return JsonResponse({'error': 'Incident not found'}, status=404)
-
         data = incidents_dict.get(str(incident_ID))
-        # print('data', data)
-
-
         context = {
             'incident_data': data,
             'incident_ID': incident_ID,
@@ -93,17 +73,7 @@ def viewAnalysis(request):
     incidents_dict = request.session.get('incidents_dict', {})
 
     if len(globalContext['incidents_data']) > 0:
-        # url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/{incident_ID}?$expand=Configuration,SystemTreeItem'
-
-        # response = requests.get(url, auth=auth)
-
-        # if response.status_code == 200:
-        #     data = response.json()
-        # else:
-        #     return JsonResponse({'error': 'Incident not found'}, status=404)
-
         data = incidents_dict.get(str(incident_ID))
-        
         context = {
             'incident_data': data,
             'configuration_name': configuration_name,
@@ -130,17 +100,7 @@ def viewReviewBoard(request):
     incidents_dict = request.session.get('incidents_dict', {})
 
     if len(globalContext['incidents_data']) > 0:
-        # url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/{incident_ID}?$expand=Configuration,SystemTreeItem'
-
-        # response = requests.get(url, auth=auth)
-
-        # if response.status_code == 200:
-        #     data = response.json()
-        # else:
-        #     return JsonResponse({'error': 'Incident not found'}, status=404)
-
         data = incidents_dict.get(str(incident_ID))
-        
         context = {
           'incident_data': data,
             'configuration_name': configuration_name,
@@ -168,17 +128,7 @@ def viewOverview(request):
     incidents_dict = request.session.get('incidents_dict', {})
 
     if len(globalContext['incidents_data']) > 0:
-        # url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents/{incident_ID}?$expand=Configuration,SystemTreeItem'
-
-        # response = requests.get(url, auth=auth)
-
-        # if response.status_code == 200:
-        #     data = response.json()
-        # else:
-        #     return JsonResponse({'error': 'Incident not found'}, status=404)
-
         data = incidents_dict.get(str(incident_ID))
-        
         context = {
             'incident_data': data,
             'incident_ID': incident_ID,

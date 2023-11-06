@@ -2,7 +2,7 @@ import requests
 import json
 from django.conf import settings
 from django.shortcuts import render, redirect
-from ...forms import operatingTimesForm
+from ...forms import OperatingTimesForm
 
 auth = (settings.API_USERNAME, settings.API_PASSWORD)
 
@@ -13,7 +13,7 @@ def operatingTimesCreate(request):
     configuration_id = request.session.get('configuration_id')
 
     # Create forms for the incident creation
-    operating_times_form = operatingTimesForm(request.POST or None)
+    operating_times_form = OperatingTimesForm(request.POST or None)
 
     context = {
         'message': None,
