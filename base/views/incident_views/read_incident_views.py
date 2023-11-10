@@ -11,7 +11,7 @@ def viewAllIncidents(request):
     incident_ID = request.session.get('incident_ID', 'default-incident-id')
     globalContext = request.session.get('context_data', {})
 
-    if len(globalContext['incidents_data']) > 0:
+    if globalContext['incidents_data'] != None:
         globalContext['selectedIncidentId'] = incident_ID
     else:
         print('no incidents found')

@@ -2,6 +2,7 @@ import json
 from django.http import JsonResponse
 from django.conf import settings
 import requests
+from .api_config import incident_attributes, configuration_attributes
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
 from ..models import IncidentInfo, EquipmentDetails, LocationDetails, MaintenanceInfo, IncidentDetail, IncidentAnalysis
@@ -33,20 +34,29 @@ def home(request):
 
     if request.method == 'POST':
         project_id = request.POST.get('project_id')
+        project_name = request.POST.get('project_name')
         system_id = request.POST.get('system_id')
+        system_name = request.POST.get('system_name')
         configuration_id = request.POST.get('configuration_id')
         configuration_name = request.POST.get('configuration_name')
         tree_item_id = request.POST.get('tree_item_id')
         tree_item_name = request.POST.get('tree_item_name')
 
         incidents = None
+        print(select_attributes)
         #  tree_item_id == '0' means no item selected
         if project_id and system_id and configuration_id and tree_item_id == '0':
-            url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents?$expand=Configuration,SystemTreeItem'
+            # url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents?$expand=Configuration,SystemTreeItem'
+            url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents?$select={select_attributes}&$expand=Configuration,SystemTreeItem'
             response = requests.get(url, auth=auth)
+            print('response')
+            print(response.status_code)
+            # print(response.json())
 
             if response.status_code == 200:
                 data = response.json()
+                # print('data', data)
+
                 incidents = [incident for incident in data['value'] if incident['Configuration'].get('ID') == int(configuration_id)]
 
         elif project_id and system_id and configuration_id and tree_item_id != '0':
@@ -65,7 +75,9 @@ def home(request):
             request.session['incidents_dict'] = incidents_dict
             
         request.session['project_id'] = project_id
+        request.session['project_name'] = project_name
         request.session['system_id'] = system_id
+        request.session['system_name'] = system_name
         request.session['configuration_id'] = configuration_id
         request.session['configuration_name'] = configuration_name
         request.session['tree_item_id'] = tree_item_id

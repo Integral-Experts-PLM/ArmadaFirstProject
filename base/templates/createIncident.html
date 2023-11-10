@@ -93,12 +93,12 @@
       <div class="input-container">
         <label class="input-label">Incident Date:</label>
         <input type="date" value="{{ create_incident_form.occurrence_date.value|default:''|date:'Y-m-d' }}"
-          class="input-box" name="occurrence_date" />
+          class="input-box" name="occurrence_date" id="occurrence_date" />
       </div>
       <div class="input-container">
         <label class="input-label">Incident Time:</label>
-        <input type="date" value="{{ create_incident_form.occurrence_time.value|default:''|date:'H-m-s' }}"
-          class="input-box" name="occurrence_time" />
+        <input type="text" value=""
+          class="input-box" name="occurrence_time" id="occurrence_time" />
       </div>
       <div class="input-container">
         <label class="input-label">User Failure Detection:</label>
@@ -109,7 +109,8 @@
   </div>
   <div class="input-container" style="width: 100%;">
     <label class="input-label" style="width: 140px; text-align: right;">Incident Description:</label>
-    <textarea name="remarks_close_out" rows="6" class="input-box" style="width: 100%; text-align: left;">{{ create_incident_form.description_incident}}
+    <!-- <textarea name="remarks_close_out" rows="6" class="input-box" style="width: 100%; text-align: left;" value=""> -->
+    <textarea name="description_incident" rows="6" class="input-box" style="width: 100%; text-align: left;" value="">
   </textarea>
   </div>
 </div>

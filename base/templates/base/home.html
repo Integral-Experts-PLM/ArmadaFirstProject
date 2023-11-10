@@ -15,12 +15,14 @@
         {% endfor %}
       </select>
     </div>
+    <input type="hidden" id="project_name" name="project_name" value="">
     <div class="input-container">
       <label class="input-label">System Name:</label>
       <select id="system_id" name="system_id" class="input-box" disabled>
         <option value="">Select System</option>
       </select>
     </div>
+    <input type="hidden" id="system_name" name="system_name" value="">
     <div class="input-container">
       <label class="input-label">Configuration Name:</label>
       <select id="configuration_id" name="configuration_id" class="input-box" disabled>
@@ -59,6 +61,14 @@
       systemIdSelect.addEventListener('change', handleSystemChange);
       configurationIdSelect.addEventListener('change', handleConfigurationChange);
       treeItemIdSelect.addEventListener('change', checkFormAndSubmit);
+      projectIdSelect.addEventListener('change', function () {
+        const selectedProjectName = projectIdSelect.options[projectIdSelect.selectedIndex].text;
+        document.getElementById('project_name').value = selectedProjectName;
+      });
+      systemIdSelect.addEventListener('change', function () {
+        const selectedSystemName = systemIdSelect.options[systemIdSelect.selectedIndex].text;
+        document.getElementById('system_name').value = selectedSystemName;
+      });
     }
 
     function checkFormAndSubmit() {

@@ -55,4 +55,4 @@ class OperatingTimesForm(ModelForm):
 class CreateIncidentForm(ModelForm):
     class Meta:
         model = CreateIncident
-        exclude = ['identifier']
+        exclude = ['identifier', 'project_id', 'system_id', 'configuration', 'system_tree_item', 'name', 'user_text26_user_failure_detection', 'occurrence_time']

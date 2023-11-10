@@ -106,7 +106,7 @@ class CreateIncident(models.Model):
     user_text24_failure_effect_item = models.CharField(max_length=200, null=True, blank=True)
     user_text25_failure_evidence = models.CharField(max_length=200, null=True, blank=True)
     occurrence_date = models.DateTimeField()
-    occurrence_time = models.DateTimeField()
+    # occurrence_time = models.CharField(max_length=200, null=True, blank=True)
     description_incident =  models.TextField(null=True, blank=True)
     user_text26_user_failure_detection = models.CharField(max_length=200, null=True, blank=True)
 

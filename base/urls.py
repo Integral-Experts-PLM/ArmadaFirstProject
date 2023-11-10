@@ -4,13 +4,14 @@ from .views.tree_items_views import tree_items_views, tree_items_create
 
 from .views.operating_times_views import operatingTimes_views, operatingTimes_create
 from .views import home_views, system_views, configuration_views, maintenanceLogs_views
-from .views.incident_views import read_incident_views, create_incident_views, update_incident_views, delete_incident_views
+from .views.incident_views import read_incident_views, create_incident_views, create_incident_views_B, update_incident_views, delete_incident_views
 
 urlpatterns = [
     # main crud
     path('', home_views.home, name='home'),
     # path('create-incident-form/', create_incident_views.createIncidentForms, name='create_incident_form'),
-    path('create-incident/', create_incident_views.createIncident, name='create_incident'),
+    # path('create-incident/', create_incident_views.createIncident, name='create_incident'),
+    path('create-incident/', create_incident_views_B.createIncident_B, name='create_incident_B'),
     path('update-incident/<str:project_id>/<str:system_id>/<str:incident_ID>/', update_incident_views.updateIncident, name='update_incident'),
     path('delete-incident/<str:pk>/', delete_incident_views.deleteIncident, name='delete_incident'),
 
