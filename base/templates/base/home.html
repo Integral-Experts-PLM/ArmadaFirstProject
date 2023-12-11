@@ -174,9 +174,9 @@
       })
         .then(handleResponse)
         .then(data => {
-          // if (data.allTreeItemsFromProjectSystemConfiguration == null) {
-          //   messageContainer.textContent = 'No Items for this combination!';
-          // } else
+          if (data.allTreeItemsFromProjectSystemConfiguration == null) {
+            messageContainer.textContent = 'No Items for this combination!';
+          } else
           {
             treeItemIdSelect.removeAttribute('disabled');
             populateDropdown(treeItemIdSelect, data.allTreeItemsFromProjectSystemConfiguration, "Name");

@@ -15,7 +15,7 @@ def viewAllIncidents(request):
         globalContext['selectedIncidentId'] = incident_ID
     else:
         print('no incidents found')
-    
+
     return render(request, 'base/view_incidents/viewAllIncidents.html', globalContext)
 
 def getIncidentData(request):

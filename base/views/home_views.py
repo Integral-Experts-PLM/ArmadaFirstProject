@@ -5,9 +5,10 @@ import requests
 from .api_config import incident_attributes, configuration_attributes
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
-from ..models import IncidentInfo, EquipmentDetails, LocationDetails, MaintenanceInfo, IncidentDetail, IncidentAnalysis
+from ..models import IncidentInfo, EquipmentDetails, LocationDetails, MaintenanceInfo, IncidentDetail, IncidentAnalysis, Incident
 from ..forms import IncidentInfoForm, EquipmentDetailsForm, LocationDetailsForm, MaintenanceInfoForm, IncidentDetailForm, IncidentAnalysisForm, IncidentInfoIdForm, IncidentCreationForm
 from datetime import datetime
+import time
 
 #===========================================================================
 # global credentials to be used on all calls
@@ -32,6 +33,14 @@ def home(request):
     message = None  # Initialize the message variable
     allProjects = get_projects()
 
+    # start_time = time.time()
+    # all_incidents = list(Incident.objects.using('sqlserver_db').all())
+    # all_incidents_in1350 = list(Incident.objects.using('sqlserver_db').filter(SetID=1350))
+    # end_time = time.time()
+    # execution_time = end_time - start_time
+    # print(f"Tiempo de ejecución de la consulta: {execution_time} segundos.")
+    # print(all_incidents)
+
     if request.method == 'POST':
         project_id = request.POST.get('project_id')
         project_name = request.POST.get('project_name')
@@ -43,14 +52,14 @@ def home(request):
         tree_item_name = request.POST.get('tree_item_name')
 
         incidents = None
-        print(select_attributes)
+        # print(incident_attributes)
         #  tree_item_id == '0' means no item selected
         if project_id and system_id and configuration_id and tree_item_id == '0':
-            # url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents?$expand=Configuration,SystemTreeItem'
-            url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents?$select={select_attributes}&$expand=Configuration,SystemTreeItem'
+            url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents?$expand=Configuration,SystemTreeItem'
+            # url = f'https://fracas.integralplm.com/WindchillRiskAndReliability12.0-REST/odata/Project_{project_id}/Systems({system_id})/Incidents?$select={incident_attributes}&$expand=Configuration,SystemTreeItem'
             response = requests.get(url, auth=auth)
-            print('response')
-            print(response.status_code)
+            # print('response')
+            # print(response.status_code)
             # print(response.json())
 
             if response.status_code == 200:

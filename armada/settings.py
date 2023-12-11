@@ -82,8 +82,36 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+   },
+    'sqlserver_db': {
+        'ENGINE': 'mssql',
+        'NAME': 'Quality120',
+        'USER': 'wrradmin',
+        'PASSWORD': 'wrradmin',
+        'HOST': 'FRACAS',
+        'PORT': '',  # Puedes dejarlo en blanco para usar el puerto predeterminado
+
+        'OPTIONS': {
+            'driver': 'ODBC Driver 17 for SQL Server',
+        },
     }
 }
+
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'mssql',
+#         'NAME': 'Quality120',
+#         'USER': 'wrradmin',
+#         'PASSWORD': 'wrradmin',
+#         'HOST': 'FRACAS',
+#         'PORT': '',
+
+#         'OPTIONS': {
+#             'driver': 'ODBC Driver 17 for SQL Server',
+#         },
+#     }
+# }
 
 
 # Password validation

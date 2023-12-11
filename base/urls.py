@@ -10,7 +10,7 @@ urlpatterns = [
     # main crud
     path('', home_views.home, name='home'),
     # path('create-incident-form/', create_incident_views.createIncidentForms, name='create_incident_form'),
-    # path('create-incident/', create_incident_views.createIncident, name='create_incident'),
+    path('create-incident/', create_incident_views.createIncident, name='create_incident'),
     path('create-incident/', create_incident_views_B.createIncident_B, name='create_incident_B'),
     path('update-incident/<str:project_id>/<str:system_id>/<str:incident_ID>/', update_incident_views.updateIncident, name='update_incident'),
     path('delete-incident/<str:pk>/', delete_incident_views.deleteIncident, name='delete_incident'),
