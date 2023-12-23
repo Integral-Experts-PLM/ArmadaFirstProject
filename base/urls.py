@@ -8,7 +8,8 @@ from .views.incident_views import read_incident_views, create_incident_views, cr
 
 urlpatterns = [
     # main crud
-    path('', home_views.home, name='home'),
+    # path('', home_views.home, name='home'),
+    path('', read_incident_views.search_incidents, name='home'),
     # path('create-incident-form/', create_incident_views.createIncidentForms, name='create_incident_form'),
     path('create-incident/', create_incident_views.createIncident, name='create_incident'),
     path('create-incident/', create_incident_views_B.createIncident_B, name='create_incident_B'),
@@ -16,6 +17,8 @@ urlpatterns = [
     path('delete-incident/<str:pk>/', delete_incident_views.deleteIncident, name='delete_incident'),
 
     # subTabs
+    path('search-incidents', read_incident_views.search_incidents, name='search_incidents'),
+    path('view-incidents/', read_incident_views.view_incidents, name='view_incidents'),
     path('view-all-incidents/', read_incident_views.viewAllIncidents, name='view_all_incidents'),
     path('get-incident-data/', read_incident_views.getIncidentData, name='get-incident-data'),
     path('maintenance-logs/', maintenanceLogs_views.viewMaintenanceLogs, name='maintenance_logs'),

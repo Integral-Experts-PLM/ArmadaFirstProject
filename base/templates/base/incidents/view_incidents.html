@@ -1,0 +1,216 @@
+{% extends 'index.html' %}
+<!-- {% load custom_filters %}  -->
+
+{% block content %}
+<style>
+    .container {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .table-container {
+        flex: 1;
+        overflow: auto;
+    }
+
+    table {
+        table-layout: fixed;
+        width: 100%;
+    }
+
+    th,
+    
+    td {
+        text-align: center;
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: left;
+    }
+
+    table td {
+        text-align: left;
+        white-space: wrap;
+        overflow: hidden;
+        vertical-align: middle;
+    }
+
+    thead {
+        position: sticky;
+        top: 0;
+    }
+
+    th {
+        background-color: #e4eef3;
+        vertical-align: middle;
+        overflow: hidden;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+        /* Light gray for even rows */
+    }
+
+    tr:nth-child(odd) {
+        background-color: white;
+        /* White for odd rows */
+    }
+
+    .selected {
+        background-color: yellow;
+    }
+
+    /* Estilos para el formulario */
+    .filter-form {
+        margin: 20px 0;
+        padding: 15px;
+        background-color: #e4eef3;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        display: flex;
+        align-items: center;
+    }
+
+    .filter-form label,
+    .filter-form input,
+    .filter-form select,
+    .filter-form button {
+        margin-right: 10px;
+        margin-bottom: 0; /* Elimina los márgenes inferiores */
+    }
+
+    .filter-form label {
+        font-weight: bold;
+    }
+
+    .filter-form input,
+    .filter-form select {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    .filter-form button {
+        padding: 8px 15px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    .filter-form button:hover {
+        background-color: #45a049;
+    }
+
+    /* Estilos para el paginador */
+    .pagination {
+        text-align: center;
+        padding: 15px 0;
+    }
+
+    .pagination .step-links {
+        display: inline-block;
+        padding: 8px;
+        background-color: #e4eef3;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .pagination a {
+        color: #4CAF50;
+        padding: 8px 12px;
+        text-decoration: none;
+        border-radius: 4px;
+        margin: 0 4px;
+        transition: background-color 0.3s, color 0.3s;
+    }
+
+    .pagination a:hover {
+        background-color: #45a049;
+        color: white;
+    }
+
+    .pagination .current {
+        padding: 8px 12px;
+        margin: 0 4px;
+        border-radius: 4px;
+        background-color: #ffce55;
+        color: black;
+    }
+
+</style>
+
+<div class="container">
+    <!-- Formulario de filtro -->
+    <form class="filter-form" method="get" action="">
+        <label for="filter_column">Filtrar por:</label>
+        <select id="filter_column" name="filter_column">
+            <option value="">Seleccionar columna</option>
+            <option value="ID" {% if request.GET.filter_column == "ID" %} selected {% endif %}>ID</option>
+            <option value="Identifier" {% if request.GET.filter_column == "Identificador" %} selected {% endif %}>Identificador</option>
+            <option value="IncidentUser" {% if request.GET.filter_column == "Reportado por" %} selected {% endif %}>Reportado por</option>
+            <option value="DateIncident" {% if request.GET.filter_column == "Fecha del fallo" %} selected {% endif %}>Fecha del fallo</option>
+            <option value="DateEndCO" {% if request.GET.filter_column == "Fecha del cierre" %} selected {% endif %}>Fecha del cierre</option>
+            <option value="IncUserText2" {% if request.GET.filter_column == "Severidad inicial" %} selected {% endif %}>Severidad inicial</option>
+            <option value="TreeName" {% if request.GET.filter_column == "HSC" %} selected {% endif %}>HSC</option>
+            <!-- Agrega aquí opciones adicionales para otras columnas -->
+            <!-- ... -->
+        </select>
+
+        <label for="filter_value">Valor:</label>
+        <input type="text" id="filter_value" name="filter_value" value="{{ request.GET.filter_value }}">
+         <!-- Incluye los demás parámetros de búsqueda existentes en el formulario -->
+         <input type="hidden" name="system_id" value="{{ request.GET.system_id }}">
+         <input type="hidden" name="configuration_id" value="{{ request.GET.configuration_id }}">
+         <input type="hidden" name="tree_item_id" value="{{ request.GET.tree_item_id }}">
+
+        <button type="submit">Filtrar</button>
+    </form>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                {% include 'base/incidents/table_header.html' %}
+            </thead>
+            <tbody>
+                {% for incident in page_obj %}
+                    {% with row_number=forloop.counter|add:start_number %}
+                        {% include 'base/incidents/table_row.html' %}
+                    {% endwith %}
+                {% empty %}
+                    <tr>
+                        <td colspan=3 style="text-align: center;">No hay incidentes para mostrar</td>
+                        <!-- Reemplaza colspan con el número de columnas -->
+                    </tr>
+                {% endfor %}
+                <tr style="background-color: #ffce55; height: 10px;">
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Controles de paginación -->
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1&system_id={{ request.GET.system_id }}&configuration_id={{ request.GET.configuration_id }}&tree_item_id={{ request.GET.tree_item_id }}&filter_column={{ request.GET.filter_column }}&filter_value={{ request.GET.filter_value }}">&laquo; primera</a>
+                <a href="?page={{ page_obj.previous_page_number }}&system_id={{ request.GET.system_id }}&configuration_id={{ request.GET.configuration_id }}&tree_item_id={{ request.GET.tree_item_id }}&filter_column={{ request.GET.filter_column }}&filter_value={{ request.GET.filter_value }}">anterior</a>
+            {% endif %}
+
+            <span class="current">
+                Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}&system_id={{ request.GET.system_id }}&configuration_id={{ request.GET.configuration_id }}&tree_item_id={{ request.GET.tree_item_id }}&filter_column={{ request.GET.filter_column }}&filter_value={{ request.GET.filter_value }}">siguiente</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}&system_id={{ request.GET.system_id }}&configuration_id={{ request.GET.configuration_id }}&tree_item_id={{ request.GET.tree_item_id }}&filter_column={{ request.GET.filter_column }}&filter_value={{ request.GET.filter_value }}">última &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+    
+</div>
+
+{% endblock %}

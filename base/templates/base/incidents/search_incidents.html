@@ -1,0 +1,58 @@
+{% extends 'index.html' %}
+
+{% load static %}
+
+{% block content %}
+<form id="incident-form" method="POST" action="{% url 'view_incidents' %}"
+  style="display: flex; justify-content: center;">
+  {% csrf_token %}
+  <div class="main-input-container" style="margin-top: 30px; width: 440px;">
+    <h3 class="title-input-container">Search Incident</h3>
+    <div style="display: flex; flex-direction: column;">
+      <div class="input-container">
+        <label for="project_id" class="input-label">Clase:</label>
+        <select id="project_id" name="project_id" class="input-box">
+          <option value="">Select Project</option>
+          {% for project in allProjects.value %}
+          <option value="{{ project.ID }}">{{ project.Name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <input type="hidden" id="project_name" name="project_name" value="">
+      <div class="input-container">
+        <label class="input-label">Serie:</label>
+        <select id="system_id" name="system_id" class="input-box" disabled>
+          <option value="">Select System</option>
+        </select>
+      </div>
+      <input type="hidden" id="system_name" name="system_name" value="">
+      <div class="input-container">
+        <label class="input-label">Buque:</label>
+        <select id="configuration_id" name="configuration_id" class="input-box" disabled>
+          <option value="" selected>Select Configuration</option>
+        </select>
+        <input type="hidden" id="configuration_name" name="configuration_name" value="">
+      </div>
+      <div class="input-container">
+        <label class="input-label">HSC:</label>
+        <select id="tree_item_id" name="tree_item_id" class="input-box" disabled>
+          <option value="" selected>Select Item or All Items</option>
+        </select>
+        <input type="hidden" id="tree_item_name" name="tree_item_name" value="">
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: center; padding: 20px 0 20px 0;">
+      <input type="submit" value="Buscar" class="button">
+    </div>
+
+    <div id="messageContainer" style="display: flex; flex-direction: column; align-items: center;">
+      {% if message %}
+      <p>{{ message }}</p>
+      {% endif %}
+    </div>
+
+  </div>
+</form>
+<script src="{% static 'js/dynamicSelectors.js' %}"></script>
+{% endblock %}

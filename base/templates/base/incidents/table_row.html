@@ -1,0 +1,12 @@
+{% load custom_filters %} 
+<tr class="clickable-row" value="{{ incident.ID }}" style="cursor: pointer;">
+    <td>{{ row_number }}</td>
+    <td>{{ incident.ID }}</td>
+    <td>{{ incident.Identifier }}</td>
+    <td>{{ incident.IncidentUser|extract_after_colon }}</td>
+    <td>{{ incident.DateIncident|format_datetime}}</td>
+    <td>{{ incident.DateEndCO|format_datetime}}</td>
+    <td>{{ incident.IncUserText2|extract_after_colon }}</td>
+    <td>{{ incident.IncidentDescription }}</td>
+    <td>{{ incident.TreeName }}</td>
+</tr>

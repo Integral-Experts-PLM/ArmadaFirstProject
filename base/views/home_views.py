@@ -5,7 +5,7 @@ import requests
 from .api_config import incident_attributes, configuration_attributes
 from django.urls import reverse
 from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
-from ..models import IncidentInfo, EquipmentDetails, LocationDetails, MaintenanceInfo, IncidentDetail, IncidentAnalysis, Incident
+from ..models import IncidentInfo, EquipmentDetails, LocationDetails, MaintenanceInfo, IncidentDetail, IncidentAnalysis
 from ..forms import IncidentInfoForm, EquipmentDetailsForm, LocationDetailsForm, MaintenanceInfoForm, IncidentDetailForm, IncidentAnalysisForm, IncidentInfoIdForm, IncidentCreationForm
 from datetime import datetime
 import time
@@ -100,6 +100,7 @@ def home(request):
     
     context = {'message': message, 'allProjects': allProjects}
     return render(request, 'base/home.html', context)
+    # return render(request, 'base/incidents/search_incidents.html', context)
 
 
 
